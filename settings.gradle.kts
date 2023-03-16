@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "Sunny Day"
 
 include(":app")
+include(":ui-common")

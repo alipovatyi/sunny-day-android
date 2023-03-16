@@ -1,4 +1,7 @@
+import com.android.build.gradle.BaseExtension
 import dev.arli.gradle.applyPlugin
+import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -15,9 +18,39 @@ allprojects {
         detektPlugins(rootProject.libs.detekt.formatting)
     }
 
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    tasks.withType<Detekt>().configureEach {
         autoCorrect = true
 
         source(layout.projectDirectory.asFileTree.matching { include("**/*.kts") })
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+
+    pluginManager.withPlugin("com.android.application") {
+        configureAndroidProject()
+    }
+
+    pluginManager.withPlugin("com.android.library") {
+        configureAndroidProject()
+    }
+}
+
+fun Project.configureAndroidProject() {
+    extensions.configure<BaseExtension> {
+        compileSdkVersion(libs.versions.compileSdk.get().toInt())
+
+        defaultConfig {
+            minSdk = libs.versions.minSdk.get().toInt()
+            targetSdk = libs.versions.targetSdk.get().toInt()
+        }
+
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+        }
     }
 }
