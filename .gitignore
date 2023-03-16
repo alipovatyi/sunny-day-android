@@ -15,6 +15,7 @@ build/
 .idea/deploymentTargetDropDown.xml
 .idea/androidTestResultsUserPreferences.xml
 .idea/artifacts
+.idea/assetWizardSettings.xml
 gradle.xml
 *.iml
 
