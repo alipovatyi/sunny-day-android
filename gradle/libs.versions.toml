@@ -1,0 +1,22 @@
+[versions]
+compileSdk = "33"
+minSdk = "24"
+targetSdk = "33"
+versionCode = "1"
+versionName = "0.1.0"
+
+kotlin = "1.8.10"
+androidGradle = "7.4.2"
+
+[libraries]
+androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.9.0" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
+
+material = { group = "com.google.android.material", name = "material", version = "1.8.0" }
+
+[bundles]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradle" }
+android-library = { id = "com.android.library", version.ref = "androidGradle" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
