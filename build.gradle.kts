@@ -1,8 +1,12 @@
 import com.android.build.gradle.BaseExtension
 import dev.arli.gradle.applyPlugin
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    dependencies {
+        classpath("com.android.tools.build:gradle:7.4.2")
+    }
+}
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -24,9 +28,11 @@ allprojects {
         source(layout.projectDirectory.asFileTree.matching { include("**/*.kts") })
     }
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "11"
+    plugins.withType<JavaBasePlugin>().configureEach {
+        extensions.configure<JavaPluginExtension> {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(11))
+            }
         }
     }
 
@@ -41,16 +47,13 @@ allprojects {
 
 fun Project.configureAndroidProject() {
     extensions.configure<BaseExtension> {
+        namespace = "dev.arli.sunnyday"
+
         compileSdkVersion(libs.versions.compileSdk.get().toInt())
 
         defaultConfig {
             minSdk = libs.versions.minSdk.get().toInt()
             targetSdk = libs.versions.targetSdk.get().toInt()
-        }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
         }
     }
 }

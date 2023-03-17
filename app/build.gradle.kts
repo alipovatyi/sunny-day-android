@@ -5,8 +5,6 @@ plugins {
 }
 
 android {
-    namespace = "dev.arli.sunnyday"
-
     defaultConfig {
         applicationId = "dev.arli.sunnyday"
         versionCode = libs.versions.versionCode.get().toInt()
@@ -27,6 +25,14 @@ android {
 
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 

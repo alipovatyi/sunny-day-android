@@ -15,8 +15,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":ui-common"))
+    implementation(project(":ui-details"))
+    implementation(project(":ui-locations"))
+    implementation(project(":ui-search"))
+    implementation(project(":ui-settings"))
+
     implementation(libs.androidx.core)
-    api(platform(libs.androidx.compose.bom))
-    api(libs.bundles.androidx.compose)
-    debugApi(libs.androidx.compose.uiTooling)
 }
