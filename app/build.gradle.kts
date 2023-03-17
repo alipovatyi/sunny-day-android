@@ -8,7 +8,7 @@ android {
     namespace = "dev.arli.sunnyday"
 
     defaultConfig {
-        applicationId = "dev.arli.bartender"
+        applicationId = "dev.arli.sunnyday"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
 
