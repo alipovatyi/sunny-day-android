@@ -16,6 +16,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core)
+    implementation(libs.material)
     api(platform(libs.androidx.compose.bom))
     api(libs.bundles.androidx.compose)
     debugApi(libs.androidx.compose.uiTooling)
