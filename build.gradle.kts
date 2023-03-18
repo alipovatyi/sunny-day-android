@@ -20,6 +20,7 @@ allprojects {
 
     dependencies {
         detektPlugins(rootProject.libs.detekt.formatting)
+        detektPlugins(rootProject.libs.detekt.compose)
     }
 
     tasks.withType<Detekt>().configureEach {
