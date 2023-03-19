@@ -48,8 +48,6 @@ allprojects {
 
 fun Project.configureAndroidProject() {
     extensions.configure<BaseExtension> {
-        namespace = "dev.arli.sunnyday"
-
         compileSdkVersion(libs.versions.compileSdk.get().toInt())
 
         defaultConfig {

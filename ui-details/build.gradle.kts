@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "dev.arli.sunnyday.ui.details"
+
     buildFeatures {
         compose = true
     }

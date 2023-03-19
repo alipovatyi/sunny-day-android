@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "dev.arli.sunnyday.data.db.room"
+
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

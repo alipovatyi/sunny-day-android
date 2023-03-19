@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "dev.arli.sunnyday.ui.navigation"
+
     buildFeatures {
         compose = true
     }

@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "dev.arli.sunnyday"
+
     defaultConfig {
         applicationId = "dev.arli.sunnyday"
         versionCode = libs.versions.versionCode.get().toInt()
@@ -37,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":localization"))
     implementation(project(":ui-common"))
 
     implementation(libs.androidx.core)
