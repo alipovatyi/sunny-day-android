@@ -38,15 +38,31 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
+}
 
-    kapt {
-        correctErrorTypes = true
-    }
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {
+    implementation(project(":data-api"))
     implementation(project(":data-common"))
+    implementation(project(":data-db"))
+    implementation(project(":data-db-room"))
+    implementation(project(":data-device"))
+    implementation(project(":data-location"))
+    implementation(project(":data-prefs"))
+    implementation(project(":data-prefs-datastore"))
+    implementation(project(":data-settings"))
+    implementation(project(":data-weather"))
+    implementation(project(":domain"))
+    implementation(project(":resources"))
     implementation(project(":ui-common"))
+    implementation(project(":ui-details"))
+    implementation(project(":ui-locations"))
+    implementation(project(":ui-navigation"))
+    implementation(project(":ui-search"))
+    implementation(project(":ui-settings"))
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
