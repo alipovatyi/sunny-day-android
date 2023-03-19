@@ -8,6 +8,7 @@ versionName = "0.1.0"
 detekt = "1.22.0"
 androidGradle = "7.4.2"
 kotlin = "1.8.10"
+coroutines = "1.6.4"
 
 dagger = "2.45"
 hilt = "2.45"
@@ -17,6 +18,8 @@ composeCompiler = "1.4.2"
 [libraries]
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version = "0.1.5" }
+
+kotlin-coroutines-playServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
@@ -30,6 +33,8 @@ androidx-activityCompose = { group = "androidx.activity", name = "activity-compo
 
 material = { group = "com.google.android.material", name = "material", version = "1.8.0" }
 
+playServices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
+
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-materialIcons = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -38,7 +43,6 @@ androidx-compose-uiToolingPreview = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
 androidx-compose-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-
 [bundles]
 androidx-compose = [
     "androidx-compose-material3",
