@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":localization"))
     implementation(project(":ui-common"))
 
     implementation(libs.androidx.core)

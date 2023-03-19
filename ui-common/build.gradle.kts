@@ -17,6 +17,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":resources"))
+
     implementation(libs.androidx.core)
     implementation(libs.material)
     api(platform(libs.androidx.compose.bom))
