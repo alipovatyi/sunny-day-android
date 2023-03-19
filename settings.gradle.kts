@@ -18,6 +18,7 @@ rootProject.name = "Sunny Day"
 
 include(":app")
 include(":data-api")
+include(":data-common")
 include(":data-db")
 include(":data-db-room")
 include(":data-device")

@@ -9,13 +9,17 @@ detekt = "1.22.0"
 androidGradle = "7.4.2"
 kotlin = "1.8.10"
 
-hilt = "2.44"
+dagger = "2.45"
+hilt = "2.45"
 compose = "2023.01.00"
 composeCompiler = "1.4.2"
 
 [libraries]
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version = "0.1.5" }
+
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }

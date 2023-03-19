@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":data-common"))
     implementation(project(":ui-common"))
 
     implementation(libs.androidx.core)
