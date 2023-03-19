@@ -6,12 +6,9 @@ plugins {
 
 android {
     namespace = "dev.arli.sunnyday"
-    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "dev.arli.bartender"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        applicationId = "dev.arli.sunnyday"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
 
@@ -32,18 +29,19 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    buildFeatures {
+        compose = true
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 }
 
 dependencies {
+    implementation(project(":ui-common"))
+
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.activityCompose)
 }
