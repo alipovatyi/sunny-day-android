@@ -47,6 +47,12 @@ allprojects {
     }
 }
 
+subprojects {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+}
+
 fun Project.configureAndroidProject() {
     extensions.configure<BaseExtension> {
         compileSdkVersion(libs.versions.compileSdk.get().toInt())

@@ -15,11 +15,22 @@ hilt = "2.45"
 compose = "2023.01.00"
 composeCompiler = "1.4.2"
 
+junit4 = "4.13.2"
+junit5 = "5.9.2"
+kotest = "5.5.5"
+mockk = "1.13.4"
+
 [libraries]
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version = "0.1.5" }
 
+kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-playServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
+kotlin-coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+
+arrow-bom = { group = "io.arrow-kt", name = "arrow-stack", version = "1.1.2" }
+arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
 
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
@@ -31,9 +42,7 @@ androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.9.0" 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 androidx-activityCompose = { group = "androidx.activity", name = "activity-compose", version = "1.6.1" }
 
-material = { group = "com.google.android.material", name = "material", version = "1.8.0" }
-
-playServices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.6.0" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
@@ -43,12 +52,41 @@ androidx-compose-uiToolingPreview = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
 androidx-compose-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+material = { group = "com.google.android.material", name = "material", version = "1.8.0" }
+
+playServices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
+
+test-kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+
+test-junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+test-junit5 = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit5" }
+test-junit5Params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit5" }
+
+test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+test-mockk-agentJvm = { group = "io.mockk", name = "mockk-agent-jvm", version.ref = "mockk" }
+test-mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+
+test-kotest-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+test-kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+
+test-turbine = { group = "app.cash.turbine", name = "turbine", version = "0.12.1" }
+
 [bundles]
 androidx-compose = [
     "androidx-compose-material3",
     "androidx-compose-materialIcons",
     "androidx-compose-uiToolingPreview",
     "androidx-compose-animation"
+]
+
+test-unitTests = [
+    "test-junit5",
+    "test-junit5Params",
+    "test-kotest-junit5",
+    "test-mockk",
+    "test-turbine",
+    "kotlin-coroutinesTest"
 ]
 
 [plugins]
