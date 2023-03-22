@@ -1,0 +1,14 @@
+package dev.arli.sunnyday.data.location.mapper
+
+import dev.arli.sunnyday.data.db.entity.LocationEntity
+import dev.arli.sunnyday.domain.model.location.NamedLocation
+
+fun NamedLocation.toLocationEntity(id: Long, isCurrent: Boolean): LocationEntity {
+    return LocationEntity(
+        id = id,
+        latitude = coordinates.latitude.value,
+        longitude = coordinates.longitude.value,
+        name = name,
+        isCurrent = isCurrent
+    )
+}
