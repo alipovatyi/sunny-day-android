@@ -14,6 +14,7 @@ dagger = "2.45"
 hilt = "2.45"
 compose = "2023.01.00"
 composeCompiler = "1.4.2"
+room = "2.5.0"
 
 junit4 = "4.13.2"
 junit5 = "5.9.2"
@@ -53,11 +54,15 @@ androidx-compose-animation = { group = "androidx.compose.animation", name = "ani
 androidx-compose-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "room" }
+androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+
 material = { group = "com.google.android.material", name = "material", version = "1.8.0" }
 
 playServices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
-
-test-kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 test-junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 test-junit5 = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit5" }
@@ -72,6 +77,12 @@ test-kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-c
 
 test-turbine = { group = "app.cash.turbine", name = "turbine", version = "0.12.1" }
 
+test-androidx-core = { group = "androidx.test", name = "core", version = "1.5.0" }
+test-androidx-coreKtx = { group = "androidx.test", name = "core-ktx", version = "1.5.0" }
+test-androidx-runner = { group = "androidx.test", name = "runner", version = "1.5.2" }
+test-androidx-junit = { group = "androidx.test.ext", name = "junit", version = "1.1.5" }
+test-androidx-junitKtx = { group = "androidx.test.ext", name = "junit-ktx", version = "1.1.5" }
+
 [bundles]
 androidx-compose = [
     "androidx-compose-material3",
@@ -80,12 +91,26 @@ androidx-compose = [
     "androidx-compose-animation"
 ]
 
+androidx-room = [
+    "androidx-room-runtime",
+    "androidx-room-ktx"
+]
+
 test-unitTests = [
     "test-junit5",
     "test-junit5Params",
     "test-kotest-junit5",
     "test-mockk",
     "test-turbine",
+    "kotlin-coroutinesTest"
+]
+
+test-instrumentedTests = [
+    "test-androidx-core",
+    "test-androidx-coreKtx",
+    "test-androidx-runner",
+    "test-androidx-junit",
+    "test-androidx-junitKtx",
     "kotlin-coroutinesTest"
 ]
 

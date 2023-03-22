@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":data-db"))
     implementation(project(":domain"))
 
     implementation(libs.dagger)
