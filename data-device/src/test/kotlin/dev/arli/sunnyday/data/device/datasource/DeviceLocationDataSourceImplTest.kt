@@ -23,11 +23,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class DeviceLocationDataSourceTest : BehaviorSpec({
+internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
 
     val mockFusedLocationProviderClient: FusedLocationProviderClient = mockk()
     val mockGeocoder: Geocoder = mockk()
-    val dataSource = DeviceLocationDataSource(
+    val dataSource = DeviceLocationDataSourceImpl(
         fusedLocationProviderClient = mockFusedLocationProviderClient,
         geocoder = mockGeocoder,
         ioDispatcher = UnconfinedTestDispatcher()

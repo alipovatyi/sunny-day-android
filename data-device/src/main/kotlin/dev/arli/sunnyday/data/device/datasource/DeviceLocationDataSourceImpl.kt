@@ -12,7 +12,7 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import dev.arli.sunnyday.data.common.di.IoDispatcher
-import dev.arli.sunnyday.data.location.LocationDataSource
+import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
 import dev.arli.sunnyday.domain.model.location.Coordinates
 import dev.arli.sunnyday.domain.model.location.Latitude
 import dev.arli.sunnyday.domain.model.location.Longitude
@@ -24,11 +24,11 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-internal class DeviceLocationDataSource @Inject constructor(
+internal class DeviceLocationDataSourceImpl @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val geocoder: Geocoder,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : LocationDataSource {
+) : DeviceLocationDataSource {
 
     override suspend fun getCurrentLocation(): Either<Throwable, NamedLocation?> {
         return either {
