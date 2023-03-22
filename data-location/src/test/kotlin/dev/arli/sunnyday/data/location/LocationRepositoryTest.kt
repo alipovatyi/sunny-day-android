@@ -7,10 +7,10 @@ import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.db.entity.LocationEntity
 import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
 import dev.arli.sunnyday.data.location.mapper.toLocationEntity
-import dev.arli.sunnyday.domain.model.location.Coordinates
-import dev.arli.sunnyday.domain.model.location.Latitude
-import dev.arli.sunnyday.domain.model.location.Longitude
-import dev.arli.sunnyday.domain.model.location.NamedLocation
+import dev.arli.sunnyday.model.location.Coordinates
+import dev.arli.sunnyday.model.location.Latitude
+import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.location.NamedLocation
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery

@@ -13,10 +13,10 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import dev.arli.sunnyday.data.common.di.IoDispatcher
 import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
-import dev.arli.sunnyday.domain.model.location.Coordinates
-import dev.arli.sunnyday.domain.model.location.Latitude
-import dev.arli.sunnyday.domain.model.location.Longitude
-import dev.arli.sunnyday.domain.model.location.NamedLocation
+import dev.arli.sunnyday.model.location.Coordinates
+import dev.arli.sunnyday.model.location.Latitude
+import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.location.NamedLocation
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlinx.coroutines.CoroutineDispatcher

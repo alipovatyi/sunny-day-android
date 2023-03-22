@@ -5,8 +5,9 @@ plugins {
 
 dependencies {
     implementation(project(":data-db"))
-    implementation(project(":domain"))
+    implementation(project(":data-model"))
 
+    implementation(libs.kotlin.coroutines.core)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 

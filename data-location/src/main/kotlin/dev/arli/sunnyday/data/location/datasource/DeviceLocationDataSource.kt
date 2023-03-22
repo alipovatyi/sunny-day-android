@@ -1,7 +1,7 @@
 package dev.arli.sunnyday.data.location.datasource
 
 import arrow.core.Either
-import dev.arli.sunnyday.domain.model.location.NamedLocation
+import dev.arli.sunnyday.model.location.NamedLocation
 
 interface DeviceLocationDataSource {
 

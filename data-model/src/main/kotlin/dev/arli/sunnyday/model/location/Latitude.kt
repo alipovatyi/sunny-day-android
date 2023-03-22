@@ -1,4 +1,4 @@
-package dev.arli.sunnyday.domain.model.location
+package dev.arli.sunnyday.model.location
 
 @JvmInline
 value class Latitude(val value: Double)

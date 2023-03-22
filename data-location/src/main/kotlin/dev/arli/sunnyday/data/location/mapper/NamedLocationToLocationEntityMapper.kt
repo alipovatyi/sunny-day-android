@@ -1,7 +1,7 @@
 package dev.arli.sunnyday.data.location.mapper
 
 import dev.arli.sunnyday.data.db.entity.LocationEntity
-import dev.arli.sunnyday.domain.model.location.NamedLocation
+import dev.arli.sunnyday.model.location.NamedLocation
 
 fun NamedLocation.toLocationEntity(id: Long, isCurrent: Boolean): LocationEntity {
     return LocationEntity(

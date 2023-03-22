@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":data-db-room"))
     implementation(project(":data-device"))
     implementation(project(":data-location"))
+    implementation(project(":data-model"))
     implementation(project(":data-prefs"))
     implementation(project(":data-prefs-datastore"))
     implementation(project(":data-settings"))

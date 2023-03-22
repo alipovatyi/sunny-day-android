@@ -8,10 +8,10 @@ import arrow.core.right
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import dev.arli.sunnyday.data.device.base.mockTask
-import dev.arli.sunnyday.domain.model.location.Coordinates
-import dev.arli.sunnyday.domain.model.location.Latitude
-import dev.arli.sunnyday.domain.model.location.Longitude
-import dev.arli.sunnyday.domain.model.location.NamedLocation
+import dev.arli.sunnyday.model.location.Coordinates
+import dev.arli.sunnyday.model.location.Latitude
+import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.location.NamedLocation
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.called

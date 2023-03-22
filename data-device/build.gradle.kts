@@ -21,7 +21,7 @@ kapt {
 dependencies {
     implementation(project(":data-common"))
     implementation(project(":data-location"))
-    implementation(project(":domain"))
+    implementation(project(":data-model"))
 
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
