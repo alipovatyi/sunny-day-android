@@ -2,19 +2,29 @@ package dev.arli.sunnyday.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = LocationEntity.TableName)
+@Entity(
+    tableName = LocationEntity.TableName,
+    primaryKeys = [
+        LocationEntity.Columns.Latitude,
+        LocationEntity.Columns.Longitude
+    ]
+)
 data class LocationEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Long,
-    @ColumnInfo(name = "latitude") val latitude: Double,
-    @ColumnInfo(name = "longitude") val longitude: Double,
-    @ColumnInfo(name = "name") val name: String?,
-    @ColumnInfo(name = "is_current") val isCurrent: Boolean
+    @ColumnInfo(name = Columns.Latitude) val latitude: Double,
+    @ColumnInfo(name = Columns.Longitude) val longitude: Double,
+    @ColumnInfo(name = Columns.Name) val name: String?,
+    @ColumnInfo(name = Columns.IsCurrent) val isCurrent: Boolean
 ) {
 
     companion object {
         const val TableName = "location"
+    }
+
+    object Columns {
+        const val Latitude = "latitude"
+        const val Longitude = "longitude"
+        const val Name = "name"
+        const val IsCurrent = "is_current"
     }
 }

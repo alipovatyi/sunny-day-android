@@ -3,10 +3,11 @@ package dev.arli.sunnyday.data.db.room.dao
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import app.cash.turbine.test
+import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.data.db.entity.LocationEntity
 import dev.arli.sunnyday.data.db.room.SunnyDayDatabase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -18,6 +19,7 @@ import org.junit.Test
 internal class RoomLocationDaoTest {
 
     private lateinit var locationDao: RoomLocationDao
+    private lateinit var currentWeatherDao: RoomCurrentWeatherDao
     private lateinit var db: SunnyDayDatabase
 
     @Before
@@ -25,6 +27,7 @@ internal class RoomLocationDaoTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, SunnyDayDatabase::class.java).build()
         locationDao = db.locationDao()
+        currentWeatherDao = db.currentWeatherDao()
     }
 
     @After
@@ -33,16 +36,37 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
-    fun shouldReturnFlowWithAllLocations() = runTest {
+    fun shouldReturnFlowWithAllLocationEntities() = runTest {
         val givenLocationEntity1 = LocationEntity(
-            id = 1,
             latitude = 52.23,
             longitude = 21.01,
             name = "Warsaw",
             isCurrent = true
         )
         val givenLocationEntity2 = LocationEntity(
-            id = 2,
+            latitude = 50.45,
+            longitude = 30.52,
+            name = "Kyiv",
+            isCurrent = false
+        )
+
+        val expectedLocationEntities = listOf(givenLocationEntity1, givenLocationEntity2)
+
+        locationDao.insert(givenLocationEntity1)
+        locationDao.insert(givenLocationEntity2)
+
+        assertEquals(expectedLocationEntities, locationDao.observeAll().first())
+    }
+
+    @Test
+    fun shouldReturnFlowWithCurrentLocationEntityIfExists() = runTest {
+        val givenLocationEntity1 = LocationEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            name = "Warsaw",
+            isCurrent = true
+        )
+        val givenLocationEntity2 = LocationEntity(
             latitude = 50.45,
             longitude = 30.52,
             name = "Kyiv",
@@ -52,24 +76,18 @@ internal class RoomLocationDaoTest {
         locationDao.insert(givenLocationEntity1)
         locationDao.insert(givenLocationEntity2)
 
-        locationDao.observeAll().test {
-            assertEquals(listOf(givenLocationEntity1, givenLocationEntity2), awaitItem())
-
-            expectNoEvents()
-        }
+        assertEquals(givenLocationEntity1, locationDao.observeCurrent().first())
     }
 
     @Test
-    fun shouldReturnCurrentLocationIfExists() = runTest {
+    fun shouldReturnCurrentLocationEntityIfExists() = runTest {
         val givenLocationEntity1 = LocationEntity(
-            id = 1,
             latitude = 52.23,
             longitude = 21.01,
             name = "Warsaw",
             isCurrent = true
         )
         val givenLocationEntity2 = LocationEntity(
-            id = 2,
             latitude = 50.45,
             longitude = 30.52,
             name = "Kyiv",
@@ -83,9 +101,8 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
-    fun shouldReturnNullIfCurrentLocationDoesNotExists() = runTest {
+    fun shouldReturnNullIfCurrentLocationEntityDoesNotExists() = runTest {
         val givenLocationEntity = LocationEntity(
-            id = 2,
             latitude = 50.45,
             longitude = 30.52,
             name = "Kyiv",
@@ -98,9 +115,8 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
-    fun shouldInsertLocationIfDoesNotExist() = runTest {
+    fun shouldInsertLocationEntityIfDoesNotExist() = runTest {
         val givenLocationEntity = LocationEntity(
-            id = 1,
             latitude = 52.23,
             longitude = 21.01,
             name = "Warsaw",
@@ -109,24 +125,18 @@ internal class RoomLocationDaoTest {
 
         locationDao.insert(givenLocationEntity)
 
-        locationDao.observeAll().test {
-            assertEquals(listOf(givenLocationEntity), awaitItem())
-
-            expectNoEvents()
-        }
+        assertEquals(listOf(givenLocationEntity), locationDao.observeAll().first())
     }
 
     @Test
-    fun shouldDeleteCurrentLocation() = runTest {
+    fun shouldDeleteCurrentLocationEntity() = runTest {
         val givenLocationEntity1 = LocationEntity(
-            id = 1,
             latitude = 52.23,
             longitude = 21.01,
             name = "Warsaw",
             isCurrent = true
         )
         val givenLocationEntity2 = LocationEntity(
-            id = 2,
             latitude = 50.45,
             longitude = 30.52,
             name = "Kyiv",
@@ -138,24 +148,18 @@ internal class RoomLocationDaoTest {
 
         locationDao.deleteCurrent()
 
-        locationDao.observeAll().test {
-            assertEquals(listOf(givenLocationEntity2), awaitItem())
-
-            expectNoEvents()
-        }
+        assertEquals(listOf(givenLocationEntity2), locationDao.observeAll().first())
     }
 
     @Test
-    fun shouldDeleteLocationWithId() = runTest {
+    fun shouldDeleteLocationEntityWithCoordinates() = runTest {
         val givenLocationEntity1 = LocationEntity(
-            id = 1,
             latitude = 52.23,
             longitude = 21.01,
             name = "Warsaw",
             isCurrent = true
         )
         val givenLocationEntity2 = LocationEntity(
-            id = 2,
             latitude = 50.45,
             longitude = 30.52,
             name = "Kyiv",
@@ -165,26 +169,70 @@ internal class RoomLocationDaoTest {
         locationDao.insert(givenLocationEntity1)
         locationDao.insert(givenLocationEntity2)
 
-        locationDao.delete(2)
+        locationDao.delete(
+            latitude = givenLocationEntity2.latitude,
+            longitude = givenLocationEntity2.longitude
+        )
 
-        locationDao.observeAll().test {
-            assertEquals(listOf(givenLocationEntity1), awaitItem())
-
-            expectNoEvents()
-        }
+        assertEquals(listOf(givenLocationEntity1), locationDao.observeAll().first())
     }
 
     @Test
-    fun shouldDeleteAllLocations() = runTest {
+    fun shouldDeleteCurrentWeatherOnLocationDelete() = runTest {
         val givenLocationEntity1 = LocationEntity(
-            id = 1,
             latitude = 52.23,
             longitude = 21.01,
             name = "Warsaw",
             isCurrent = true
         )
         val givenLocationEntity2 = LocationEntity(
-            id = 2,
+            latitude = 50.45,
+            longitude = 30.52,
+            name = "Kyiv",
+            isCurrent = false
+        )
+        val givenCurrentWeatherEntity1 = CurrentWeatherEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            temperature = 19.0,
+            windSpeed = 5.0,
+            windDirection = 180.0,
+            weatherCode = 0,
+            time = ""
+        )
+        val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
+            latitude = 50.45,
+            longitude = 30.52,
+            temperature = 10.0,
+            windSpeed = 25.0,
+            windDirection = 90.0,
+            weatherCode = 1,
+            time = ""
+        )
+
+        locationDao.insert(givenLocationEntity1)
+        locationDao.insert(givenLocationEntity2)
+        currentWeatherDao.insert(givenCurrentWeatherEntity1)
+        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+
+        locationDao.delete(
+            latitude = givenLocationEntity1.latitude,
+            longitude = givenLocationEntity1.longitude
+        )
+
+        assertEquals(listOf(givenLocationEntity2), locationDao.observeAll().first())
+        assertEquals(listOf(givenCurrentWeatherEntity2), currentWeatherDao.observeAll().first())
+    }
+
+    @Test
+    fun shouldDeleteAllLocationEntities() = runTest {
+        val givenLocationEntity1 = LocationEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            name = "Warsaw",
+            isCurrent = true
+        )
+        val givenLocationEntity2 = LocationEntity(
             latitude = 50.45,
             longitude = 30.52,
             name = "Kyiv",
@@ -196,10 +244,6 @@ internal class RoomLocationDaoTest {
 
         locationDao.deleteAll()
 
-        locationDao.observeAll().test {
-            assertEquals(emptyList<LocationEntity>(), awaitItem())
-
-            expectNoEvents()
-        }
+        assertEquals(emptyList<LocationEntity>(), locationDao.observeAll().first())
     }
 }

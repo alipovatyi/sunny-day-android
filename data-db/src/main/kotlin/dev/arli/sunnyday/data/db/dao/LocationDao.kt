@@ -7,13 +7,15 @@ interface LocationDao {
 
     fun observeAll(): Flow<List<LocationEntity>>
 
+    fun observeCurrent(): Flow<LocationEntity>
+
     suspend fun selectCurrent(): LocationEntity?
 
     suspend fun insert(location: LocationEntity)
 
     suspend fun deleteCurrent()
 
-    suspend fun delete(id: Long)
+    suspend fun delete(latitude: Double, longitude: Double)
 
     suspend fun deleteAll()
 }

@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.arli.sunnyday.data.db.DatabaseTransactionRunner
+import dev.arli.sunnyday.data.db.dao.CurrentWeatherDao
 import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.db.room.RoomDatabaseTransactionRunner
 import dev.arli.sunnyday.data.db.room.SunnyDayDatabase
@@ -32,6 +33,10 @@ internal object RoomDatabaseModule {
     @Singleton
     @Provides
     fun provideLocationDao(database: SunnyDayDatabase): LocationDao = database.locationDao()
+
+    @Singleton
+    @Provides
+    fun provideCurrentWeatherDao(database: SunnyDayDatabase): CurrentWeatherDao = database.currentWeatherDao()
 
     @Singleton
     @Provides

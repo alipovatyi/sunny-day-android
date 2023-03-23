@@ -21,14 +21,13 @@ internal class NamedLocationToLocationEntityMapperTest {
         )
 
         val expectedLocationEntity = LocationEntity(
-            id = 1,
             latitude = 52.237049,
             longitude = 21.017532,
             name = "Warsaw",
             isCurrent = true
         )
 
-        val actualLocationEntity = givenNamedLocation.toLocationEntity(id = 1, isCurrent = true)
+        val actualLocationEntity = givenNamedLocation.toLocationEntity(isCurrent = true)
 
         actualLocationEntity shouldBe expectedLocationEntity
     }

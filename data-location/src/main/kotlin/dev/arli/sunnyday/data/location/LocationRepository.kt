@@ -31,7 +31,7 @@ class LocationRepository @Inject internal constructor(
                         locationDao.deleteCurrent()
                     }
                     if (newCurrentLocation != null) {
-                        val locationEntity = newCurrentLocation.toLocationEntity(id = 0, isCurrent = true)
+                        val locationEntity = newCurrentLocation.toLocationEntity(isCurrent = true)
                         locationDao.insert(locationEntity)
                     }
                 }

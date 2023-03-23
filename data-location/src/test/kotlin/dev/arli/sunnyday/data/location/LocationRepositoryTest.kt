@@ -69,7 +69,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                         name = "Warsaw"
                     )
 
-                    val expectedLocationEntity = givenNewLocation.toLocationEntity(id = 0, isCurrent = true)
+                    val expectedLocationEntity = givenNewLocation.toLocationEntity(isCurrent = true)
 
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenNewLocation.right()
 
@@ -89,7 +89,6 @@ internal class LocationRepositoryTest : BehaviorSpec({
 
             and("old location is not null") {
                 val givenOldLocationEntity = LocationEntity(
-                    id = 1,
                     latitude = 52.237049,
                     longitude = 21.017532,
                     name = "Warsaw",
@@ -148,7 +147,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenNewLocation.right()
 
                     then("update current location in database") {
-                        val expectedLocationEntity = givenNewLocation.toLocationEntity(id = 0, isCurrent = true)
+                        val expectedLocationEntity = givenNewLocation.toLocationEntity(isCurrent = true)
 
                         coEvery { mockLocationDao.deleteCurrent() } just runs
                         coEvery { mockLocationDao.insert(expectedLocationEntity) } just runs
