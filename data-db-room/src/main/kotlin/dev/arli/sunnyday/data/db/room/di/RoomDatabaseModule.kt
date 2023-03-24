@@ -8,10 +8,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.arli.sunnyday.data.db.DatabaseTransactionRunner
+import dev.arli.sunnyday.data.db.SunnyDayDatabase
 import dev.arli.sunnyday.data.db.dao.CurrentWeatherDao
 import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.db.room.RoomDatabaseTransactionRunner
-import dev.arli.sunnyday.data.db.room.SunnyDayDatabase
+import dev.arli.sunnyday.data.db.room.RoomSunnyDayDatabase
 import javax.inject.Singleton
 
 @Module
@@ -22,21 +23,21 @@ internal object RoomDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideSunnyDayRoomDatabase(
+    fun provideRoomSunnyDayDatabase(
         @ApplicationContext context: Context
-    ): SunnyDayDatabase {
-        return Room.databaseBuilder(context, SunnyDayDatabase::class.java, DatabaseName)
+    ): RoomSunnyDayDatabase {
+        return Room.databaseBuilder(context, RoomSunnyDayDatabase::class.java, DatabaseName)
             .fallbackToDestructiveMigration()
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideLocationDao(database: SunnyDayDatabase): LocationDao = database.locationDao()
+    fun provideLocationDao(database: RoomSunnyDayDatabase): LocationDao = database.locationDao()
 
     @Singleton
     @Provides
-    fun provideCurrentWeatherDao(database: SunnyDayDatabase): CurrentWeatherDao = database.currentWeatherDao()
+    fun provideCurrentWeatherDao(database: RoomSunnyDayDatabase): CurrentWeatherDao = database.currentWeatherDao()
 
     @Singleton
     @Provides

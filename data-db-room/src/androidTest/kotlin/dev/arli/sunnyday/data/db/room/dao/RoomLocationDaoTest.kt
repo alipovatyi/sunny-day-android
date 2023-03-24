@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.data.db.entity.LocationEntity
-import dev.arli.sunnyday.data.db.room.SunnyDayDatabase
+import dev.arli.sunnyday.data.db.room.RoomSunnyDayDatabase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -20,12 +20,12 @@ internal class RoomLocationDaoTest {
 
     private lateinit var locationDao: RoomLocationDao
     private lateinit var currentWeatherDao: RoomCurrentWeatherDao
-    private lateinit var db: SunnyDayDatabase
+    private lateinit var db: RoomSunnyDayDatabase
 
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(context, SunnyDayDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, RoomSunnyDayDatabase::class.java).build()
         locationDao = db.locationDao()
         currentWeatherDao = db.currentWeatherDao()
     }
@@ -198,7 +198,7 @@ internal class RoomLocationDaoTest {
             windSpeed = 5.0,
             windDirection = 180.0,
             weatherCode = 0,
-            time = ""
+            time = "2023-03-24T12:00"
         )
         val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
             latitude = 50.45,
@@ -207,7 +207,7 @@ internal class RoomLocationDaoTest {
             windSpeed = 25.0,
             windDirection = 90.0,
             weatherCode = 1,
-            time = ""
+            time = "2023-03-24T12:00"
         )
 
         locationDao.insert(givenLocationEntity1)
