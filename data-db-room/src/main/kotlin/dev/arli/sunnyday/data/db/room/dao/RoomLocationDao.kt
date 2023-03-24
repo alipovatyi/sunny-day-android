@@ -2,6 +2,7 @@ package dev.arli.sunnyday.data.db.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.db.entity.LocationEntity
@@ -19,8 +20,8 @@ abstract class RoomLocationDao : LocationDao {
     @Query("SELECT * FROM ${LocationEntity.TableName} WHERE ${LocationEntity.Columns.IsCurrent} = 1")
     abstract override suspend fun selectCurrent(): LocationEntity?
 
-    @Insert
-    abstract override suspend fun insert(location: LocationEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract override suspend fun insertOrUpdate(location: LocationEntity)
 
     @Query("DELETE FROM ${LocationEntity.TableName} WHERE ${LocationEntity.Columns.IsCurrent} = 1")
     abstract override suspend fun deleteCurrent()

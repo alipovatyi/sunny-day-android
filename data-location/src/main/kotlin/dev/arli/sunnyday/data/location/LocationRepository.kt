@@ -32,7 +32,7 @@ class LocationRepository @Inject internal constructor(
                     }
                     if (newCurrentLocation != null) {
                         val locationEntity = newCurrentLocation.toLocationEntity(isCurrent = true)
-                        locationDao.insert(locationEntity)
+                        locationDao.insertOrUpdate(locationEntity)
                     }
                 }
             }
@@ -40,8 +40,8 @@ class LocationRepository @Inject internal constructor(
     }
 
     fun observeLocations(): Flow<List<ForecastLocation>> {
-        return locationDao.observeAll().map { locations ->
-            locations.map {
+        return locationDao.observeAll().map { locationEntities ->
+            locationEntities.map {
                 ForecastLocation(
                     coordinates = Coordinates(
                         latitude = Latitude(it.latitude),

@@ -22,7 +22,7 @@ abstract class RoomCurrentWeatherDao : CurrentWeatherDao {
     abstract override fun observe(latitude: Double, longitude: Double): Flow<CurrentWeatherEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override suspend fun insert(currentWeather: CurrentWeatherEntity)
+    abstract override suspend fun insertOrUpdate(currentWeather: CurrentWeatherEntity)
 
     @Query(
         "DELETE FROM ${CurrentWeatherEntity.TableName} " +

@@ -52,8 +52,8 @@ internal class RoomLocationDaoTest {
 
         val expectedLocationEntities = listOf(givenLocationEntity1, givenLocationEntity2)
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
         assertEquals(expectedLocationEntities, locationDao.observeAll().first())
     }
@@ -73,8 +73,8 @@ internal class RoomLocationDaoTest {
             isCurrent = false
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
         assertEquals(givenLocationEntity1, locationDao.observeCurrent().first())
     }
@@ -94,8 +94,8 @@ internal class RoomLocationDaoTest {
             isCurrent = false
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
         assertEquals(givenLocationEntity1, locationDao.selectCurrent())
     }
@@ -109,7 +109,7 @@ internal class RoomLocationDaoTest {
             isCurrent = false
         )
 
-        locationDao.insert(givenLocationEntity)
+        locationDao.insertOrUpdate(givenLocationEntity)
 
         assertNull(locationDao.selectCurrent())
     }
@@ -123,9 +123,30 @@ internal class RoomLocationDaoTest {
             isCurrent = true
         )
 
-        locationDao.insert(givenLocationEntity)
+        locationDao.insertOrUpdate(givenLocationEntity)
 
         assertEquals(listOf(givenLocationEntity), locationDao.observeAll().first())
+    }
+
+    @Test
+    fun shouldUpdateLocationEntityIfExists() = runTest {
+        val givenLocationEntity1 = LocationEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            name = "Warsaw",
+            isCurrent = true
+        )
+        val givenLocationEntity2 = LocationEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            name = "Warsaw",
+            isCurrent = false
+        )
+
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+
+        assertEquals(listOf(givenLocationEntity2), locationDao.observeAll().first())
     }
 
     @Test
@@ -143,8 +164,8 @@ internal class RoomLocationDaoTest {
             isCurrent = false
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
         locationDao.deleteCurrent()
 
@@ -166,8 +187,8 @@ internal class RoomLocationDaoTest {
             isCurrent = false
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
         locationDao.delete(
             latitude = givenLocationEntity2.latitude,
@@ -210,10 +231,10 @@ internal class RoomLocationDaoTest {
             time = "2023-03-24T12:00"
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
-        currentWeatherDao.insert(givenCurrentWeatherEntity1)
-        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
 
         locationDao.delete(
             latitude = givenLocationEntity1.latitude,
@@ -239,8 +260,8 @@ internal class RoomLocationDaoTest {
             isCurrent = false
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
         locationDao.deleteAll()
 

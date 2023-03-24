@@ -51,11 +51,11 @@ internal class RoomCurrentWeatherDaoTest {
 
         val expectedCurrentWeatherEntities = listOf(givenCurrentWeatherEntity1, givenCurrentWeatherEntity2)
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
-        currentWeatherDao.insert(givenCurrentWeatherEntity1)
-        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
 
         assertEquals(expectedCurrentWeatherEntities, currentWeatherDao.observeAll().first())
     }
@@ -81,11 +81,11 @@ internal class RoomCurrentWeatherDaoTest {
             time = "2023-03-24T12:00"
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
 
-        currentWeatherDao.insert(givenCurrentWeatherEntity1)
-        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
 
         val actualCurrentWeatherEntity = currentWeatherDao.observe(
             latitude = givenCurrentWeatherEntity1.latitude,
@@ -107,9 +107,9 @@ internal class RoomCurrentWeatherDaoTest {
             time = "2023-03-24T12:00"
         )
 
-        locationDao.insert(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity1)
 
-        currentWeatherDao.insert(givenCurrentWeatherEntity)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity)
 
         assertEquals(listOf(givenCurrentWeatherEntity), currentWeatherDao.observeAll().first())
     }
@@ -135,10 +135,10 @@ internal class RoomCurrentWeatherDaoTest {
             time = "2023-03-24T12:00"
         )
 
-        locationDao.insert(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity1)
 
-        currentWeatherDao.insert(givenCurrentWeatherEntity1)
-        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
 
         assertEquals(listOf(givenCurrentWeatherEntity2), currentWeatherDao.observeAll().first())
     }
@@ -164,10 +164,10 @@ internal class RoomCurrentWeatherDaoTest {
             time = "2023-03-24T12:00"
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
-        currentWeatherDao.insert(givenCurrentWeatherEntity1)
-        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
 
         currentWeatherDao.delete(
             latitude = givenCurrentWeatherEntity1.latitude,
@@ -198,10 +198,10 @@ internal class RoomCurrentWeatherDaoTest {
             time = "2023-03-24T12:00"
         )
 
-        locationDao.insert(givenLocationEntity1)
-        locationDao.insert(givenLocationEntity2)
-        currentWeatherDao.insert(givenCurrentWeatherEntity1)
-        currentWeatherDao.insert(givenCurrentWeatherEntity2)
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
 
         currentWeatherDao.deleteAll()
 

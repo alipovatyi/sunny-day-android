@@ -11,7 +11,7 @@ interface LocationDao {
 
     suspend fun selectCurrent(): LocationEntity?
 
-    suspend fun insert(location: LocationEntity)
+    suspend fun insertOrUpdate(location: LocationEntity)
 
     suspend fun deleteCurrent()
 
