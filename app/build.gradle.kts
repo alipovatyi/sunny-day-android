@@ -31,6 +31,24 @@ android {
         }
     }
 
+    setFlavorDimensions(listOf("env"))
+
+    productFlavors {
+        create("staging") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-staging"
+
+            buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+        }
+
+        create("production") {
+            dimension = "env"
+
+            buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+        }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -47,6 +65,7 @@ kapt {
 dependencies {
     implementation(project(":data-api"))
     implementation(project(":data-common"))
+    implementation(project(":data-config"))
     implementation(project(":data-db"))
     implementation(project(":data-db-room"))
     implementation(project(":data-device"))
@@ -71,4 +90,6 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.bundles.test.unitTests)
 }
