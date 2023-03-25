@@ -1,5 +1,6 @@
-package dev.arli.sunnyday.model.forecast
+package dev.arli.sunnyday.model.weather
 
+import dev.arli.sunnyday.model.weather.DailyForecastVariable
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe

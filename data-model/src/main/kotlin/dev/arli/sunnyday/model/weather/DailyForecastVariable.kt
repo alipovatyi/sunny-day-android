@@ -1,4 +1,4 @@
-package dev.arli.sunnyday.model.forecast
+package dev.arli.sunnyday.model.weather
 
 enum class DailyForecastVariable(val key: String) {
     Temperature2m("temperature_2m"),

@@ -1,4 +1,4 @@
-package dev.arli.sunnyday.model.forecast
+package dev.arli.sunnyday.model.weather
 
 enum class HourlyForecastVariable(val key: String) {
     WeatherCode("weathercode"),
