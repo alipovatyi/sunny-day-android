@@ -31,6 +31,8 @@ kotlin-coroutines-playServices = { group = "org.jetbrains.kotlinx", name = "kotl
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.4.1" }
 
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version = "2.0.0" }
+
 arrow-bom = { group = "io.arrow-kt", name = "arrow-stack", version = "1.1.2" }
 arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
 

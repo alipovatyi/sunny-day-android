@@ -56,6 +56,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 }
 
 kapt {
@@ -91,6 +95,8 @@ dependencies {
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+
+    coreLibraryDesugaring(libs.desugar)
 
     testImplementation(libs.bundles.test.unitTests)
 }
