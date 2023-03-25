@@ -12,7 +12,7 @@ data class HourlyForecast(
     val relativeHumidity2m: Int,
     val dewPoint2m: Double,
     val apparentTemperature: Double,
-    val precipitationProbability: Int,
+    val precipitationProbability: Int?,
     val precipitation: Double,
     val weatherCode: Int,
     val pressureMsl: Double,

@@ -11,7 +11,7 @@ data class HourlyForecastDto(
     @SerialName("relativehumidity_2m") val relativeHumidity2m: List<Int>,
     @SerialName("dewpoint_2m") val dewPoint2m: List<Double>,
     @SerialName("apparent_temperature") val apparentTemperature: List<Double>,
-    @SerialName("precipitation_probability") val precipitationProbability: List<Int>,
+    @SerialName("precipitation_probability") val precipitationProbability: List<Int?>, // sometimes API returns null items
     @SerialName("precipitation") val precipitation: List<Double>,
     @SerialName("weathercode") val weatherCode: List<Int>,
     @SerialName("pressure_msl") val pressureMsl: List<Double>,

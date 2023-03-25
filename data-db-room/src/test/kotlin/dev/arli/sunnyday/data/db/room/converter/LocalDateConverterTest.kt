@@ -21,7 +21,7 @@ internal class LocalDateConverterTest : ShouldSpec({
     }
 
     should("convert string to local date") {
-        val givenLocalDateString = "2023-02-19"
+        val givenLocalDateString = "2023-03-25"
 
         val expectedLocalDate = LocalDate.parse("2023-03-25")
 
