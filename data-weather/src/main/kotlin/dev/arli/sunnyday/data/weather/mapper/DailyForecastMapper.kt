@@ -10,14 +10,14 @@ fun DailyForecastDto.toEntity(latitude: Latitude, longitude: Longitude): List<Da
         DailyForecastEntity(
             latitude = latitude.value,
             longitude = longitude.value,
-            time = time[index].toString(),
+            time = time[index],
             weatherCode = weatherCode[index],
             temperature2mMax = temperature2mMax[index],
             temperature2mMin = temperature2mMin[index],
             apparentTemperatureMax = apparentTemperatureMax[index],
             apparentTemperatureMin = apparentTemperatureMin[index],
-            sunrise = sunrise[index].toString(),
-            sunset = sunset[index].toString(),
+            sunrise = sunrise[index],
+            sunset = sunset[index],
             uvIndexMax = uvIndexMax[index]
         )
     }

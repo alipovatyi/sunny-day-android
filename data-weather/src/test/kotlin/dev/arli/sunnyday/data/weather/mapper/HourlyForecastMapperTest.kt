@@ -7,6 +7,7 @@ import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import java.time.LocalDateTime
 
 internal class HourlyForecastMapperTest : BehaviorSpec({
     given("hourly forecast dto") {
@@ -38,7 +39,7 @@ internal class HourlyForecastMapperTest : BehaviorSpec({
                     HourlyForecastEntity(
                         latitude = givenLatitude.value,
                         longitude = givenLongitude.value,
-                        time = "2023-03-25T00:00",
+                        time = LocalDateTime.parse("2023-03-25T00:00"),
                         temperature2m = 11.8,
                         relativeHumidity2m = 92,
                         dewPoint2m = 10.5,
@@ -54,7 +55,7 @@ internal class HourlyForecastMapperTest : BehaviorSpec({
                     HourlyForecastEntity(
                         latitude = givenLatitude.value,
                         longitude = givenLongitude.value,
-                        time = "2023-03-25T01:00",
+                        time = LocalDateTime.parse("2023-03-25T01:00"),
                         temperature2m = 11.0,
                         relativeHumidity2m = 91,
                         dewPoint2m = 9.5,
@@ -70,7 +71,7 @@ internal class HourlyForecastMapperTest : BehaviorSpec({
                     HourlyForecastEntity(
                         latitude = givenLatitude.value,
                         longitude = givenLongitude.value,
-                        time = "2023-03-25T02:00",
+                        time = LocalDateTime.parse("2023-03-25T02:00"),
                         temperature2m = 10.0,
                         relativeHumidity2m = 90,
                         dewPoint2m = 8.5,

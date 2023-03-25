@@ -8,6 +8,8 @@ import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class DailyForecastMapperTest : BehaviorSpec({
     given("daily forecast dto") {
@@ -44,40 +46,40 @@ internal class DailyForecastMapperTest : BehaviorSpec({
                     DailyForecastEntity(
                         latitude = givenLatitude.value,
                         longitude = givenLongitude.value,
-                        time = "2023-03-25",
+                        time = LocalDate.parse("2023-03-25"),
                         weatherCode = 95,
                         temperature2mMax = 13.8,
                         temperature2mMin = 7.4,
                         apparentTemperatureMax = 11.1,
                         apparentTemperatureMin = 4.9,
-                        sunrise = "2023-03-25T05:25",
-                        sunset = "2023-03-25T17:58",
+                        sunrise = LocalDateTime.parse("2023-03-25T05:25"),
+                        sunset = LocalDateTime.parse("2023-03-25T17:58"),
                         uvIndexMax = 4.30
                     ),
                     DailyForecastEntity(
                         latitude = givenLatitude.value,
                         longitude = givenLongitude.value,
-                        time = "2023-03-26",
+                        time = LocalDate.parse("2023-03-26"),
                         weatherCode = 61,
                         temperature2mMax = 9.9,
                         temperature2mMin = 6.2,
                         apparentTemperatureMax = 6.9,
                         apparentTemperatureMin = 3.4,
-                        sunrise = "2023-03-26T05:23",
-                        sunset = "2023-03-26T18:00",
+                        sunrise = LocalDateTime.parse("2023-03-26T05:23"),
+                        sunset = LocalDateTime.parse("2023-03-26T18:00"),
                         uvIndexMax = 3.95
                     ),
                     DailyForecastEntity(
                         latitude = givenLatitude.value,
                         longitude = givenLongitude.value,
-                        time = "2023-03-27",
+                        time = LocalDate.parse("2023-03-27"),
                         weatherCode = 80,
                         temperature2mMax = 5.8,
                         temperature2mMin = -0.7,
                         apparentTemperatureMax = 3.8,
                         apparentTemperatureMin = -6.1,
-                        sunrise = "2023-03-27T05:20",
-                        sunset = "2023-03-27T18:02",
+                        sunrise = LocalDateTime.parse("2023-03-27T05:20"),
+                        sunset = LocalDateTime.parse("2023-03-27T18:02"),
                         uvIndexMax = 3.10
                     )
                 )

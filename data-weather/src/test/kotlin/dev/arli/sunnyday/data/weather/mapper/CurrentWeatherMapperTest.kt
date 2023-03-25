@@ -33,7 +33,7 @@ internal class CurrentWeatherMapperTest : BehaviorSpec({
                     windSpeed = 13.2,
                     windDirection = 244,
                     weatherCode = 80,
-                    time = "2023-03-25T15:00"
+                    time = LocalDateTime.parse("2023-03-25T15:00")
                 )
 
                 givenCurrentWeatherDto.toEntity(givenLatitude, givenLongitude) shouldBe expectedCurrentWeatherEntity
@@ -49,7 +49,7 @@ internal class CurrentWeatherMapperTest : BehaviorSpec({
             windSpeed = 13.2,
             windDirection = 244,
             weatherCode = 80,
-            time = "2023-03-25T15:00"
+            time = LocalDateTime.parse("2023-03-25T15:00")
         )
 
         `when`("map to model") {

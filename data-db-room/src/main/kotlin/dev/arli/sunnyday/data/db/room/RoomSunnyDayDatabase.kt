@@ -6,10 +6,10 @@ import androidx.room.TypeConverters
 import dev.arli.sunnyday.data.db.SunnyDayDatabase
 import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.data.db.entity.LocationEntity
+import dev.arli.sunnyday.data.db.room.converter.LocalDateConverter
+import dev.arli.sunnyday.data.db.room.converter.LocalDateTimeConverter
 import dev.arli.sunnyday.data.db.room.dao.RoomCurrentWeatherDao
 import dev.arli.sunnyday.data.db.room.dao.RoomLocationDao
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Database(
     entities = [
@@ -18,7 +18,7 @@ import java.time.LocalDateTime
     ],
     version = 1
 )
-@TypeConverters(LocalDate::class, LocalDateTime::class)
+@TypeConverters(LocalDateConverter::class, LocalDateTimeConverter::class)
 abstract class RoomSunnyDayDatabase : RoomDatabase(), SunnyDayDatabase {
     abstract override fun locationDao(): RoomLocationDao
     abstract override fun currentWeatherDao(): RoomCurrentWeatherDao

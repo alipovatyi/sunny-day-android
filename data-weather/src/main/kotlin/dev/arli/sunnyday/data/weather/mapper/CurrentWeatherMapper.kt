@@ -5,7 +5,6 @@ import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
-import java.time.LocalDateTime
 
 fun CurrentWeatherDto.toEntity(latitude: Latitude, longitude: Longitude): CurrentWeatherEntity {
     return CurrentWeatherEntity(
@@ -15,7 +14,7 @@ fun CurrentWeatherDto.toEntity(latitude: Latitude, longitude: Longitude): Curren
         windSpeed = windSpeed,
         windDirection = windDirection.toInt(),
         weatherCode = weatherCode,
-        time = time.toString()
+        time = time
     )
 }
 
@@ -27,6 +26,6 @@ fun CurrentWeatherEntity.toModel(): CurrentWeather {
         windSpeed = windSpeed,
         windDirection = windDirection,
         weatherCode = weatherCode,
-        time = LocalDateTime.parse(time)
+        time = time
     )
 }

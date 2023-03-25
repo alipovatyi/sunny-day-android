@@ -3,6 +3,7 @@ package dev.arli.sunnyday.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import java.time.LocalDateTime
 
 @Entity(
     tableName = CurrentWeatherEntity.TableName,
@@ -32,7 +33,7 @@ data class CurrentWeatherEntity(
     @ColumnInfo(name = Columns.WindSpeed) val windSpeed: Double,
     @ColumnInfo(name = Columns.WindDirection) val windDirection: Int,
     @ColumnInfo(name = Columns.WeatherCode) val weatherCode: Int,
-    @ColumnInfo(name = Columns.Time) val time: String
+    @ColumnInfo(name = Columns.Time) val time: LocalDateTime
 ) {
 
     companion object {

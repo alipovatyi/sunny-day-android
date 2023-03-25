@@ -10,7 +10,7 @@ fun HourlyForecastDto.toEntity(latitude: Latitude, longitude: Longitude): List<H
         HourlyForecastEntity(
             latitude = latitude.value,
             longitude = longitude.value,
-            time = time[index].toString(),
+            time = time[index],
             temperature2m = temperature2m[index],
             relativeHumidity2m = relativeHumidity2m[index],
             dewPoint2m = dewPoint2m[index],
