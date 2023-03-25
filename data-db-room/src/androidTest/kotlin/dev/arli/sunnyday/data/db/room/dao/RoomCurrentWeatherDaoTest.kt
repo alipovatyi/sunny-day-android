@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.data.db.entity.LocationEntity
 import dev.arli.sunnyday.data.db.room.RoomSunnyDayDatabase
+import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -37,7 +38,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 5.0,
             windDirection = 180,
             weatherCode = 0,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
         val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
             latitude = 50.45,
@@ -46,7 +47,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 25.0,
             windDirection = 90,
             weatherCode = 1,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
 
         val expectedCurrentWeatherEntities = listOf(givenCurrentWeatherEntity1, givenCurrentWeatherEntity2)
@@ -69,7 +70,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 5.0,
             windDirection = 180,
             weatherCode = 0,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
         val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
             latitude = 50.45,
@@ -78,7 +79,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 25.0,
             windDirection = 90,
             weatherCode = 1,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
 
         locationDao.insertOrUpdate(givenLocationEntity1)
@@ -104,7 +105,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 5.0,
             windDirection = 180,
             weatherCode = 0,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
 
         locationDao.insertOrUpdate(givenLocationEntity1)
@@ -123,7 +124,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 5.0,
             windDirection = 180,
             weatherCode = 0,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
         val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
             latitude = 52.23,
@@ -132,47 +133,13 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 10.0,
             windDirection = 35,
             weatherCode = 3,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
 
         locationDao.insertOrUpdate(givenLocationEntity1)
 
         currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
         currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
-
-        assertEquals(listOf(givenCurrentWeatherEntity2), currentWeatherDao.observeAll().first())
-    }
-
-    @Test
-    fun shouldDeleteCurrentWeatherEntityForCoordinates() = runTest {
-        val givenCurrentWeatherEntity1 = CurrentWeatherEntity(
-            latitude = 52.23,
-            longitude = 21.01,
-            temperature = 19.0,
-            windSpeed = 5.0,
-            windDirection = 180,
-            weatherCode = 0,
-            time = "2023-03-24T12:00"
-        )
-        val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
-            latitude = 50.45,
-            longitude = 30.52,
-            temperature = 10.0,
-            windSpeed = 25.0,
-            windDirection = 90,
-            weatherCode = 1,
-            time = "2023-03-24T12:00"
-        )
-
-        locationDao.insertOrUpdate(givenLocationEntity1)
-        locationDao.insertOrUpdate(givenLocationEntity2)
-        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
-        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
-
-        currentWeatherDao.delete(
-            latitude = givenCurrentWeatherEntity1.latitude,
-            longitude = givenCurrentWeatherEntity1.longitude
-        )
 
         assertEquals(listOf(givenCurrentWeatherEntity2), currentWeatherDao.observeAll().first())
     }
@@ -186,7 +153,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 5.0,
             windDirection = 180,
             weatherCode = 0,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
         val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
             latitude = 50.45,
@@ -195,7 +162,7 @@ internal class RoomCurrentWeatherDaoTest {
             windSpeed = 25.0,
             windDirection = 90,
             weatherCode = 1,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
 
         locationDao.insertOrUpdate(givenLocationEntity1)
@@ -206,6 +173,40 @@ internal class RoomCurrentWeatherDaoTest {
         currentWeatherDao.deleteAll()
 
         assertEquals(emptyList<CurrentWeatherEntity>(), currentWeatherDao.observeAll().first())
+    }
+
+    @Test
+    fun shouldDeleteCurrentWeatherEntityForCoordinates() = runTest {
+        val givenCurrentWeatherEntity1 = CurrentWeatherEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            temperature = 19.0,
+            windSpeed = 5.0,
+            windDirection = 180,
+            weatherCode = 0,
+            time = LocalDateTime.parse("2023-03-24T12:00")
+        )
+        val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
+            latitude = 50.45,
+            longitude = 30.52,
+            temperature = 10.0,
+            windSpeed = 25.0,
+            windDirection = 90,
+            weatherCode = 1,
+            time = LocalDateTime.parse("2023-03-24T12:00")
+        )
+
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity1)
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity2)
+
+        currentWeatherDao.delete(
+            latitude = givenCurrentWeatherEntity1.latitude,
+            longitude = givenCurrentWeatherEntity1.longitude
+        )
+
+        assertEquals(listOf(givenCurrentWeatherEntity2), currentWeatherDao.observeAll().first())
     }
 
     private companion object {

@@ -7,5 +7,5 @@ import dev.arli.sunnyday.data.db.dao.LocationDao
 interface SunnyDayDatabase {
     fun locationDao(): LocationDao
     fun currentWeatherDao(): CurrentWeatherDao
-//    fun dailyForecastDao(): DailyForecastDao
+    fun dailyForecastDao(): DailyForecastDao
 }

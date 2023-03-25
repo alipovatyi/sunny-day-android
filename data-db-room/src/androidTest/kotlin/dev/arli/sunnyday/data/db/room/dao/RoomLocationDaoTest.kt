@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.data.db.entity.LocationEntity
 import dev.arli.sunnyday.data.db.room.RoomSunnyDayDatabase
+import java.time.LocalDateTime
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -219,7 +220,7 @@ internal class RoomLocationDaoTest {
             windSpeed = 5.0,
             windDirection = 180,
             weatherCode = 0,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
         val givenCurrentWeatherEntity2 = CurrentWeatherEntity(
             latitude = 50.45,
@@ -228,7 +229,7 @@ internal class RoomLocationDaoTest {
             windSpeed = 25.0,
             windDirection = 90,
             weatherCode = 1,
-            time = "2023-03-24T12:00"
+            time = LocalDateTime.parse("2023-03-24T12:00")
         )
 
         locationDao.insertOrUpdate(givenLocationEntity1)
