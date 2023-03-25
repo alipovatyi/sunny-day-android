@@ -4,8 +4,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dev.arli.sunnyday.data.api.retrofit.adapter.EitherCallAdapterFactory
-import dev.arli.sunnyday.data.api.retrofit.service.RetrofitWeatherService
-import dev.arli.sunnyday.data.api.service.WeatherService
+import dev.arli.sunnyday.data.api.retrofit.RetrofitWeatherApi
+import dev.arli.sunnyday.data.api.WeatherApi
 import dev.arli.sunnyday.data.config.datasource.ConfigDataSource
 import javax.inject.Singleton
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -53,5 +53,5 @@ object RetrofitApiModule {
 
     @Singleton
     @Provides
-    fun provideWeatherService(retrofit: Retrofit): WeatherService = retrofit.create<RetrofitWeatherService>()
+    fun provideWeatherService(retrofit: Retrofit): WeatherApi = retrofit.create<RetrofitWeatherApi>()
 }

@@ -30,7 +30,7 @@ data class CurrentWeatherEntity(
     @ColumnInfo(name = Columns.Longitude) val longitude: Double,
     @ColumnInfo(name = Columns.Temperature) val temperature: Double,
     @ColumnInfo(name = Columns.WindSpeed) val windSpeed: Double,
-    @ColumnInfo(name = Columns.WindDirection) val windDirection: Double,
+    @ColumnInfo(name = Columns.WindDirection) val windDirection: Int,
     @ColumnInfo(name = Columns.WeatherCode) val weatherCode: Int,
     @ColumnInfo(name = Columns.Time) val time: String
 ) {

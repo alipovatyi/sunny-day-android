@@ -35,7 +35,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 19.0,
             windSpeed = 5.0,
-            windDirection = 180.0,
+            windDirection = 180,
             weatherCode = 0,
             time = "2023-03-24T12:00"
         )
@@ -44,7 +44,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 30.52,
             temperature = 10.0,
             windSpeed = 25.0,
-            windDirection = 90.0,
+            windDirection = 90,
             weatherCode = 1,
             time = "2023-03-24T12:00"
         )
@@ -67,7 +67,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 19.0,
             windSpeed = 5.0,
-            windDirection = 180.0,
+            windDirection = 180,
             weatherCode = 0,
             time = "2023-03-24T12:00"
         )
@@ -76,7 +76,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 30.52,
             temperature = 10.0,
             windSpeed = 25.0,
-            windDirection = 90.0,
+            windDirection = 90,
             weatherCode = 1,
             time = "2023-03-24T12:00"
         )
@@ -102,7 +102,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 19.0,
             windSpeed = 5.0,
-            windDirection = 180.0,
+            windDirection = 180,
             weatherCode = 0,
             time = "2023-03-24T12:00"
         )
@@ -121,7 +121,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 19.0,
             windSpeed = 5.0,
-            windDirection = 180.0,
+            windDirection = 180,
             weatherCode = 0,
             time = "2023-03-24T12:00"
         )
@@ -130,7 +130,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 25.0,
             windSpeed = 10.0,
-            windDirection = 35.0,
+            windDirection = 35,
             weatherCode = 3,
             time = "2023-03-24T12:00"
         )
@@ -150,7 +150,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 19.0,
             windSpeed = 5.0,
-            windDirection = 180.0,
+            windDirection = 180,
             weatherCode = 0,
             time = "2023-03-24T12:00"
         )
@@ -159,7 +159,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 30.52,
             temperature = 10.0,
             windSpeed = 25.0,
-            windDirection = 90.0,
+            windDirection = 90,
             weatherCode = 1,
             time = "2023-03-24T12:00"
         )
@@ -184,7 +184,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 21.01,
             temperature = 19.0,
             windSpeed = 5.0,
-            windDirection = 180.0,
+            windDirection = 180,
             weatherCode = 0,
             time = "2023-03-24T12:00"
         )
@@ -193,7 +193,7 @@ internal class RoomCurrentWeatherDaoTest {
             longitude = 30.52,
             temperature = 10.0,
             windSpeed = 25.0,
-            windDirection = 90.0,
+            windDirection = 90,
             weatherCode = 1,
             time = "2023-03-24T12:00"
         )

@@ -13,6 +13,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -22,8 +24,9 @@ import retrofit2.http.GET
 
 @OptIn(ExperimentalSerializationApi::class)
 internal class EitherCallAdapterTest : BehaviorSpec({
+
     lateinit var mockWebServer: MockWebServer
-    lateinit var testApi: TestApi
+    lateinit var testService: TestService
 
     beforeEach {
         mockWebServer = MockWebServer()
@@ -36,7 +39,7 @@ internal class EitherCallAdapterTest : BehaviorSpec({
             addCallAdapterFactory(EitherCallAdapterFactory())
         }.build()
 
-        testApi = retrofit.create()
+        testService = retrofit.create()
     }
 
     afterEach {
@@ -50,7 +53,7 @@ internal class EitherCallAdapterTest : BehaviorSpec({
 
                 mockWebServer.enqueue(givenResponse)
 
-                val actualError = testApi.callWithResponseBody().shouldBeLeft()
+                val actualError = testService.callWithResponseBody().shouldBeLeft()
 
                 actualError.shouldBeInstanceOf<ApiError.UnknownApiError>()
                 actualError.throwable.shouldBeInstanceOf<SerializationException>()
@@ -64,7 +67,7 @@ internal class EitherCallAdapterTest : BehaviorSpec({
 
                 mockWebServer.enqueue(givenResponse)
 
-                val actualError = testApi.callWithResponseBody().shouldBeLeft()
+                val actualError = testService.callWithResponseBody().shouldBeLeft()
 
                 actualError.shouldBeInstanceOf<ApiError.UnknownApiError>()
                 actualError.throwable.shouldBeInstanceOf<MissingFieldException>()
@@ -80,7 +83,7 @@ internal class EitherCallAdapterTest : BehaviorSpec({
 
                 mockWebServer.enqueue(givenResponse)
 
-                testApi.callWithResponseBody() shouldBeRight expectedTestDto
+                testService.callWithResponseBody() shouldBeRight expectedTestDto
             }
         }
 
@@ -90,7 +93,7 @@ internal class EitherCallAdapterTest : BehaviorSpec({
 
                 mockWebServer.enqueue(givenResponse)
 
-                testApi.callWithoutResponseBody() shouldBeRight Unit
+                testService.callWithoutResponseBody() shouldBeRight Unit
             }
         }
     }
@@ -104,7 +107,7 @@ internal class EitherCallAdapterTest : BehaviorSpec({
 
                 mockWebServer.enqueue(givenResponse)
 
-                testApi.callWithResponseBody() shouldBeLeft expectedError
+                testService.callWithResponseBody() shouldBeLeft expectedError
             }
         }
 
@@ -117,26 +120,28 @@ internal class EitherCallAdapterTest : BehaviorSpec({
 
                 mockWebServer.enqueue(givenResponse)
 
-                testApi.callWithResponseBody() shouldBeLeft expectedError
+                testService.callWithResponseBody() shouldBeLeft expectedError
             }
         }
 
         `when`("body is correct") {
             then("return either left with http error and reason") {
-                val givenResponseJson = """{ "reason": "Something went wrong" }"""
-                val givenResponse = MockResponse().setResponseCode(404).setBody(givenResponseJson)
+                val givenResponseJson = buildJsonObject {
+                    put("reason", "Something went wrong")
+                }
+                val givenResponse = MockResponse().setResponseCode(404).setBody(givenResponseJson.toString())
 
                 val expectedError = ApiError.HttpError(code = 404, reason = "Something went wrong")
 
                 mockWebServer.enqueue(givenResponse)
 
-                testApi.callWithResponseBody() shouldBeLeft expectedError
+                testService.callWithResponseBody() shouldBeLeft expectedError
             }
         }
     }
 }) {
 
-    private interface TestApi {
+    private interface TestService {
         @GET("/")
         suspend fun callWithResponseBody(): Either<ApiError, TestDto>
 

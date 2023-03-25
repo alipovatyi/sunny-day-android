@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     implementation(project(":data-api"))
+    implementation(project(":data-common"))
     implementation(project(":data-config"))
     implementation(project(":data-model"))
 
