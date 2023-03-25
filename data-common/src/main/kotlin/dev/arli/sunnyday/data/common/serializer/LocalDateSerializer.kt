@@ -11,17 +11,15 @@ import kotlinx.serialization.encoding.Encoder
 
 typealias SerializableLocalDate = @Serializable(LocalDateSerializer::class) LocalDate
 
-object LocalDateSerializer : KSerializer<LocalDate?> {
+object LocalDateSerializer : KSerializer<LocalDate> {
 
     override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: LocalDate?) {
-        if (value != null) {
-            encoder.encodeString(DateTimeFormatter.ISO_LOCAL_DATE.format(value))
-        }
+    override fun serialize(encoder: Encoder, value: LocalDate) {
+        encoder.encodeString(DateTimeFormatter.ISO_LOCAL_DATE.format(value))
     }
 
-    override fun deserialize(decoder: Decoder): LocalDate? {
+    override fun deserialize(decoder: Decoder): LocalDate {
         return LocalDate.parse(decoder.decodeString(), DateTimeFormatter.ISO_DATE)
     }
 }
