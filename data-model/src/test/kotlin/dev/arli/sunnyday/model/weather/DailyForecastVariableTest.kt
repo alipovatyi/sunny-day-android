@@ -1,6 +1,5 @@
 package dev.arli.sunnyday.model.weather
 
-import dev.arli.sunnyday.model.weather.DailyForecastVariable
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
@@ -8,17 +7,14 @@ import io.kotest.matchers.shouldBe
 internal class DailyForecastVariableTest : ShouldSpec({
     should("return correct key") {
         listOf(
-            DailyForecastVariable.Temperature2m to "temperature_2m",
-            DailyForecastVariable.RelativeHumidity2m to "relativehumidity_2m",
-            DailyForecastVariable.DewPoint2m to "dewpoint_2m",
-            DailyForecastVariable.ApparentTemperature to "apparent_temperature",
-            DailyForecastVariable.PrecipitationProbability to "precipitation_probability",
-            DailyForecastVariable.Precipitation to "precipitation",
             DailyForecastVariable.WeatherCode to "weathercode",
-            DailyForecastVariable.PressureMsl to "pressure_msl",
-            DailyForecastVariable.WindSpeed10m to "windspeed_10m",
-            DailyForecastVariable.WindDirection10m to "winddirection_10m",
-            DailyForecastVariable.UVIndex to "uv_index",
+            DailyForecastVariable.Temperature2mMax to "temperature_2m_max",
+            DailyForecastVariable.Temperature2mMin to "temperature_2m_min",
+            DailyForecastVariable.ApparentTemperature2mMax to "apparent_temperature_max",
+            DailyForecastVariable.ApparentTemperature2mMin to "apparent_temperature_min",
+            DailyForecastVariable.Sunrise to "sunrise",
+            DailyForecastVariable.Sunset to "sunset",
+            DailyForecastVariable.UVIndexMax to "uv_index_max"
         ).forAll { (givenDailyForecastVariable, expectedKey) ->
             givenDailyForecastVariable.key shouldBe expectedKey
         }
