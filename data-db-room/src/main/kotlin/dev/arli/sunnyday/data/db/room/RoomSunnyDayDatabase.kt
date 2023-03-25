@@ -9,6 +9,7 @@ import dev.arli.sunnyday.data.db.entity.LocationEntity
 import dev.arli.sunnyday.data.db.room.dao.RoomCurrentWeatherDao
 import dev.arli.sunnyday.data.db.room.dao.RoomLocationDao
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Database(
     entities = [
@@ -17,7 +18,7 @@ import java.time.LocalDate
     ],
     version = 1
 )
-@TypeConverters(LocalDate::class)
+@TypeConverters(LocalDate::class, LocalDateTime::class)
 abstract class RoomSunnyDayDatabase : RoomDatabase(), SunnyDayDatabase {
     abstract override fun locationDao(): RoomLocationDao
     abstract override fun currentWeatherDao(): RoomCurrentWeatherDao
