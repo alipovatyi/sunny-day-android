@@ -28,7 +28,8 @@ detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version =
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-playServices = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
-kotlin-coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.4.1" }
 
 arrow-bom = { group = "io.arrow-kt", name = "arrow-stack", version = "1.1.2" }
 arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
@@ -64,6 +65,9 @@ material = { group = "com.google.android.material", name = "material", version =
 
 playServices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
 
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
+retrofit-kotlinSerialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version = "0.8.0" }
+
 test-junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 test-junit5 = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit5" }
 test-junit5Params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit5" }
@@ -74,8 +78,11 @@ test-mockk-android = { group = "io.mockk", name = "mockk-android", version.ref =
 
 test-kotest-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 test-kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+test-kotest-assertions-arrow = { group = "io.kotest.extensions", name = "kotest-assertions-arrow", version = "1.3.0" }
 
 test-turbine = { group = "app.cash.turbine", name = "turbine", version = "0.12.1" }
+
+test-mockWebServer = { group = "com.squareup.okhttp3", name = "mockwebserver", version = "4.10.0" }
 
 test-androidx-core = { group = "androidx.test", name = "core", version = "1.5.0" }
 test-androidx-coreKtx = { group = "androidx.test", name = "core-ktx", version = "1.5.0" }
@@ -100,9 +107,10 @@ test-unitTests = [
     "test-junit5",
     "test-junit5Params",
     "test-kotest-junit5",
+    "test-kotest-assertions-arrow",
     "test-mockk",
     "test-turbine",
-    "kotlin-coroutinesTest"
+    "kotlin-coroutines-test"
 ]
 
 test-instrumentedTests = [
@@ -111,12 +119,13 @@ test-instrumentedTests = [
     "test-androidx-runner",
     "test-androidx-junit",
     "test-androidx-junitKtx",
-    "kotlin-coroutinesTest"
+    "kotlin-coroutines-test"
 ]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradle" }
 android-library = { id = "com.android.library", version.ref = "androidGradle" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

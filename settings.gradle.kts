@@ -18,6 +18,7 @@ rootProject.name = "Sunny Day"
 
 include(":app")
 include(":data-api")
+include(":data-api-retrofit")
 include(":data-common")
 include(":data-config")
 include(":data-db")
