@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.arli.sunnyday.data.db.DatabaseTransactionRunner
 import dev.arli.sunnyday.data.db.dao.CurrentWeatherDao
 import dev.arli.sunnyday.data.db.dao.DailyForecastDao
+import dev.arli.sunnyday.data.db.dao.HourlyForecastDao
 import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.db.room.RoomDatabaseTransactionRunner
 import dev.arli.sunnyday.data.db.room.RoomSunnyDayDatabase
@@ -42,6 +43,10 @@ internal object RoomDatabaseModule {
     @Singleton
     @Provides
     fun provideDailyForecastDao(database: RoomSunnyDayDatabase): DailyForecastDao = database.dailyForecastDao()
+
+    @Singleton
+    @Provides
+    fun provideHourlyForecastDao(database: RoomSunnyDayDatabase): HourlyForecastDao = database.hourlyForecastDao()
 
     @Singleton
     @Provides
