@@ -15,3 +15,12 @@ fun LocationEntity.toNamedLocation(): NamedLocation {
         name = name
     )
 }
+
+fun NamedLocation.toLocationEntity(isCurrent: Boolean): LocationEntity {
+    return LocationEntity(
+        latitude = coordinates.latitude.value,
+        longitude = coordinates.longitude.value,
+        name = name,
+        isCurrent = isCurrent
+    )
+}

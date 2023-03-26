@@ -11,7 +11,6 @@ import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
 
 internal class CurrentWeatherMapperTest : BehaviorSpec({
-
     given("current weather dto") {
         val givenCurrentWeatherDto = CurrentWeatherDto(
             temperature = 12.6,
