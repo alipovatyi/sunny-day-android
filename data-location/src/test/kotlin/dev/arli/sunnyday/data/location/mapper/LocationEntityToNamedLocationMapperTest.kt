@@ -13,7 +13,6 @@ internal class LocationEntityToNamedLocationMapperTest {
     @Test
     fun `Should map LocationEntity to NamedLocation`() {
         val givenLocationEntity = LocationEntity(
-            id = 1,
             latitude = 52.237049,
             longitude = 21.017532,
             name = "Warsaw",
