@@ -12,4 +12,11 @@ internal class ApplicationConfigDataSource @Inject constructor() : ConfigDataSou
 
     override val currentTimeZone: TimeZone
         get() = TimeZone.getDefault()
+
+    override val forecastDaysCount: Int
+        get() = ForecastDaysCount
+
+    private companion object {
+        const val ForecastDaysCount = 10
+    }
 }

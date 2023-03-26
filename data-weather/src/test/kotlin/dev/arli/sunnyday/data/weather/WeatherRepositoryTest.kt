@@ -122,7 +122,10 @@ internal class WeatherRepositoryTest : BehaviorSpec({
         val givenForecastDaysCount = 10
 
         afterTest {
-            verify { mockConfigDataSource.currentTimeZone }
+            verify {
+                mockConfigDataSource.currentTimeZone
+                mockConfigDataSource.forecastDaysCount
+            }
             coVerify {
                 mockWeatherApi.getWeather(
                     latitude = givenLatitude.value,
@@ -140,6 +143,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
             val givenError = ApiError.HttpError(code = 500, reason = null)
 
             every { mockConfigDataSource.currentTimeZone } returns givenTimeZone
+            every { mockConfigDataSource.forecastDaysCount } returns givenForecastDaysCount
             coEvery {
                 mockWeatherApi.getWeather(
                     latitude = givenLatitude.value,
@@ -153,11 +157,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
             } returns givenError.left()
 
             then("return either left with error") {
-                repository.refreshWeather(
-                    latitude = givenLatitude,
-                    longitude = givenLongitude,
-                    forecastDaysCount = givenForecastDaysCount
-                ) shouldBeLeft givenError
+                repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenError
             }
         }
 
@@ -216,6 +216,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
             )
 
             every { mockConfigDataSource.currentTimeZone } returns givenTimeZone
+            every { mockConfigDataSource.forecastDaysCount } returns givenForecastDaysCount
             coEvery {
                 mockWeatherApi.getWeather(
                     latitude = givenLatitude.value,
@@ -239,11 +240,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } throws givenException
 
                 then("return either left with error") {
-                    repository.refreshWeather(
-                        latitude = givenLatitude,
-                        longitude = givenLongitude,
-                        forecastDaysCount = givenForecastDaysCount
-                    ) shouldBeLeft givenException
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenException
 
                     coVerify { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) }
                 }
@@ -265,11 +262,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } throws givenException
 
                 then("return either left with error") {
-                    repository.refreshWeather(
-                        latitude = givenLatitude,
-                        longitude = givenLongitude,
-                        forecastDaysCount = givenForecastDaysCount
-                    ) shouldBeLeft givenException
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenException
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)
@@ -299,11 +292,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 coEvery { mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities) } throws givenException
 
                 then("return either left with error") {
-                    repository.refreshWeather(
-                        latitude = givenLatitude,
-                        longitude = givenLongitude,
-                        forecastDaysCount = givenForecastDaysCount
-                    ) shouldBeLeft givenException
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenException
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)
@@ -332,11 +321,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 coEvery { mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities) } just runs
 
                 then("return either right with Unit") {
-                    repository.refreshWeather(
-                        latitude = givenLatitude,
-                        longitude = givenLongitude,
-                        forecastDaysCount = givenForecastDaysCount
-                    ) shouldBeRight Unit
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeRight Unit
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)

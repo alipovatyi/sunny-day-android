@@ -16,4 +16,8 @@ internal class ApplicationConfigDataSourceTest : ShouldSpec({
     should("return current time zone") {
         dataSource.currentTimeZone shouldBe TimeZone.getDefault()
     }
+
+    should("return forecast days count") {
+        dataSource.forecastDaysCount shouldBe 10
+    }
 })

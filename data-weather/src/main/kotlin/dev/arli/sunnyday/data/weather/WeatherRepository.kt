@@ -34,15 +34,11 @@ class WeatherRepository @Inject internal constructor(
         }
     }
 
-    suspend fun refreshWeather(
-        latitude: Latitude,
-        longitude: Longitude,
-        forecastDaysCount: Int
-    ): Either<Throwable, Unit> {
+    suspend fun refreshWeather(latitude: Latitude, longitude: Longitude): Either<Throwable, Unit> {
         return weatherApi.getWeather(
             latitude = latitude.value,
             longitude = longitude.value,
-            forecastDaysCount = forecastDaysCount,
+            forecastDaysCount = configDataSource.forecastDaysCount,
             includeCurrentWeather = true,
             hourlyVariables = HourlyForecastVariable.values().map { it.key },
             dailyVariables = DailyForecastVariable.values().map { it.key },

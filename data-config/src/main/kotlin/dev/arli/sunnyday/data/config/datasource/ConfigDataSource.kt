@@ -5,4 +5,5 @@ import java.util.TimeZone
 interface ConfigDataSource {
     val apiUrl: String
     val currentTimeZone: TimeZone
+    val forecastDaysCount: Int
 }
