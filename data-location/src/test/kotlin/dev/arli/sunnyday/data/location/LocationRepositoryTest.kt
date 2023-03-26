@@ -66,10 +66,11 @@ internal class LocationRepositoryTest : BehaviorSpec({
                             latitude = Latitude(52.237049),
                             longitude = Longitude(21.017532)
                         ),
-                        name = "Warsaw"
+                        name = "Warsaw",
+                        isCurrent = true
                     )
 
-                    val expectedLocationEntity = givenNewLocation.toLocationEntity(isCurrent = true)
+                    val expectedLocationEntity = givenNewLocation.toLocationEntity()
 
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenNewLocation.right()
 
@@ -119,7 +120,8 @@ internal class LocationRepositoryTest : BehaviorSpec({
                             latitude = Latitude(52.237049),
                             longitude = Longitude(21.017532)
                         ),
-                        name = "Warsaw"
+                        name = "Warsaw",
+                        isCurrent = true
                     )
 
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenNewLocation.right()
@@ -141,13 +143,14 @@ internal class LocationRepositoryTest : BehaviorSpec({
                             latitude = Latitude(50.45),
                             longitude = Longitude(30.52)
                         ),
-                        name = "Kyiv"
+                        name = "Kyiv",
+                        isCurrent = true
                     )
 
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenNewLocation.right()
 
                     then("update current location in database") {
-                        val expectedLocationEntity = givenNewLocation.toLocationEntity(isCurrent = true)
+                        val expectedLocationEntity = givenNewLocation.toLocationEntity()
 
                         coEvery { mockLocationDao.deleteCurrent() } just runs
                         coEvery { mockLocationDao.insertOrUpdate(expectedLocationEntity) } just runs

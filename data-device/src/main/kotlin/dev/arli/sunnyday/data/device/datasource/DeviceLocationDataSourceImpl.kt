@@ -34,7 +34,11 @@ internal class DeviceLocationDataSourceImpl @Inject constructor(
         return either {
             val coordinates = getCurrentLocationCoordinates().bind() ?: return@either null
             val address = getLocationAddress(coordinates).bind()
-            NamedLocation(coordinates = coordinates, name = address?.locality)
+            NamedLocation(
+                coordinates = coordinates,
+                name = address?.locality,
+                isCurrent = true
+            )
         }
     }
 

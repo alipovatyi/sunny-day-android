@@ -111,7 +111,8 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
                                 latitude = Latitude(givenLatitude),
                                 longitude = Longitude(givenLongitude)
                             ),
-                            name = null
+                            name = null,
+                            isCurrent = true
                         )
 
                         every {
@@ -139,7 +140,8 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
                                 latitude = Latitude(givenLatitude),
                                 longitude = Longitude(givenLongitude)
                             ),
-                            name = givenName
+                            name = givenName,
+                            isCurrent = true
                         )
 
                         every { mockGeocoder.getFromLocation(any(), any(), any()) } returns listOf(givenAddress)

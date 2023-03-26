@@ -12,11 +12,12 @@ fun LocationEntity.toNamedLocation(): NamedLocation {
             Latitude(value = latitude),
             Longitude(longitude)
         ) ,
-        name = name
+        name = name,
+        isCurrent = isCurrent
     )
 }
 
-fun NamedLocation.toLocationEntity(isCurrent: Boolean): LocationEntity {
+fun NamedLocation.toLocationEntity(): LocationEntity {
     return LocationEntity(
         latitude = coordinates.latitude.value,
         longitude = coordinates.longitude.value,

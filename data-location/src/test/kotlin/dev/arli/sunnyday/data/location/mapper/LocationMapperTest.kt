@@ -24,7 +24,8 @@ internal class LocationMapperTest : BehaviorSpec({
                         latitude = Latitude(52.237049),
                         longitude = Longitude(21.017532)
                     ),
-                    name = "Warsaw"
+                    name = "Warsaw",
+                    isCurrent = true
                 )
 
                 givenLocationEntity.toNamedLocation() shouldBe expectedNamedLocation
@@ -38,9 +39,10 @@ internal class LocationMapperTest : BehaviorSpec({
                 latitude = Latitude(52.237049),
                 longitude = Longitude(21.017532)
             ),
-            name = "Warsaw"
+            name = "Warsaw",
+            isCurrent = true
         )
-        
+
         `when`("map to location entity") {
             val expectedLocationEntity = LocationEntity(
                 latitude = 52.237049,
@@ -49,7 +51,7 @@ internal class LocationMapperTest : BehaviorSpec({
                 isCurrent = true
             )
 
-            val actualLocationEntity = givenNamedLocation.toLocationEntity(isCurrent = true)
+            val actualLocationEntity = givenNamedLocation.toLocationEntity()
 
             actualLocationEntity shouldBe expectedLocationEntity
         }
