@@ -12,7 +12,7 @@ coroutines = "1.6.4"
 
 dagger = "2.45"
 hilt = "2.45"
-compose = "2023.01.00"
+compose = "2023.03.00"
 composeCompiler = "1.4.2"
 room = "2.5.0"
 
