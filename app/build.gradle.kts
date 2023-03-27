@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activityCompose)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

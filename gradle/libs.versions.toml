@@ -41,6 +41,7 @@ dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", versi
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.0.0" }
 
 androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.9.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
@@ -56,6 +57,8 @@ androidx-compose-uiToolingPreview = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
 androidx-compose-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+androidx-navigation-compose = { group="androidx.navigation", name="navigation-compose", version = "2.5.3" }
 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
