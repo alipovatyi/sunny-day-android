@@ -16,6 +16,9 @@ internal class ApplicationConfigDataSource @Inject constructor() : ConfigDataSou
     override val forecastDaysCount: Int
         get() = ForecastDaysCount
 
+    override val googleMapsApiKey: String
+        get() = BuildConfig.GOOGLE_MAPS_API_KEY
+
     private companion object {
         const val ForecastDaysCount = 10
     }

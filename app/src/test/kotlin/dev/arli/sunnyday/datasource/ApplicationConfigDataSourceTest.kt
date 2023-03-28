@@ -20,4 +20,8 @@ internal class ApplicationConfigDataSourceTest : ShouldSpec({
     should("return forecast days count") {
         dataSource.forecastDaysCount shouldBe 10
     }
+
+    should("return Google Maps API key") {
+        dataSource.googleMapsApiKey shouldBe BuildConfig.GOOGLE_MAPS_API_KEY
+    }
 })

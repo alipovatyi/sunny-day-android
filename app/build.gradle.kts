@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.secrets)
 }
 
 android {
@@ -89,9 +90,9 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activityCompose)
     implementation(libs.androidx.navigation.compose)
-
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.google.places)
 
     coreLibraryDesugaring(libs.desugar)
 
