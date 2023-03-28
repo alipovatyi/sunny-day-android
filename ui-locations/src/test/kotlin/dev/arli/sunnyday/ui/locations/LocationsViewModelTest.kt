@@ -65,6 +65,14 @@ internal class LocationsViewModelTest : BehaviorSpec({
 
                 confirmVerified(mockObserveLocationsWithCurrentWeatherUseCase)
             }
+
+            then("refresh weather for all locations") {
+                coEvery { mockRefreshWeatherForAllLocationsUseCase() } returns Unit.right()
+
+                coVerify { mockRefreshWeatherForAllLocationsUseCase() }
+
+                confirmVerified(mockRefreshWeatherForAllLocationsUseCase)
+            }
         }
     }
 
@@ -140,7 +148,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
         }
     }
 
-    given("RefreshLocations event") {
+    given("Refresh event") {
         `when`("event sent") {
             and("refreshing failed") {
                 then("update view state") {

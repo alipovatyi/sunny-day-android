@@ -24,6 +24,7 @@ class LocationsViewModel @Inject constructor(
 
     init {
         observeLocationsWithCurrentWeather()
+        refreshWeatherForAllLocations()
     }
 
     override fun initialViewState(): LocationsViewState = LocationsViewState()
@@ -35,7 +36,7 @@ class LocationsViewModel @Inject constructor(
                 sendEffect(LocationsEffect.OpenLocationDetails(event.location.coordinates))
             }
             is LocationsEvent.AddLocation -> addLocation(event.location)
-            is LocationsEvent.Refresh -> refresh()
+            is LocationsEvent.Refresh -> refreshWeatherForAllLocations()
         }
     }
 
@@ -51,7 +52,7 @@ class LocationsViewModel @Inject constructor(
         }
     }
 
-    private fun refresh() {
+    private fun refreshWeatherForAllLocations() {
         setState { it.copy(isRefreshing = true) }
 
         viewModelScope.launch {
