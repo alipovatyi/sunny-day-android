@@ -130,7 +130,7 @@ private fun LocationsScreen(
             )
         },
         floatingActionButton = {
-            if (viewState.locations.isNotEmpty()) {
+            if (viewState.showAddLocationButton) {
                 FloatingActionButton(onClick = { onEventSent(LocationsEvent.AddLocationClick) }) {
                     Icon(
                         imageVector = Icons.Default.Add,
