@@ -3,8 +3,6 @@ package dev.arli.sunnyday.data.device.datasource
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import arrow.core.left
-import arrow.core.right
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import dev.arli.sunnyday.data.device.base.mockTask
@@ -12,8 +10,9 @@ import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.location.NamedLocation
+import io.kotest.assertions.arrow.core.shouldBeLeft
+import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.called
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -45,7 +44,7 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
             } returns givenLocationTask
 
             then("return failure result") {
-                dataSource.getCurrentLocation() shouldBe givenException.left()
+                dataSource.getCurrentLocation() shouldBeLeft givenException
 
                 verify {
                     mockFusedLocationProviderClient.getCurrentLocation(expectedPriority, any())
@@ -63,7 +62,7 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
                 } returns givenLocationTask
 
                 then("return success result") {
-                    dataSource.getCurrentLocation() shouldBe null.right()
+                    dataSource.getCurrentLocation() shouldBeRight null
 
                     verify {
                         mockFusedLocationProviderClient.getCurrentLocation(expectedPriority, any())
@@ -91,7 +90,7 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
                     every { mockGeocoder.getFromLocation(givenLatitude, givenLongitude, 1) } throws givenException
 
                     then("return failure result") {
-                        dataSource.getCurrentLocation() shouldBe givenException.left()
+                        dataSource.getCurrentLocation() shouldBeLeft givenException
 
                         verify {
                             mockFusedLocationProviderClient.getCurrentLocation(expectedPriority, any())
@@ -120,7 +119,7 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
                         } returns listOf(givenAddress)
 
                         then("return success result") {
-                            dataSource.getCurrentLocation() shouldBe expectedNamedLocation.right()
+                            dataSource.getCurrentLocation() shouldBeRight expectedNamedLocation
 
                             verify {
                                 mockFusedLocationProviderClient.getCurrentLocation(expectedPriority, any())
@@ -147,7 +146,7 @@ internal class DeviceLocationDataSourceImplTest : BehaviorSpec({
                         every { mockGeocoder.getFromLocation(any(), any(), any()) } returns listOf(givenAddress)
 
                         then("return success result") {
-                            dataSource.getCurrentLocation() shouldBe expectedNamedLocation.right()
+                            dataSource.getCurrentLocation() shouldBeRight expectedNamedLocation
 
                             verify {
                                 mockFusedLocationProviderClient.getCurrentLocation(expectedPriority, any())

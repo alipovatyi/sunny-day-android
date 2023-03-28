@@ -230,24 +230,24 @@ internal class WeatherRepositoryTest : BehaviorSpec({
             } returns givenWeatherResponseDto.right()
 
             and("updating current weather failed") {
-                val givenException = Throwable()
+                val givenError = Throwable()
 
                 val expectedCurrentWeatherEntity = givenWeatherResponseDto.currentWeather.toEntity(
                     latitude = givenLatitude,
                     longitude = givenLongitude
                 )
 
-                coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } throws givenException
+                coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } throws givenError
 
                 then("return either left with error") {
-                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenException
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenError
 
                     coVerify { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) }
                 }
             }
 
             and("updating daily forecast failed") {
-                val givenException = Throwable()
+                val givenError = Throwable()
 
                 val expectedCurrentWeatherEntity = givenWeatherResponseDto.currentWeather.toEntity(
                     latitude = givenLatitude,
@@ -259,10 +259,10 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 ).toTypedArray()
 
                 coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } just runs
-                coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } throws givenException
+                coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } throws givenError
 
                 then("return either left with error") {
-                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenException
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenError
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)
@@ -272,7 +272,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
             }
 
             and("updating hourly forecast failed") {
-                val givenException = Throwable()
+                val givenError = Throwable()
 
                 val expectedCurrentWeatherEntity = givenWeatherResponseDto.currentWeather.toEntity(
                     latitude = givenLatitude,
@@ -289,10 +289,10 @@ internal class WeatherRepositoryTest : BehaviorSpec({
 
                 coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } just runs
                 coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } just runs
-                coEvery { mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities) } throws givenException
+                coEvery { mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities) } throws givenError
 
                 then("return either left with error") {
-                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenException
+                    repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenError
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)

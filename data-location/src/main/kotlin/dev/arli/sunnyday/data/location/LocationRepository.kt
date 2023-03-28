@@ -41,4 +41,8 @@ class LocationRepository @Inject internal constructor(
             locationEntities.map { it.toNamedLocation() }
         }
     }
+
+    suspend fun addLocation(location: NamedLocation): Either<Throwable, Unit> {
+        return either { locationDao.insertOrUpdate(location.toLocationEntity()) }
+    }
 }
