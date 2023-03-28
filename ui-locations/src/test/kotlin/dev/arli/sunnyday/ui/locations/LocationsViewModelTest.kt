@@ -1,0 +1,165 @@
+package dev.arli.sunnyday.ui.locations
+
+import app.cash.turbine.test
+import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
+import dev.arli.sunnyday.model.CurrentWeather
+import dev.arli.sunnyday.model.LocationWithCurrentWeather
+import dev.arli.sunnyday.model.location.Coordinates
+import dev.arli.sunnyday.model.location.Latitude
+import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
+import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
+import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import java.time.LocalDateTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+
+@OptIn(ExperimentalCoroutinesApi::class)
+internal class LocationsViewModelTest : BehaviorSpec({
+
+    val locationsWithCurrentWeatherFlow = MutableSharedFlow<List<LocationWithCurrentWeather>>()
+
+    val mockObserveLocationsWithCurrentWeatherUseCase: ObserveLocationsWithCurrentWeatherUseCase = mockk {
+        every { this@mockk.invoke() } returns locationsWithCurrentWeatherFlow
+    }
+
+    lateinit var viewModel: LocationsViewModel
+
+    beforeEach {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+
+        viewModel = LocationsViewModel(
+            observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase
+        )
+    }
+
+    afterEach {
+        Dispatchers.resetMain()
+    }
+
+    given("view model") {
+        `when`("init") {
+            then("observe locations with current weather") {
+                verify { mockObserveLocationsWithCurrentWeatherUseCase() }
+
+                confirmVerified(mockObserveLocationsWithCurrentWeatherUseCase)
+            }
+        }
+    }
+
+    given("AddLocationClick event") {
+        `when`("event sent") {
+            then("send OpenAddLocation effect") {
+                viewModel.effect.test {
+                    viewModel.onEventSent(LocationsEvent.AddLocationClick)
+
+                    awaitItem() shouldBe LocationsEffect.OpenAddLocation
+
+                    expectNoEvents()
+                }
+            }
+        }
+    }
+
+    given("LocationClick event") {
+        `when`("event sent") {
+            then("send OpenLocationDetails effect") {
+                val givenLocation = LocationWithCurrentWeather(
+                    coordinates = Coordinates(
+                        latitude = Latitude(52.23),
+                        longitude = Longitude(21.01),
+                    ),
+                    name = "Warsaw",
+                    isCurrent = true,
+                    currentWeather = CurrentWeather(
+                        latitude = Latitude(52.23),
+                        longitude = Longitude(21.01),
+                        temperature = 12.6,
+                        windSpeed = 13.2,
+                        windDirection = 244,
+                        weatherCode = 80,
+                        time = LocalDateTime.parse("2023-03-25T15:00")
+                    )
+                )
+
+                val expectedEffect = LocationsEffect.OpenLocationDetails(
+                    coordinates = givenLocation.coordinates
+                )
+
+                viewModel.effect.test {
+                    viewModel.onEventSent(LocationsEvent.LocationClick(givenLocation))
+
+                    awaitItem() shouldBe expectedEffect
+
+                    expectNoEvents()
+                }
+            }
+        }
+    }
+
+    given("observing locations with current weather") {
+        `when`("locations are emitted") {
+            then("update view state") {
+                val givenLocation1 = LocationWithCurrentWeather(
+                    coordinates = Coordinates(
+                        latitude = Latitude(52.23),
+                        longitude = Longitude(21.01)
+                    ),
+                    name = "Warsaw",
+                    isCurrent = true,
+                    currentWeather = CurrentWeather(
+                        latitude = Latitude(52.23),
+                        longitude = Longitude(21.01),
+                        temperature = 12.6,
+                        windSpeed = 13.2,
+                        windDirection = 244,
+                        weatherCode = 80,
+                        time = LocalDateTime.parse("2023-03-25T15:00")
+                    )
+                )
+                val givenLocation2 = LocationWithCurrentWeather(
+                    coordinates = Coordinates(
+                        latitude = Latitude(50.45),
+                        longitude = Longitude(30.52)
+                    ),
+                    name = "Kyiv",
+                    isCurrent = false,
+                    currentWeather = CurrentWeather(
+                        latitude = Latitude(50.45),
+                        longitude = Longitude(30.52),
+                        temperature = 10.0,
+                        windSpeed = 25.0,
+                        windDirection = 90,
+                        weatherCode = 1,
+                        time = LocalDateTime.parse("2023-03-25T15:00")
+                    )
+                )
+
+                val expectedViewState1 = LocationsViewState(locations = listOf(givenLocation1))
+                val expectedViewState2 = LocationsViewState(locations = listOf(givenLocation1, givenLocation2))
+
+                viewModel.viewState.test {
+                    skipItems(1) // skip initial state
+
+                    locationsWithCurrentWeatherFlow.emit(listOf(givenLocation1))
+                    awaitItem() shouldBe expectedViewState1
+
+                    locationsWithCurrentWeatherFlow.emit(listOf(givenLocation1, givenLocation2))
+                    awaitItem() shouldBe expectedViewState2
+
+                    expectNoEvents()
+                }
+            }
+        }
+    }
+})

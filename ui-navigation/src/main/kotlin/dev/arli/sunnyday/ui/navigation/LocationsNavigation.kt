@@ -1,5 +1,6 @@
 package dev.arli.sunnyday.ui.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -24,6 +25,8 @@ private fun NavGraphBuilder.addLocations(
     navController: NavController
 ) {
     composable(route = Screen.Locations.createRoute(rootScreen)) {
-        LocationsScreen()
+        LocationsScreen(
+            viewModel = hiltViewModel()
+        )
     }
 }

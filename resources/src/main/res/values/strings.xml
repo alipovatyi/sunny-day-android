@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Sunny Day</string>
     <string name="my_locations">My Locations</string>
+    <string name="current_location">Current location</string>
+    <string name="add_location">Add location</string>
+    <string name="no_locations_added">No locations added</string>
+    <string name="add_first_location">Add your first location by clicking the button below</string>
 </resources>

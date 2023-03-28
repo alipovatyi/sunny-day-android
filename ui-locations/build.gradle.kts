@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -17,8 +19,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":data-location"))
+    implementation(project(":data-weather"))
     implementation(project(":domain"))
     implementation(project(":ui-common"))
 
     implementation(libs.androidx.core)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    testImplementation(libs.bundles.test.unitTests)
 }
