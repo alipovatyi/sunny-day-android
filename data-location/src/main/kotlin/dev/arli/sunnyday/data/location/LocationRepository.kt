@@ -18,9 +18,13 @@ class LocationRepository @Inject internal constructor(
     private val locationDao: LocationDao
 ) {
 
-    suspend fun refreshCurrentLocation(): Either<Throwable, Unit> {
+    suspend fun refreshCurrentLocation(): Either<Throwable, NamedLocation?> {
         return either {
-            val newCurrentLocation = deviceLocationDataSource.getCurrentLocation().bind()
+            val newCurrentLocation = deviceLocationDataSource.getCurrentLocation().tapLeft { error ->
+                if (error is SecurityException) {
+                    locationDao.deleteCurrent()
+                }
+            }.bind()
             databaseTransactionRunner {
                 val oldCurrentLocation = locationDao.selectCurrent()?.toNamedLocation()
                 if (oldCurrentLocation != newCurrentLocation) {
@@ -32,6 +36,7 @@ class LocationRepository @Inject internal constructor(
                         locationDao.insertOrUpdate(locationEntity)
                     }
                 }
+                newCurrentLocation
             }
         }
     }
@@ -43,6 +48,10 @@ class LocationRepository @Inject internal constructor(
     }
 
     suspend fun addLocation(location: NamedLocation): Either<Throwable, Unit> {
-        return either { locationDao.insertOrUpdate(location.toLocationEntity()) }
+        return Either.catch {
+            databaseTransactionRunner {
+                locationDao.insertOrUpdate(location.toLocationEntity())
+            }
+        }
     }
 }

@@ -39,17 +39,37 @@ internal class LocationRepositoryTest : BehaviorSpec({
     )
 
     given("refresh current location") {
-        `when`("fetching failed") {
-            val givenError = Throwable()
+        `when`("fetching current location failed") {
+            and("error is SecurityException") {
+                then("remove stored current location and return either left with error") {
+                    val givenError = SecurityException()
 
-            coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenError.left()
+                    coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenError.left()
+                    coEvery { mockLocationDao.deleteCurrent() } just runs
 
-            repository.refreshCurrentLocation()
+                    repository.refreshCurrentLocation()
 
-            coVerify { mockDeviceLocationDataSource.getCurrentLocation() }
+                    coVerify {
+                        mockDeviceLocationDataSource.getCurrentLocation()
+                        mockLocationDao.deleteCurrent()
+                    }
+                }
+            }
+
+            and("error is not SecurityException") {
+                then("return either left with error") {
+                    val givenError = Throwable()
+
+                    coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenError.left()
+
+                    repository.refreshCurrentLocation()
+
+                    coVerify { mockDeviceLocationDataSource.getCurrentLocation() }
+                }
+            }
         }
 
-        `when`("fetching succeeded") {
+        `when`("fetching current location succeeded") {
             and("old location is null") {
                 coEvery { mockLocationDao.selectCurrent() } returns null
 
@@ -57,7 +77,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns null.right()
 
                     then("do nothing and return success result") {
-                        repository.refreshCurrentLocation() shouldBeRight Unit
+                        repository.refreshCurrentLocation() shouldBeRight null
 
                         coVerify {
                             mockDeviceLocationDataSource.getCurrentLocation()
@@ -83,7 +103,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                     then("save new location in database") {
                         coEvery { mockLocationDao.insertOrUpdate(expectedLocationEntity) } just runs
 
-                        repository.refreshCurrentLocation() shouldBeRight Unit
+                        repository.refreshCurrentLocation() shouldBeRight givenNewLocation
 
                         coVerify {
                             mockDeviceLocationDataSource.getCurrentLocation()
@@ -110,7 +130,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                     then("delete old location and return success result") {
                         coEvery { mockLocationDao.deleteCurrent() } just runs
 
-                        repository.refreshCurrentLocation() shouldBeRight Unit
+                        repository.refreshCurrentLocation() shouldBeRight null
 
                         coVerify {
                             mockDeviceLocationDataSource.getCurrentLocation()
@@ -133,8 +153,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                     coEvery { mockDeviceLocationDataSource.getCurrentLocation() } returns givenNewLocation.right()
 
                     then("do nothing and return success result") {
-
-                        repository.refreshCurrentLocation() shouldBeRight Unit
+                        repository.refreshCurrentLocation() shouldBeRight givenNewLocation
 
                         coVerify {
                             mockDeviceLocationDataSource.getCurrentLocation()
@@ -161,7 +180,7 @@ internal class LocationRepositoryTest : BehaviorSpec({
                         coEvery { mockLocationDao.deleteCurrent() } just runs
                         coEvery { mockLocationDao.insertOrUpdate(expectedLocationEntity) } just runs
 
-                        repository.refreshCurrentLocation() shouldBeRight Unit
+                        repository.refreshCurrentLocation() shouldBeRight givenNewLocation
 
                         coVerify {
                             mockDeviceLocationDataSource.getCurrentLocation()
