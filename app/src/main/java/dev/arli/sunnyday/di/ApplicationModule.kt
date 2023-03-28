@@ -1,3 +1,5 @@
+@file:Suppress("UnnecessaryAbstractClass")
+
 package dev.arli.sunnyday.di
 
 import dagger.Module

@@ -3,17 +3,17 @@ package dev.arli.sunnyday.data.api.retrofit.di
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
-import dev.arli.sunnyday.data.api.retrofit.adapter.EitherCallAdapterFactory
-import dev.arli.sunnyday.data.api.retrofit.RetrofitWeatherApi
 import dev.arli.sunnyday.data.api.WeatherApi
+import dev.arli.sunnyday.data.api.retrofit.RetrofitWeatherApi
+import dev.arli.sunnyday.data.api.retrofit.adapter.EitherCallAdapterFactory
 import dev.arli.sunnyday.data.config.datasource.ConfigDataSource
-import javax.inject.Singleton
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.create
+import javax.inject.Singleton
 
 @OptIn(ExperimentalSerializationApi::class)
 @Module

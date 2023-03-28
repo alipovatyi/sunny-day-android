@@ -1,3 +1,5 @@
+@file:Suppress("UnnecessaryAbstractClass")
+
 package dev.arli.sunnyday.data.device.di
 
 import android.content.Context

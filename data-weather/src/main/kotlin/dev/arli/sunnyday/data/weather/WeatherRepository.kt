@@ -15,9 +15,9 @@ import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.weather.DailyForecastVariable
 import dev.arli.sunnyday.model.weather.HourlyForecastVariable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class WeatherRepository @Inject internal constructor(
     private val configDataSource: ConfigDataSource,
@@ -34,6 +34,8 @@ class WeatherRepository @Inject internal constructor(
         }
     }
 
+    @Suppress("ForbiddenComment")
+    // TODO: consider using Coordinates class instead of latitude/longitude
     suspend fun refreshWeather(latitude: Latitude, longitude: Longitude): Either<Throwable, Unit> {
         return weatherApi.getWeather(
             latitude = latitude.value,
@@ -51,8 +53,8 @@ class WeatherRepository @Inject internal constructor(
 
                 databaseTransactionRunner {
                     currentWeatherDao.insertOrUpdate(currentWeatherEntity)
-                    dailyForecastDao.insertOrUpdateAll(*dailyForecastEntities.toTypedArray())
-                    hourlyForecastDao.insertOrUpdateAll(*hourlyForecastEntities.toTypedArray())
+                    dailyForecastDao.insertOrUpdateAll(dailyForecastEntities)
+                    hourlyForecastDao.insertOrUpdateAll(hourlyForecastEntities)
                 }
             }
         }

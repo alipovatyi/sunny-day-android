@@ -24,13 +24,13 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.LocalDateTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class LocationsViewModelTest : BehaviorSpec({
@@ -41,7 +41,9 @@ internal class LocationsViewModelTest : BehaviorSpec({
         every { this@mockk.invoke() } returns locationsWithCurrentWeatherFlow
     }
     val mockAddLocationUseCase: AddLocationUseCase = mockk()
-    val mockRefreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase = mockk()
+    val mockRefreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase = mockk {
+        coEvery { this@mockk.invoke() } returns Unit.right()
+    }
     val mockRefreshCurrentLocationUseCase: RefreshCurrentLocationUseCase = mockk()
 
     lateinit var viewModel: LocationsViewModel
@@ -70,8 +72,6 @@ internal class LocationsViewModelTest : BehaviorSpec({
             }
 
             then("refresh weather for all locations") {
-                coEvery { mockRefreshWeatherForAllLocationsUseCase() } returns Unit.right()
-
                 coVerify { mockRefreshWeatherForAllLocationsUseCase() }
 
                 confirmVerified(mockRefreshWeatherForAllLocationsUseCase)
@@ -178,7 +178,6 @@ internal class LocationsViewModelTest : BehaviorSpec({
                 }
             }
             then("add location and send ScrollToBottom effect") {
-
             }
         }
     }

@@ -11,10 +11,10 @@ import dev.arli.sunnyday.ui.common.base.BaseViewModel
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class LocationsViewModel @Inject constructor(

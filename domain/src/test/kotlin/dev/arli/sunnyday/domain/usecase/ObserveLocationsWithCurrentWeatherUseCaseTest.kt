@@ -15,8 +15,8 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.time.LocalDateTime
 import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDateTime
 
 internal class ObserveLocationsWithCurrentWeatherUseCaseTest : ShouldSpec({
 

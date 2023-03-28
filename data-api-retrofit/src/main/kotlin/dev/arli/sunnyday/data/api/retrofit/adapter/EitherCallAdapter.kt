@@ -1,3 +1,5 @@
+@file:Suppress("Filename", "MatchingDeclarationName", "ReturnCount")
+
 package dev.arli.sunnyday.data.api.retrofit.adapter
 
 import arrow.core.Either
@@ -5,9 +7,6 @@ import arrow.core.left
 import arrow.core.right
 import dev.arli.sunnyday.data.api.dto.error.ErrorDto
 import dev.arli.sunnyday.model.error.ApiError
-import java.io.IOException
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okio.Timeout
@@ -17,6 +16,9 @@ import retrofit2.Callback
 import retrofit2.Converter
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.io.IOException
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 internal class EitherCallAdapterFactory : CallAdapter.Factory() {
 
@@ -56,7 +58,6 @@ private class EitherCallAdapter<R>(
 
     override fun responseType(): Type = successType
 }
-
 
 private class EitherCall<R>(
     private val delegate: Call<R>,

@@ -2,11 +2,11 @@ package dev.arli.sunnyday.data.common.serializer
 
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
-import java.time.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.LocalDateTime
 
 internal class LocalDateTimeSerializerTest : ShouldSpec({
     context("serializing") {

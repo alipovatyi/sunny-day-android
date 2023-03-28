@@ -17,12 +17,12 @@ import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.location.NamedLocation
-import javax.inject.Inject
-import kotlin.coroutines.resume
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.resume
 
 internal class DeviceLocationDataSourceImpl @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
@@ -61,6 +61,7 @@ internal class DeviceLocationDataSourceImpl @Inject constructor(
         }
     }
 
+    @Suppress("ForbiddenComment")
     // TODO: consider replacing Geocoder with Google Geocoding API
     private suspend fun getLocationAddress(coordinates: Coordinates): Either<Throwable, Address?> {
         val (latitude, longitude) = coordinates.latitude.value to coordinates.longitude.value

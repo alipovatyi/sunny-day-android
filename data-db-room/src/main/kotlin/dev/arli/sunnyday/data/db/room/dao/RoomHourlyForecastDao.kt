@@ -22,7 +22,7 @@ abstract class RoomHourlyForecastDao : HourlyForecastDao {
     abstract override fun observeAll(latitude: Double, longitude: Double): Flow<List<HourlyForecastEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract override suspend fun insertOrUpdateAll(vararg hourlyForecasts: HourlyForecastEntity)
+    abstract override suspend fun insertOrUpdateAll(hourlyForecasts: List<HourlyForecastEntity>)
 
     @Query("DELETE FROM ${HourlyForecastEntity.TableName}")
     abstract override suspend fun deleteAll()
@@ -34,4 +34,3 @@ abstract class RoomHourlyForecastDao : HourlyForecastDao {
     )
     abstract override suspend fun deleteAll(latitude: Double, longitude: Double)
 }
-

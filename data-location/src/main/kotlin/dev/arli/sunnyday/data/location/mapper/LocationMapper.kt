@@ -11,7 +11,7 @@ fun LocationEntity.toNamedLocation(): NamedLocation {
         coordinates = Coordinates(
             Latitude(value = latitude),
             Longitude(longitude)
-        ) ,
+        ),
         name = name,
         isCurrent = isCurrent
     )

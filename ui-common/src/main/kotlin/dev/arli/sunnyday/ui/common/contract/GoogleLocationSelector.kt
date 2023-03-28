@@ -29,6 +29,7 @@ object GoogleLocationSelector :
             .build(context)
     }
 
+    @Suppress("ReturnCount")
     override fun parseResult(resultCode: Int, intent: Intent?): Either<Throwable, NamedLocation?> {
         if (intent == null) {
             return NullPointerException("Intent is null").left()
@@ -48,7 +49,6 @@ object GoogleLocationSelector :
                     name = locality?.name,
                     isCurrent = false
                 ).right()
-
             }
             AutocompleteActivity.RESULT_ERROR -> {
                 val status = Autocomplete.getStatusFromIntent(intent)

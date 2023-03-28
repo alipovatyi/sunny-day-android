@@ -35,9 +35,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 import java.util.TimeZone
-import kotlinx.coroutines.flow.flowOf
 
 internal class WeatherRepositoryTest : BehaviorSpec({
 
@@ -256,17 +256,17 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 val expectedDailyForecastEntities = givenWeatherResponseDto.daily.toEntity(
                     latitude = givenLatitude,
                     longitude = givenLongitude
-                ).toTypedArray()
+                )
 
                 coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } just runs
-                coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } throws givenError
+                coEvery { mockDailyForecastDao.insertOrUpdateAll(expectedDailyForecastEntities) } throws givenError
 
                 then("return either left with error") {
                     repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenError
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)
-                        mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities)
+                        mockDailyForecastDao.insertOrUpdateAll(expectedDailyForecastEntities)
                     }
                 }
             }
@@ -281,23 +281,23 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 val expectedDailyForecastEntities = givenWeatherResponseDto.daily.toEntity(
                     latitude = givenLatitude,
                     longitude = givenLongitude
-                ).toTypedArray()
+                )
                 val expectedHourlyForecastEntities = givenWeatherResponseDto.hourly.toEntity(
                     latitude = givenLatitude,
                     longitude = givenLongitude
-                ).toTypedArray()
+                )
 
                 coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } just runs
-                coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } just runs
-                coEvery { mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities) } throws givenError
+                coEvery { mockDailyForecastDao.insertOrUpdateAll(expectedDailyForecastEntities) } just runs
+                coEvery { mockHourlyForecastDao.insertOrUpdateAll(expectedHourlyForecastEntities) } throws givenError
 
                 then("return either left with error") {
                     repository.refreshWeather(givenLatitude, givenLongitude) shouldBeLeft givenError
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)
-                        mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities)
-                        mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities)
+                        mockDailyForecastDao.insertOrUpdateAll(expectedDailyForecastEntities)
+                        mockHourlyForecastDao.insertOrUpdateAll(expectedHourlyForecastEntities)
                     }
                 }
             }
@@ -310,23 +310,23 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 val expectedDailyForecastEntities = givenWeatherResponseDto.daily.toEntity(
                     latitude = givenLatitude,
                     longitude = givenLongitude
-                ).toTypedArray()
+                )
                 val expectedHourlyForecastEntities = givenWeatherResponseDto.hourly.toEntity(
                     latitude = givenLatitude,
                     longitude = givenLongitude
-                ).toTypedArray()
+                )
 
                 coEvery { mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity) } just runs
-                coEvery { mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities) } just runs
-                coEvery { mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities) } just runs
+                coEvery { mockDailyForecastDao.insertOrUpdateAll(expectedDailyForecastEntities) } just runs
+                coEvery { mockHourlyForecastDao.insertOrUpdateAll(expectedHourlyForecastEntities) } just runs
 
                 then("return either right with Unit") {
                     repository.refreshWeather(givenLatitude, givenLongitude) shouldBeRight Unit
 
                     coVerify {
                         mockCurrentWeatherDao.insertOrUpdate(expectedCurrentWeatherEntity)
-                        mockDailyForecastDao.insertOrUpdateAll(*expectedDailyForecastEntities)
-                        mockHourlyForecastDao.insertOrUpdateAll(*expectedHourlyForecastEntities)
+                        mockDailyForecastDao.insertOrUpdateAll(expectedDailyForecastEntities)
+                        mockHourlyForecastDao.insertOrUpdateAll(expectedHourlyForecastEntities)
                     }
                 }
             }

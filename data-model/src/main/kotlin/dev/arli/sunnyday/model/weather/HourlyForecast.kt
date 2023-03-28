@@ -4,6 +4,8 @@ import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import java.time.LocalDateTime
 
+@Suppress("ForbiddenComment")
+// TODO: consider using Coordinates class instead of latitude/longitude
 data class HourlyForecast(
     val latitude: Latitude,
     val longitude: Longitude,

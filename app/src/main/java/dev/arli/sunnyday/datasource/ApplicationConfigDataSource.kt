@@ -1,7 +1,7 @@
 package dev.arli.sunnyday.datasource
 
-import dev.arli.sunnyday.data.config.datasource.ConfigDataSource
 import dev.arli.sunnyday.BuildConfig
+import dev.arli.sunnyday.data.config.datasource.ConfigDataSource
 import java.util.TimeZone
 import javax.inject.Inject
 

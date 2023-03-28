@@ -9,7 +9,7 @@ interface DailyForecastDao {
 
     fun observeAll(latitude: Double, longitude: Double): Flow<List<DailyForecastEntity>>
 
-    suspend fun insertOrUpdateAll(vararg dailyForecasts: DailyForecastEntity)
+    suspend fun insertOrUpdateAll(dailyForecasts: List<DailyForecastEntity>)
 
     suspend fun deleteAll()
 

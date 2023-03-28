@@ -1,13 +1,15 @@
+@file:Suppress("AnnotationOnSeparateLine")
+
 package dev.arli.sunnyday.data.common.serializer
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 typealias SerializableLocalDateTime = @Serializable(LocalDateTimeSerializer::class) LocalDateTime
 

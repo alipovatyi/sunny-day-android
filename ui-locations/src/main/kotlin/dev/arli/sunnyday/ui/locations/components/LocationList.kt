@@ -18,6 +18,7 @@ import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
 import java.time.LocalDateTime
 
+@Suppress("UnstableCollections")
 @Composable
 internal fun LocationList(
     locations: List<LocationWithCurrentWeather>,
@@ -53,6 +54,7 @@ internal fun LocationList(
     }
 }
 
+@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationListPreview() {
@@ -101,6 +103,7 @@ private fun LocationListPreview() {
     }
 }
 
+@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationListWithCurrentLocationPlaceholderPreview() {

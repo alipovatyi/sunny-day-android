@@ -8,9 +8,9 @@ import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
 import dev.arli.sunnyday.data.location.mapper.toLocationEntity
 import dev.arli.sunnyday.data.location.mapper.toNamedLocation
 import dev.arli.sunnyday.model.location.NamedLocation
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class LocationRepository @Inject internal constructor(
     private val deviceLocationDataSource: DeviceLocationDataSource,

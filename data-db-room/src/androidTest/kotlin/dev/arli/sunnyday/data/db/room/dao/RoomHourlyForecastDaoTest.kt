@@ -69,7 +69,7 @@ internal class RoomHourlyForecastDaoTest {
         locationDao.insertOrUpdate(givenLocationEntity1)
         locationDao.insertOrUpdate(givenLocationEntity2)
 
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity1, givenHourlyForecastEntity2)
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity1, givenHourlyForecastEntity2))
 
         assertEquals(expectedHourlyForecastWeatherEntities, hourlyForecastDao.observeAll().first())
     }
@@ -112,7 +112,7 @@ internal class RoomHourlyForecastDaoTest {
         locationDao.insertOrUpdate(givenLocationEntity1)
         locationDao.insertOrUpdate(givenLocationEntity2)
 
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity1, givenHourlyForecastEntity2)
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity1, givenHourlyForecastEntity2))
 
         val actualHourlyForecastEntity = hourlyForecastDao.observeAll(
             latitude = givenHourlyForecastEntity1.latitude,
@@ -162,7 +162,7 @@ internal class RoomHourlyForecastDaoTest {
         locationDao.insertOrUpdate(givenLocationEntity1)
         locationDao.insertOrUpdate(givenLocationEntity2)
 
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity1, givenHourlyForecastEntity2)
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity1, givenHourlyForecastEntity2))
 
         assertEquals(expectedHourlyWeatherEntities, hourlyForecastDao.observeAll().first())
     }
@@ -239,8 +239,8 @@ internal class RoomHourlyForecastDaoTest {
         locationDao.insertOrUpdate(givenLocationEntity1)
         locationDao.insertOrUpdate(givenLocationEntity2)
 
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity1, givenHourlyForecastEntity2)
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity3, givenHourlyForecastEntity4)
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity1, givenHourlyForecastEntity2))
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity3, givenHourlyForecastEntity4))
 
         assertEquals(expectedHourlyWeatherEntities, hourlyForecastDao.observeAll().first())
     }
@@ -282,7 +282,7 @@ internal class RoomHourlyForecastDaoTest {
 
         locationDao.insertOrUpdate(givenLocationEntity1)
         locationDao.insertOrUpdate(givenLocationEntity2)
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity1, givenHourlyForecastEntity2)
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity1, givenHourlyForecastEntity2))
 
         hourlyForecastDao.deleteAll()
 
@@ -326,7 +326,7 @@ internal class RoomHourlyForecastDaoTest {
 
         locationDao.insertOrUpdate(givenLocationEntity1)
         locationDao.insertOrUpdate(givenLocationEntity2)
-        hourlyForecastDao.insertOrUpdateAll(givenHourlyForecastEntity1, givenHourlyForecastEntity2)
+        hourlyForecastDao.insertOrUpdateAll(listOf(givenHourlyForecastEntity1, givenHourlyForecastEntity2))
 
         hourlyForecastDao.deleteAll(
             latitude = givenHourlyForecastEntity1.latitude,

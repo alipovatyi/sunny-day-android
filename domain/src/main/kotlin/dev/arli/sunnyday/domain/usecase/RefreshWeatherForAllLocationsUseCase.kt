@@ -5,11 +5,11 @@ import arrow.core.continuations.either
 import dev.arli.sunnyday.data.location.LocationRepository
 import dev.arli.sunnyday.data.weather.WeatherRepository
 import dev.arli.sunnyday.domain.base.SuspendOutUseCase
-import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.firstOrNull
+import javax.inject.Inject
 
 class RefreshWeatherForAllLocationsUseCase @Inject internal constructor(
     private val locationRepository: LocationRepository,
