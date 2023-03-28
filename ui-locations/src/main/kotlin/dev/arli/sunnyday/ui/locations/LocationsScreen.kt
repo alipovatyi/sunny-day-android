@@ -2,10 +2,12 @@ package dev.arli.sunnyday.ui.locations
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.launch
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -15,10 +17,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -39,23 +46,28 @@ import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
 import java.time.LocalDateTime
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @Composable
 fun LocationsScreen(
     viewModel: LocationsViewModel
 ) {
+    val scope = rememberCoroutineScope()
     val viewState by viewModel.viewState.collectAsState()
     val lazyListState = rememberLazyListState()
     val googleLocationSelectorLauncher = rememberLauncherForActivityResult(
         contract = GoogleLocationSelector,
         onResult = { result ->
-            result.orNull()?.let { viewModel.onEventSent(LocationsEvent.AddLocation(it)) }
+            result.orNull()?.let {
+                viewModel.onEventSent(LocationsEvent.AddLocation(it))
+                scope.launch { lazyListState.scrollToItem(viewState.locations.lastIndex) }
+            }
         }
     )
 
     LaunchedEffect(Unit) {
         viewModel.effect.onEach { effect ->
-            when(effect) {
+            when (effect) {
                 LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
                 is LocationsEffect.OpenLocationDetails -> {
                     // TODO
@@ -71,7 +83,7 @@ fun LocationsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun LocationsScreen(
     viewState: LocationsViewState,
@@ -79,6 +91,10 @@ private fun LocationsScreen(
     onEventSent: (LocationsEvent) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewState.isRefreshing,
+        onRefresh = { onEventSent(LocationsEvent.Refresh) }
+    )
 
     Scaffold(
         topBar = {
@@ -109,12 +125,24 @@ private fun LocationsScreen(
                     .padding(contentPadding)
             )
         } else {
-            LocationList(
-                lazyListState = lazyListState,
-                locations = viewState.locations,
-                onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) },
-                modifier = Modifier.padding(contentPadding)
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+                    .pullRefresh(pullRefreshState)
+            ) {
+                LocationList(
+                    lazyListState = lazyListState,
+                    locations = viewState.locations,
+                    onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) }
+                )
+
+                PullRefreshIndicator(
+                    refreshing = viewState.isRefreshing,
+                    state = pullRefreshState,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
+            }
         }
     }
 }

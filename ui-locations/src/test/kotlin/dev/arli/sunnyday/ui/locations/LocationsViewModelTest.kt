@@ -1,8 +1,11 @@
 package dev.arli.sunnyday.ui.locations
 
 import app.cash.turbine.test
+import arrow.core.left
+import arrow.core.right
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
+import dev.arli.sunnyday.domain.usecase.RefreshWeatherForAllLocationsUseCase
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
@@ -14,6 +17,7 @@ import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -36,6 +40,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
         every { this@mockk.invoke() } returns locationsWithCurrentWeatherFlow
     }
     val mockAddLocationUseCase: AddLocationUseCase = mockk()
+    val mockRefreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase = mockk()
 
     lateinit var viewModel: LocationsViewModel
 
@@ -44,7 +49,8 @@ internal class LocationsViewModelTest : BehaviorSpec({
 
         viewModel = LocationsViewModel(
             observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase,
-            addLocationUseCase = mockAddLocationUseCase
+            addLocationUseCase = mockAddLocationUseCase,
+            refreshWeatherForAllLocationsUseCase = mockRefreshWeatherForAllLocationsUseCase
         )
     }
 
@@ -130,6 +136,58 @@ internal class LocationsViewModelTest : BehaviorSpec({
 
                 coVerify { mockAddLocationUseCase(expectedInput) }
                 confirmVerified(mockAddLocationUseCase)
+            }
+        }
+    }
+
+    given("RefreshLocations event") {
+        `when`("event sent") {
+            and("refreshing failed") {
+                then("update view state") {
+                    val givenError = Throwable()
+
+                    val expectedViewState1 = LocationsViewState(isRefreshing = true)
+                    val expectedViewState2 = LocationsViewState(isRefreshing = false)
+
+                    coEvery { mockRefreshWeatherForAllLocationsUseCase() } returns givenError.left()
+
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
+                        viewModel.onEventSent(LocationsEvent.Refresh)
+
+                        awaitItem() shouldBe expectedViewState1
+                        awaitItem() shouldBe expectedViewState2
+
+                        expectNoEvents()
+                    }
+
+                    coVerify { mockRefreshWeatherForAllLocationsUseCase() }
+                    confirmVerified(mockRefreshWeatherForAllLocationsUseCase)
+                }
+            }
+
+            and("refreshing succeeded") {
+                then("update view state") {
+                    val expectedViewState1 = LocationsViewState(isRefreshing = true)
+                    val expectedViewState2 = LocationsViewState(isRefreshing = false)
+
+                    coEvery { mockRefreshWeatherForAllLocationsUseCase() } returns Unit.right()
+
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
+                        viewModel.onEventSent(LocationsEvent.Refresh)
+
+                        awaitItem() shouldBe expectedViewState1
+                        awaitItem() shouldBe expectedViewState2
+
+                        expectNoEvents()
+                    }
+
+                    coVerify { mockRefreshWeatherForAllLocationsUseCase() }
+                    confirmVerified(mockRefreshWeatherForAllLocationsUseCase)
+                }
             }
         }
     }

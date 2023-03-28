@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
+import dev.arli.sunnyday.domain.usecase.RefreshWeatherForAllLocationsUseCase
 import dev.arli.sunnyday.model.location.NamedLocation
 import dev.arli.sunnyday.ui.common.base.BaseViewModel
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class LocationsViewModel @Inject constructor(
     private val observeLocationsWithCurrentWeatherUseCase: ObserveLocationsWithCurrentWeatherUseCase,
-    private val addLocationUseCase: AddLocationUseCase
+    private val addLocationUseCase: AddLocationUseCase,
+    private val refreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase
 ) : BaseViewModel<LocationsEvent, LocationsViewState, LocationsEffect>() {
 
     init {
@@ -33,6 +35,7 @@ class LocationsViewModel @Inject constructor(
                 sendEffect(LocationsEffect.OpenLocationDetails(event.location.coordinates))
             }
             is LocationsEvent.AddLocation -> addLocation(event.location)
+            is LocationsEvent.Refresh -> refresh()
         }
     }
 
@@ -45,6 +48,21 @@ class LocationsViewModel @Inject constructor(
     private fun addLocation(location: NamedLocation) {
         viewModelScope.launch {
             addLocationUseCase(AddLocationUseCase.Input(location = location))
+        }
+    }
+
+    private fun refresh() {
+        setState { it.copy(isRefreshing = true) }
+
+        viewModelScope.launch {
+            refreshWeatherForAllLocationsUseCase().fold(
+                ifLeft = {
+                    setState { it.copy(isRefreshing = false) }
+                },
+                ifRight = {
+                    setState { it.copy(isRefreshing = false) }
+                }
+            )
         }
     }
 }
