@@ -44,24 +44,20 @@ import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
 import java.time.LocalDateTime
+import kotlin.math.max
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @Composable
 fun LocationsScreen(
     viewModel: LocationsViewModel
 ) {
-    val scope = rememberCoroutineScope()
     val viewState by viewModel.viewState.collectAsState()
     val lazyListState = rememberLazyListState()
     val googleLocationSelectorLauncher = rememberLauncherForActivityResult(
         contract = GoogleLocationSelector,
         onResult = { result ->
-            result.orNull()?.let {
-                viewModel.onEventSent(LocationsEvent.AddLocation(it))
-                scope.launch { lazyListState.scrollToItem(viewState.locations.lastIndex) }
-            }
+            result.orNull()?.let { viewModel.onEventSent(LocationsEvent.AddLocation(it)) }
         }
     )
 
@@ -71,6 +67,9 @@ fun LocationsScreen(
                 LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
                 is LocationsEffect.OpenLocationDetails -> {
                     // TODO
+                }
+                LocationsEffect.ScrollToBottom -> {
+                    lazyListState.scrollToItem(max(0, viewState.locations.lastIndex))
                 }
             }
         }.collect()

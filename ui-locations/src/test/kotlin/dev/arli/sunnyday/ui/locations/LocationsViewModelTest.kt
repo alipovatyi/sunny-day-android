@@ -127,23 +127,55 @@ internal class LocationsViewModelTest : BehaviorSpec({
     }
 
     given("AddLocation event") {
+        val givenLocation = NamedLocation(
+            coordinates = Coordinates(
+                latitude = Latitude(50.45),
+                longitude = Longitude(30.52),
+            ),
+            name = "Kyiv",
+            isCurrent = false
+        )
+
         `when`("event sent") {
-            then("add location") {
-                val givenLocation = NamedLocation(
-                    coordinates = Coordinates(
-                        latitude = Latitude(50.45),
-                        longitude = Longitude(30.52),
-                    ),
-                    name = "Kyiv",
-                    isCurrent = false
-                )
+            and("adding location failed") {
+                then("do nothing") {
+                    val givenError = Throwable()
 
-                val expectedInput = AddLocationUseCase.Input(location = givenLocation)
+                    val expectedInput = AddLocationUseCase.Input(location = givenLocation)
 
-                viewModel.onEventSent(LocationsEvent.AddLocation(givenLocation))
+                    coEvery { mockAddLocationUseCase(expectedInput) } returns givenError.left()
 
-                coVerify { mockAddLocationUseCase(expectedInput) }
-                confirmVerified(mockAddLocationUseCase)
+                    viewModel.effect.test {
+                        viewModel.onEventSent(LocationsEvent.AddLocation(givenLocation))
+
+                        expectNoEvents()
+                    }
+
+                    coVerify { mockAddLocationUseCase(expectedInput) }
+                    confirmVerified(mockAddLocationUseCase)
+                }
+            }
+
+            and("adding location succeeded") {
+                then("send ScrollToBottom effect") {
+                    val expectedInput = AddLocationUseCase.Input(location = givenLocation)
+
+                    coEvery { mockAddLocationUseCase(expectedInput) } returns Unit.right()
+
+                    viewModel.effect.test {
+                        viewModel.onEventSent(LocationsEvent.AddLocation(givenLocation))
+
+                        awaitItem() shouldBe LocationsEffect.ScrollToBottom
+
+                        expectNoEvents()
+                    }
+
+                    coVerify { mockAddLocationUseCase(expectedInput) }
+                    confirmVerified(mockAddLocationUseCase)
+                }
+            }
+            then("add location and send ScrollToBottom effect") {
+
             }
         }
     }

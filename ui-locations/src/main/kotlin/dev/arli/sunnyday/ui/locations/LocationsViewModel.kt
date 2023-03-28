@@ -48,7 +48,9 @@ class LocationsViewModel @Inject constructor(
 
     private fun addLocation(location: NamedLocation) {
         viewModelScope.launch {
-            addLocationUseCase(AddLocationUseCase.Input(location = location))
+            addLocationUseCase(AddLocationUseCase.Input(location = location)).tap {
+                sendEffect(LocationsEffect.ScrollToBottom)
+            }
         }
     }
 

@@ -6,4 +6,5 @@ import dev.arli.sunnyday.ui.common.base.ViewEffect
 sealed class LocationsEffect : ViewEffect {
     object OpenAddLocation : LocationsEffect()
     data class OpenLocationDetails(val coordinates: Coordinates) : LocationsEffect()
+    object ScrollToBottom : LocationsEffect()
 }
