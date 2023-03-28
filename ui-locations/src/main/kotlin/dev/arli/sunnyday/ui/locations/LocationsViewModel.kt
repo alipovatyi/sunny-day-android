@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
+import dev.arli.sunnyday.domain.usecase.RefreshCurrentLocationUseCase
 import dev.arli.sunnyday.domain.usecase.RefreshWeatherForAllLocationsUseCase
 import dev.arli.sunnyday.model.location.NamedLocation
 import dev.arli.sunnyday.ui.common.base.BaseViewModel
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 class LocationsViewModel @Inject constructor(
     private val observeLocationsWithCurrentWeatherUseCase: ObserveLocationsWithCurrentWeatherUseCase,
     private val addLocationUseCase: AddLocationUseCase,
-    private val refreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase
+    private val refreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase,
+    private val refreshCurrentLocationUseCase: RefreshCurrentLocationUseCase
 ) : BaseViewModel<LocationsEvent, LocationsViewState, LocationsEffect>() {
 
     init {
@@ -37,12 +39,17 @@ class LocationsViewModel @Inject constructor(
             }
             is LocationsEvent.AddLocation -> addLocation(event.location)
             is LocationsEvent.Refresh -> refreshWeatherForAllLocations()
+            is LocationsEvent.LocationPermissionStateChange -> {
+                if (event.isGranted) {
+                    refreshCurrentLocation()
+                }
+            }
         }
     }
 
     private fun observeLocationsWithCurrentWeather() {
         observeLocationsWithCurrentWeatherUseCase().onEach { locations ->
-            setState { it.copy(locations = locations, showEmptyState = locations.isEmpty()) }
+            setState { it.copy(locations = locations) }
         }.launchIn(viewModelScope)
     }
 
@@ -59,6 +66,21 @@ class LocationsViewModel @Inject constructor(
 
         viewModelScope.launch {
             refreshWeatherForAllLocationsUseCase().fold(
+                ifLeft = {
+                    setState { it.copy(isRefreshing = false) }
+                },
+                ifRight = {
+                    setState { it.copy(isRefreshing = false) }
+                }
+            )
+        }
+    }
+
+    private fun refreshCurrentLocation() {
+        setState { it.copy(isRefreshing = true) }
+
+        viewModelScope.launch {
+            refreshCurrentLocationUseCase().fold(
                 ifLeft = {
                     setState { it.copy(isRefreshing = false) }
                 },

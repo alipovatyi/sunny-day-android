@@ -7,7 +7,6 @@ internal class LocationsViewStateTest : ShouldSpec({
     should("return initial view state") {
         val expectedViewState = LocationsViewState(
             locations = emptyList(),
-            showEmptyState = false,
             isRefreshing = false
         )
 

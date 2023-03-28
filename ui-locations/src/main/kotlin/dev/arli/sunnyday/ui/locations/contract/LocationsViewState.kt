@@ -5,6 +5,5 @@ import dev.arli.sunnyday.ui.common.base.ViewState
 
 data class LocationsViewState(
     val locations: List<LocationWithCurrentWeather> = emptyList(),
-    val showEmptyState: Boolean = false,
     val isRefreshing: Boolean = false
 ) : ViewState

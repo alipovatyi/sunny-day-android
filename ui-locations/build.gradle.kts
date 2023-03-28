@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.bundles.test.unitTests)
 }

@@ -1,9 +1,9 @@
 package dev.arli.sunnyday.ui.locations
 
+import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -29,6 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
@@ -37,7 +41,6 @@ import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.resources.R
 import dev.arli.sunnyday.ui.common.contract.GoogleLocationSelector
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
-import dev.arli.sunnyday.ui.locations.components.LocationEmptyState
 import dev.arli.sunnyday.ui.locations.components.LocationList
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
@@ -47,6 +50,7 @@ import kotlin.math.max
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationsScreen(
     viewModel: LocationsViewModel
@@ -59,6 +63,18 @@ fun LocationsScreen(
             result.orNull()?.let { viewModel.onEventSent(LocationsEvent.AddLocation(it)) }
         }
     )
+    val locationPermissionState = rememberPermissionState(
+        permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+        onPermissionResult = { isGranted ->
+            viewModel.onEventSent(LocationsEvent.LocationPermissionStateChange(isGranted = isGranted))
+        }
+    )
+
+    LaunchedEffect(Unit) {
+        if (locationPermissionState.status.isGranted.not()) {
+            locationPermissionState.launchPermissionRequest()
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.onEach { effect ->
@@ -77,7 +93,15 @@ fun LocationsScreen(
     LocationsScreen(
         viewState = viewState,
         lazyListState = lazyListState,
-        onEventSent = viewModel::onEventSent
+        locationPermissionGranted = locationPermissionState.status.isGranted,
+        onEventSent = viewModel::onEventSent,
+        onRequestLocationPermissionClick = {
+            if (locationPermissionState.status.shouldShowRationale) {
+                // TODO
+            } else {
+                locationPermissionState.launchPermissionRequest()
+            }
+        }
     )
 }
 
@@ -85,6 +109,8 @@ fun LocationsScreen(
 @Composable
 private fun LocationsScreen(
     viewState: LocationsViewState,
+    locationPermissionGranted: Boolean,
+    onRequestLocationPermissionClick: () -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
     onEventSent: (LocationsEvent) -> Unit
 ) {
@@ -115,31 +141,24 @@ private fun LocationsScreen(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { contentPadding ->
-        if (viewState.showEmptyState) {
-            LocationEmptyState(
-                onAddLocationClick = { onEventSent(LocationsEvent.AddLocationClick) },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+        Box(
+            modifier = Modifier
+                .padding(contentPadding)
+                .pullRefresh(pullRefreshState)
+        ) {
+            LocationList(
+                lazyListState = lazyListState,
+                locations = viewState.locations,
+                showCurrentLocationPlaceholder = locationPermissionGranted.not(),
+                onCurrentLocationPlaceholderClick = onRequestLocationPermissionClick,
+                onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) }
             )
-        } else {
-            Box(
-                modifier = Modifier
-                    .padding(contentPadding)
-                    .pullRefresh(pullRefreshState)
-            ) {
-                LocationList(
-                    lazyListState = lazyListState,
-                    locations = viewState.locations,
-                    onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) }
-                )
 
-                PullRefreshIndicator(
-                    refreshing = viewState.isRefreshing,
-                    state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter)
-                )
-            }
+            PullRefreshIndicator(
+                refreshing = viewState.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
@@ -186,7 +205,9 @@ private fun LocationsScreenPreview() {
                     )
                 )
             ),
-            onEventSent = {}
+            locationPermissionGranted = true,
+            onEventSent = {},
+            onRequestLocationPermissionClick = {}
         )
     }
 }
@@ -197,7 +218,9 @@ private fun LocationsScreenEmptyPreview() {
     SunnyDayThemePreview {
         LocationsScreen(
             viewState = LocationsViewState(),
-            onEventSent = {}
+            locationPermissionGranted = true,
+            onEventSent = {},
+            onRequestLocationPermissionClick = {}
         )
     }
 }

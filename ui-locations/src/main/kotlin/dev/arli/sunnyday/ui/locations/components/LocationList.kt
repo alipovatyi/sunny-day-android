@@ -21,6 +21,8 @@ import java.time.LocalDateTime
 @Composable
 internal fun LocationList(
     locations: List<LocationWithCurrentWeather>,
+    showCurrentLocationPlaceholder: Boolean,
+    onCurrentLocationPlaceholderClick: () -> Unit,
     onLocationClick: (LocationWithCurrentWeather) -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState()
@@ -33,9 +35,12 @@ internal fun LocationList(
             end = 16.dp,
             bottom = 96.dp
         ),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
     ) {
+        if (showCurrentLocationPlaceholder) {
+            item { CurrentLocationPlaceholder(onClick = onCurrentLocationPlaceholderClick) }
+        }
         items(
             items = locations,
             key = { "${it.coordinates.latitude.value}:${it.coordinates.longitude.value}" }
@@ -70,7 +75,8 @@ private fun LocationListPreview() {
                         weatherCode = 80,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     )
-                ), LocationWithCurrentWeather(
+                ),
+                LocationWithCurrentWeather(
                     coordinates = Coordinates(
                         latitude = Latitude(50.45),
                         longitude = Longitude(30.52)
@@ -88,6 +94,39 @@ private fun LocationListPreview() {
                     )
                 )
             ),
+            showCurrentLocationPlaceholder = false,
+            onCurrentLocationPlaceholderClick = {},
+            onLocationClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun LocationListWithCurrentLocationPlaceholderPreview() {
+    SunnyDayThemePreview {
+        LocationList(
+            locations = listOf(
+                LocationWithCurrentWeather(
+                    coordinates = Coordinates(
+                        latitude = Latitude(50.45),
+                        longitude = Longitude(30.52)
+                    ),
+                    name = "Kyiv",
+                    isCurrent = false,
+                    currentWeather = CurrentWeather(
+                        latitude = Latitude(50.45),
+                        longitude = Longitude(30.52),
+                        temperature = 10.0,
+                        windSpeed = 25.0,
+                        windDirection = 90,
+                        weatherCode = 1,
+                        time = LocalDateTime.parse("2023-03-25T15:00")
+                    )
+                )
+            ),
+            showCurrentLocationPlaceholder = true,
+            onCurrentLocationPlaceholderClick = {},
             onLocationClick = {}
         )
     }

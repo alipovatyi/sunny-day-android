@@ -3,6 +3,6 @@
     <string name="my_locations">My Locations</string>
     <string name="current_location">Current location</string>
     <string name="add_location">Add location</string>
-    <string name="no_locations_added">No locations added</string>
-    <string name="add_first_location">Add your first location by clicking the button below</string>
+    <string name="current_location_unavailable">Current location unavailable</string>
+    <string name="location_permission_required">Location permission required. Click here to grant it.</string>
 </resources>

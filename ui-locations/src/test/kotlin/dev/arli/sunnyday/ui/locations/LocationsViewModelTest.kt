@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
+import dev.arli.sunnyday.domain.usecase.RefreshCurrentLocationUseCase
 import dev.arli.sunnyday.domain.usecase.RefreshWeatherForAllLocationsUseCase
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.LocationWithCurrentWeather
@@ -41,6 +42,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
     }
     val mockAddLocationUseCase: AddLocationUseCase = mockk()
     val mockRefreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase = mockk()
+    val mockRefreshCurrentLocationUseCase: RefreshCurrentLocationUseCase = mockk()
 
     lateinit var viewModel: LocationsViewModel
 
@@ -50,7 +52,8 @@ internal class LocationsViewModelTest : BehaviorSpec({
         viewModel = LocationsViewModel(
             observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase,
             addLocationUseCase = mockAddLocationUseCase,
-            refreshWeatherForAllLocationsUseCase = mockRefreshWeatherForAllLocationsUseCase
+            refreshWeatherForAllLocationsUseCase = mockRefreshWeatherForAllLocationsUseCase,
+            refreshCurrentLocationUseCase = mockRefreshCurrentLocationUseCase
         )
     }
 
@@ -232,17 +235,82 @@ internal class LocationsViewModelTest : BehaviorSpec({
         }
     }
 
-    given("observing locations with current weather") {
-        `when`("locations are emitted") {
-            and("list is empty") {
+    given("LocationPermissionStateChange event") {
+        `when`("event sent") {
+            and("permission not granted") {
+                then("do nothing") {
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
+                        viewModel.onEventSent(LocationsEvent.LocationPermissionStateChange(isGranted = false))
+
+                        expectNoEvents()
+                    }
+
+                    confirmVerified(mockRefreshCurrentLocationUseCase)
+                }
+            }
+
+            and("permission granted") {
+                and("refreshing current location failed") {
+                    then("update view state") {
+                        val givenError = Throwable()
+
+                        val expectedViewState1 = LocationsViewState(isRefreshing = true)
+                        val expectedViewState2 = LocationsViewState(isRefreshing = false)
+
+                        coEvery { mockRefreshCurrentLocationUseCase() } returns givenError.left()
+
+                        viewModel.viewState.test {
+                            skipItems(1) // skip initial state
+
+                            viewModel.onEventSent(LocationsEvent.LocationPermissionStateChange(isGranted = true))
+
+                            awaitItem() shouldBe expectedViewState1
+                            awaitItem() shouldBe expectedViewState2
+
+                            expectNoEvents()
+                        }
+
+                        coVerify { mockRefreshCurrentLocationUseCase() }
+                        confirmVerified(mockRefreshCurrentLocationUseCase)
+                    }
+                }
+            }
+
+            and("refreshing current location succeeded") {
                 then("update view state") {
-                    val expectedViewState = LocationsViewState(showEmptyState = true)
+                    val expectedViewState1 = LocationsViewState(isRefreshing = true)
+                    val expectedViewState2 = LocationsViewState(isRefreshing = false)
+
+                    coEvery { mockRefreshCurrentLocationUseCase() } returns Unit.right()
 
                     viewModel.viewState.test {
                         skipItems(1) // skip initial state
 
+                        viewModel.onEventSent(LocationsEvent.LocationPermissionStateChange(isGranted = true))
+
+                        awaitItem() shouldBe expectedViewState1
+                        awaitItem() shouldBe expectedViewState2
+
+                        expectNoEvents()
+                    }
+
+                    coVerify { mockRefreshCurrentLocationUseCase() }
+                    confirmVerified(mockRefreshCurrentLocationUseCase)
+                }
+            }
+        }
+    }
+
+    given("observing locations with current weather") {
+        `when`("locations are emitted") {
+            and("list is empty") {
+                then("update view state") {
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
                         locationsWithCurrentWeatherFlow.emit(emptyList())
-                        awaitItem() shouldBe expectedViewState
 
                         expectNoEvents()
                     }

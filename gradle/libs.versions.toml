@@ -59,13 +59,15 @@ androidx-compose-animation = { group = "androidx.compose.animation", name = "ani
 androidx-compose-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
-androidx-navigation-compose = { group="androidx.navigation", name="navigation-compose", version = "2.5.3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version = "2.5.3" }
 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "room" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version = "0.30.0" }
 
 material = { group = "com.google.android.material", name = "material", version = "1.8.0" }
 
