@@ -28,4 +28,5 @@ dependencies {
     debugApi(libs.androidx.compose.uiTooling)
     api(libs.androidx.lifecycle.viewmodel)
     api(libs.androidx.navigation.compose)
+    implementation(libs.google.places)
 }
