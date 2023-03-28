@@ -26,5 +26,10 @@ jobs:
           java-version: '11'
           cache: 'gradle'
 
+      - name: Create secrets.properties
+        run: echo "$GOOGLE_MAPS_API_KEY" >> secrets.properties
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+
       - name: Check
         run: ./gradlew check
