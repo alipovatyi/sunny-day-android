@@ -42,7 +42,7 @@ class LocationsViewModel @Inject constructor(
 
     private fun observeLocationsWithCurrentWeather() {
         observeLocationsWithCurrentWeatherUseCase().onEach { locations ->
-            setState { it.copy(locations = locations) }
+            setState { it.copy(locations = locations, showEmptyState = locations.isEmpty()) }
         }.launchIn(viewModelScope)
     }
 

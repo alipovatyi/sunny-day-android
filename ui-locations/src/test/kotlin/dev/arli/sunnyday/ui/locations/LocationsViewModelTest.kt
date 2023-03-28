@@ -202,55 +202,72 @@ internal class LocationsViewModelTest : BehaviorSpec({
 
     given("observing locations with current weather") {
         `when`("locations are emitted") {
-            then("update view state") {
-                val givenLocation1 = LocationWithCurrentWeather(
-                    coordinates = Coordinates(
-                        latitude = Latitude(52.23),
-                        longitude = Longitude(21.01)
-                    ),
-                    name = "Warsaw",
-                    isCurrent = true,
-                    currentWeather = CurrentWeather(
-                        latitude = Latitude(52.23),
-                        longitude = Longitude(21.01),
-                        temperature = 12.6,
-                        windSpeed = 13.2,
-                        windDirection = 244,
-                        weatherCode = 80,
-                        time = LocalDateTime.parse("2023-03-25T15:00")
+            and("list is empty") {
+                then("update view state") {
+                    val expectedViewState = LocationsViewState(showEmptyState = true)
+
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
+                        locationsWithCurrentWeatherFlow.emit(emptyList())
+                        awaitItem() shouldBe expectedViewState
+
+                        expectNoEvents()
+                    }
+                }
+            }
+
+            and("list is not empty") {
+                then("update view state") {
+                    val givenLocation1 = LocationWithCurrentWeather(
+                        coordinates = Coordinates(
+                            latitude = Latitude(52.23),
+                            longitude = Longitude(21.01)
+                        ),
+                        name = "Warsaw",
+                        isCurrent = true,
+                        currentWeather = CurrentWeather(
+                            latitude = Latitude(52.23),
+                            longitude = Longitude(21.01),
+                            temperature = 12.6,
+                            windSpeed = 13.2,
+                            windDirection = 244,
+                            weatherCode = 80,
+                            time = LocalDateTime.parse("2023-03-25T15:00")
+                        )
                     )
-                )
-                val givenLocation2 = LocationWithCurrentWeather(
-                    coordinates = Coordinates(
-                        latitude = Latitude(50.45),
-                        longitude = Longitude(30.52)
-                    ),
-                    name = "Kyiv",
-                    isCurrent = false,
-                    currentWeather = CurrentWeather(
-                        latitude = Latitude(50.45),
-                        longitude = Longitude(30.52),
-                        temperature = 10.0,
-                        windSpeed = 25.0,
-                        windDirection = 90,
-                        weatherCode = 1,
-                        time = LocalDateTime.parse("2023-03-25T15:00")
+                    val givenLocation2 = LocationWithCurrentWeather(
+                        coordinates = Coordinates(
+                            latitude = Latitude(50.45),
+                            longitude = Longitude(30.52)
+                        ),
+                        name = "Kyiv",
+                        isCurrent = false,
+                        currentWeather = CurrentWeather(
+                            latitude = Latitude(50.45),
+                            longitude = Longitude(30.52),
+                            temperature = 10.0,
+                            windSpeed = 25.0,
+                            windDirection = 90,
+                            weatherCode = 1,
+                            time = LocalDateTime.parse("2023-03-25T15:00")
+                        )
                     )
-                )
 
-                val expectedViewState1 = LocationsViewState(locations = listOf(givenLocation1))
-                val expectedViewState2 = LocationsViewState(locations = listOf(givenLocation1, givenLocation2))
+                    val expectedViewState1 = LocationsViewState(locations = listOf(givenLocation1))
+                    val expectedViewState2 = LocationsViewState(locations = listOf(givenLocation1, givenLocation2))
 
-                viewModel.viewState.test {
-                    skipItems(1) // skip initial state
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
 
-                    locationsWithCurrentWeatherFlow.emit(listOf(givenLocation1))
-                    awaitItem() shouldBe expectedViewState1
+                        locationsWithCurrentWeatherFlow.emit(listOf(givenLocation1))
+                        awaitItem() shouldBe expectedViewState1
 
-                    locationsWithCurrentWeatherFlow.emit(listOf(givenLocation1, givenLocation2))
-                    awaitItem() shouldBe expectedViewState2
+                        locationsWithCurrentWeatherFlow.emit(listOf(givenLocation1, givenLocation2))
+                        awaitItem() shouldBe expectedViewState2
 
-                    expectNoEvents()
+                        expectNoEvents()
+                    }
                 }
             }
         }

@@ -117,7 +117,7 @@ private fun LocationsScreen(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { contentPadding ->
-        if (viewState.locations.isEmpty()) {
+        if (viewState.showEmptyState) {
             LocationEmptyState(
                 onAddLocationClick = { onEventSent(LocationsEvent.AddLocationClick) },
                 modifier = Modifier
