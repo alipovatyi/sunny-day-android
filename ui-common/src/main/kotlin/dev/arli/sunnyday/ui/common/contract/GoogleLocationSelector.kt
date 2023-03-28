@@ -18,16 +18,15 @@ import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.location.NamedLocation
 
 object GoogleLocationSelector :
-    ActivityResultContract<GoogleLocationSelector.Input, Either<Throwable, NamedLocation?>>() {
+    ActivityResultContract<Unit, Either<Throwable, NamedLocation?>>() {
 
-    override fun createIntent(context: Context, input: Input): Intent {
+    override fun createIntent(context: Context, input: Unit): Intent {
         val mode = AutocompleteActivityMode.FULLSCREEN
         val fields = listOf(Place.Field.LAT_LNG, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS)
         val typeFilter = PlaceTypes.CITIES
-        return Autocomplete.IntentBuilder(mode, fields).apply {
-            setTypesFilter(listOf(typeFilter))
-            setHint(input.hint)
-        }.build(context)
+        return Autocomplete.IntentBuilder(mode, fields)
+            .setTypesFilter(listOf(typeFilter))
+            .build(context)
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Either<Throwable, NamedLocation?> {
@@ -60,6 +59,4 @@ object GoogleLocationSelector :
             else -> Throwable("Unknown error").left()
         }
     }
-
-    data class Input(val hint: String? = null)
 }

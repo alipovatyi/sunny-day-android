@@ -1,5 +1,7 @@
 package dev.arli.sunnyday.ui.locations
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.launch
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -27,9 +29,11 @@ import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.resources.R
+import dev.arli.sunnyday.ui.common.contract.GoogleLocationSelector
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
 import dev.arli.sunnyday.ui.locations.components.LocationEmptyState
 import dev.arli.sunnyday.ui.locations.components.LocationList
+import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
 import java.time.LocalDateTime
@@ -42,9 +46,22 @@ fun LocationsScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val lazyListState = rememberLazyListState()
+    val googleLocationSelectorLauncher = rememberLauncherForActivityResult(
+        contract = GoogleLocationSelector,
+        onResult = { result ->
+            result.orNull()?.let { viewModel.onEventSent(LocationsEvent.AddLocation(it)) }
+        }
+    )
 
     LaunchedEffect(Unit) {
-        viewModel.effect.onEach { effect -> /* TODO */ }.collect()
+        viewModel.effect.onEach { effect ->
+            when(effect) {
+                LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
+                is LocationsEffect.OpenLocationDetails -> {
+                    // TODO
+                }
+            }
+        }.collect()
     }
 
     LocationsScreen(

@@ -1,17 +1,20 @@
 package dev.arli.sunnyday.ui.locations
 
 import app.cash.turbine.test
+import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.location.NamedLocation
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -32,6 +35,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
     val mockObserveLocationsWithCurrentWeatherUseCase: ObserveLocationsWithCurrentWeatherUseCase = mockk {
         every { this@mockk.invoke() } returns locationsWithCurrentWeatherFlow
     }
+    val mockAddLocationUseCase: AddLocationUseCase = mockk()
 
     lateinit var viewModel: LocationsViewModel
 
@@ -39,7 +43,8 @@ internal class LocationsViewModelTest : BehaviorSpec({
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
         viewModel = LocationsViewModel(
-            observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase
+            observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase,
+            addLocationUseCase = mockAddLocationUseCase
         )
     }
 
@@ -103,6 +108,28 @@ internal class LocationsViewModelTest : BehaviorSpec({
 
                     expectNoEvents()
                 }
+            }
+        }
+    }
+
+    given("AddLocation event") {
+        `when`("event sent") {
+            then("add location") {
+                val givenLocation = NamedLocation(
+                    coordinates = Coordinates(
+                        latitude = Latitude(50.45),
+                        longitude = Longitude(30.52),
+                    ),
+                    name = "Kyiv",
+                    isCurrent = false
+                )
+
+                val expectedInput = AddLocationUseCase.Input(location = givenLocation)
+
+                viewModel.onEventSent(LocationsEvent.AddLocation(givenLocation))
+
+                coVerify { mockAddLocationUseCase(expectedInput) }
+                confirmVerified(mockAddLocationUseCase)
             }
         }
     }
