@@ -5,6 +5,7 @@ import dev.arli.sunnyday.data.common.serializer.SerializableLocalDateTime
 import dev.arli.sunnyday.data.db.entity.HourlyForecastEntity
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.HourlyForecast
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
@@ -87,6 +88,48 @@ internal class HourlyForecastMapperTest : BehaviorSpec({
                 )
 
                 givenHourlyForecastDto.toEntity(givenLatitude, givenLongitude) shouldBe expectedHourlyForecastEntities
+            }
+        }
+    }
+
+    given("hourly forecast entity") {
+        val givenHourlyForecastEntity = HourlyForecastEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            time = LocalDateTime.parse("2023-03-25T00:00"),
+            temperature2m = 11.8,
+            relativeHumidity2m = 92,
+            dewPoint2m = 10.5,
+            apparentTemperature = 10.9,
+            precipitationProbability = 30,
+            precipitation = 0.10,
+            weatherCode = 3,
+            pressureMsl = 1003.6,
+            windSpeed10m = 6.8,
+            windDirection10m = 267,
+            uvIndex = 0.05
+        )
+
+        `when`("map to model") {
+            then("return hourly forecast model") {
+                val expectedHourlyForecast = HourlyForecast(
+                    latitude = Latitude(52.23),
+                    longitude = Longitude(21.01),
+                    time = LocalDateTime.parse("2023-03-25T00:00"),
+                    temperature2m = 11.8,
+                    relativeHumidity2m = 92,
+                    dewPoint2m = 10.5,
+                    apparentTemperature = 10.9,
+                    precipitationProbability = 30,
+                    precipitation = 0.10,
+                    weatherCode = 3,
+                    pressureMsl = 1003.6,
+                    windSpeed10m = 6.8,
+                    windDirection10m = 267,
+                    uvIndex = 0.05
+                )
+
+                givenHourlyForecastEntity.toModel() shouldBe expectedHourlyForecast
             }
         }
     }

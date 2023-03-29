@@ -18,5 +18,5 @@ data class DailyForecast(
     val apparentTemperatureMin: Double,
     val sunrise: LocalDateTime,
     val sunset: LocalDateTime,
-    val uvIndexMax: String
+    val uvIndexMax: Double
 )

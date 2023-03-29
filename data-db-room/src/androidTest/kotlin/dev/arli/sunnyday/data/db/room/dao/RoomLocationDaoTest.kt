@@ -60,6 +60,32 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
+    fun shouldReturnFlowWithCurrentLocationForCoordinates() = runTest {
+        val givenLocationEntity1 = LocationEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            name = "Warsaw",
+            isCurrent = true
+        )
+        val givenLocationEntity2 = LocationEntity(
+            latitude = 50.45,
+            longitude = 30.52,
+            name = "Kyiv",
+            isCurrent = false
+        )
+
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+
+        val actualLocationEntity = locationDao.observe(
+            latitude = givenLocationEntity1.latitude,
+            longitude = givenLocationEntity1.longitude
+        ).first()
+
+        assertEquals(givenLocationEntity1, actualLocationEntity)
+    }
+
+    @Test
     fun shouldReturnFlowWithCurrentLocationEntityIfExists() = runTest {
         val givenLocationEntity1 = LocationEntity(
             latitude = 52.23,

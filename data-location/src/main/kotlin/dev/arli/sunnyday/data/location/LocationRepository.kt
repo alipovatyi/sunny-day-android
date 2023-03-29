@@ -7,6 +7,7 @@ import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
 import dev.arli.sunnyday.data.location.mapper.toLocationEntity
 import dev.arli.sunnyday.data.location.mapper.toNamedLocation
+import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.NamedLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -44,6 +45,15 @@ class LocationRepository @Inject internal constructor(
     fun observeLocations(): Flow<List<NamedLocation>> {
         return locationDao.observeAll().map { locationEntities ->
             locationEntities.map { it.toNamedLocation() }
+        }
+    }
+
+    fun observeLocation(coordinates: Coordinates): Flow<NamedLocation> {
+        return locationDao.observe(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map {
+            it.toNamedLocation()
         }
     }
 

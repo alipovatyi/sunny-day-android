@@ -4,6 +4,7 @@ import dev.arli.sunnyday.data.api.dto.weather.DailyForecastDto
 import dev.arli.sunnyday.data.db.entity.DailyForecastEntity
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.DailyForecast
 
 fun DailyForecastDto.toEntity(latitude: Latitude, longitude: Longitude): List<DailyForecastEntity> {
     return List(temperature2mMax.size) { index ->
@@ -21,4 +22,20 @@ fun DailyForecastDto.toEntity(latitude: Latitude, longitude: Longitude): List<Da
             uvIndexMax = uvIndexMax[index]
         )
     }
+}
+
+fun DailyForecastEntity.toModel(): DailyForecast {
+    return DailyForecast(
+        latitude = Latitude(latitude),
+        longitude = Longitude(longitude),
+        time = time,
+        weatherCode = weatherCode,
+        temperature2mMax = temperature2mMax,
+        temperature2mMin = temperature2mMin,
+        apparentTemperatureMax = apparentTemperatureMax,
+        apparentTemperatureMin = apparentTemperatureMin,
+        sunrise = sunrise,
+        sunset = sunset,
+        uvIndexMax = uvIndexMax
+    )
 }

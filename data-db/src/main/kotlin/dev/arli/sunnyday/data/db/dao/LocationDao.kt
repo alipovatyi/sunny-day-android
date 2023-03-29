@@ -7,6 +7,8 @@ interface LocationDao {
 
     fun observeAll(): Flow<List<LocationEntity>>
 
+    fun observe(latitude: Double, longitude: Double): Flow<LocationEntity>
+
     fun observeCurrent(): Flow<LocationEntity>
 
     suspend fun selectCurrent(): LocationEntity?

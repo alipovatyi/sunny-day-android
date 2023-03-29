@@ -6,6 +6,7 @@ import dev.arli.sunnyday.data.common.serializer.SerializableLocalDateTime
 import dev.arli.sunnyday.data.db.entity.DailyForecastEntity
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.DailyForecast
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDate
@@ -85,6 +86,42 @@ internal class DailyForecastMapperTest : BehaviorSpec({
                 )
 
                 givenDailyForecastDto.toEntity(givenLatitude, givenLongitude) shouldBe expectedDailyForecastEntities
+            }
+        }
+    }
+
+    given("daily forecast entity") {
+        val givenDailyForecastEntity = DailyForecastEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            time = LocalDate.parse("2023-03-25"),
+            weatherCode = 95,
+            temperature2mMax = 13.8,
+            temperature2mMin = 7.4,
+            apparentTemperatureMax = 11.1,
+            apparentTemperatureMin = 4.9,
+            sunrise = LocalDateTime.parse("2023-03-25T05:25"),
+            sunset = LocalDateTime.parse("2023-03-25T17:58"),
+            uvIndexMax = 4.30
+        )
+
+        `when`("map to model") {
+            then("return daily forecast model") {
+                val expectedDailyForecast = DailyForecast(
+                    latitude = Latitude(52.23),
+                    longitude = Longitude(21.01),
+                    time = LocalDate.parse("2023-03-25"),
+                    weatherCode = 95,
+                    temperature2mMax = 13.8,
+                    temperature2mMin = 7.4,
+                    apparentTemperatureMax = 11.1,
+                    apparentTemperatureMin = 4.9,
+                    sunrise = LocalDateTime.parse("2023-03-25T05:25"),
+                    sunset = LocalDateTime.parse("2023-03-25T17:58"),
+                    uvIndexMax = 4.30
+                )
+
+                givenDailyForecastEntity.toModel() shouldBe expectedDailyForecast
             }
         }
     }

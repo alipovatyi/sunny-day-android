@@ -11,9 +11,12 @@ import dev.arli.sunnyday.data.db.dao.HourlyForecastDao
 import dev.arli.sunnyday.data.weather.mapper.toEntity
 import dev.arli.sunnyday.data.weather.mapper.toModel
 import dev.arli.sunnyday.model.CurrentWeather
+import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.DailyForecast
 import dev.arli.sunnyday.model.weather.DailyForecastVariable
+import dev.arli.sunnyday.model.weather.HourlyForecast
 import dev.arli.sunnyday.model.weather.HourlyForecastVariable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -31,6 +34,31 @@ class WeatherRepository @Inject internal constructor(
     fun observeAllCurrentWeather(): Flow<List<CurrentWeather>> {
         return currentWeatherDao.observeAll().map { currentWeatherEntities ->
             currentWeatherEntities.map { it.toModel() }
+        }
+    }
+
+    fun observeCurrentWeather(coordinates: Coordinates): Flow<CurrentWeather> {
+        return currentWeatherDao.observe(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { it.toModel() }
+    }
+
+    fun observeDailyForecast(coordinates: Coordinates): Flow<List<DailyForecast>> {
+        return dailyForecastDao.observeAll(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { dailyForecastEntities ->
+            dailyForecastEntities.map { it.toModel() }
+        }
+    }
+
+    fun observeHourlyForecast(coordinates: Coordinates): Flow<List<HourlyForecast>> {
+        return hourlyForecastDao.observeAll(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { hourlyForecastEntities ->
+            hourlyForecastEntities.map { it.toModel() }
         }
     }
 
