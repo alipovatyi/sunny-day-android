@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -142,6 +143,7 @@ private fun LocationsScreen(
     ) { contentPadding ->
         Box(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(contentPadding)
                 .pullRefresh(pullRefreshState)
         ) {

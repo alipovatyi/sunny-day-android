@@ -8,6 +8,7 @@ import androidx.navigation.navigation
 import dev.arli.sunnyday.ui.common.navigation.RootScreen
 import dev.arli.sunnyday.ui.common.navigation.Screen
 import dev.arli.sunnyday.ui.details.LocationDetailsScreen
+import dev.arli.sunnyday.ui.details.LocationDetailsScreenArgs
 import dev.arli.sunnyday.ui.locations.LocationsScreen
 
 internal fun NavGraphBuilder.addLocationsTopLevel(navController: NavController) {
@@ -40,7 +41,10 @@ private fun NavGraphBuilder.addLocationDetails(
     rootScreen: RootScreen,
     navController: NavController
 ) {
-    composable(route = Screen.LocationDetails.createRoute(rootScreen)) {
+    composable(
+        route = Screen.LocationDetails.createRoute(rootScreen),
+        arguments = LocationDetailsScreenArgs.navArguments
+    ) {
         LocationDetailsScreen(
             viewModel = hiltViewModel(),
             navigateUp = navController::popBackStack

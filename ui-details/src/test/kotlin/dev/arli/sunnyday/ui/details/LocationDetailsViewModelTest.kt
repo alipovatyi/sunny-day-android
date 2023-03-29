@@ -1,5 +1,6 @@
 package dev.arli.sunnyday.ui.details
 
+import androidx.lifecycle.SavedStateHandle
 import io.kotest.core.spec.style.BehaviorSpec
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +16,9 @@ internal class LocationDetailsViewModelTest : BehaviorSpec({
     beforeEach {
         Dispatchers.setMain(UnconfinedTestDispatcher())
 
-        viewModel = LocationDetailsViewModel()
+        viewModel = LocationDetailsViewModel(
+            savedStateHandle = SavedStateHandle(mapOf("latitude" to 52.23, "longitude" to 21.01))
+        )
     }
 
     afterEach {
