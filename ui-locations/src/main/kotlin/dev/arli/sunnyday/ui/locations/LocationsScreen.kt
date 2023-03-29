@@ -53,7 +53,8 @@ import kotlin.math.max
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationsScreen(
-    viewModel: LocationsViewModel
+    viewModel: LocationsViewModel,
+    openLocationDetails: (Coordinates) -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val lazyListState = rememberLazyListState()
@@ -80,9 +81,7 @@ fun LocationsScreen(
         viewModel.effect.onEach { effect ->
             when (effect) {
                 LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
-                is LocationsEffect.OpenLocationDetails -> {
-                    // TODO
-                }
+                is LocationsEffect.OpenLocationDetails -> openLocationDetails(effect.coordinates)
                 LocationsEffect.ScrollToBottom -> {
                     lazyListState.scrollToItem(max(0, viewState.locations.lastIndex))
                 }

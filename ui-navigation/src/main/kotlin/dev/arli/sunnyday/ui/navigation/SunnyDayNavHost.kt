@@ -16,6 +16,6 @@ fun SunnyDayNavHost(
         startDestination = RootScreen.Locations.route,
         modifier = modifier
     ) {
-        addLocationsTopLevel()
+        addLocationsTopLevel(navHostController)
     }
 }

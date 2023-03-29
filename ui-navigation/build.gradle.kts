@@ -17,6 +17,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":data-model"))
     implementation(project(":ui-common"))
     implementation(project(":ui-details"))
     implementation(project(":ui-locations"))
