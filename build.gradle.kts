@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.detekt) apply true
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.secrets) apply false
 }
 
 allprojects {
@@ -46,6 +48,12 @@ allprojects {
     }
 }
 
+subprojects {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+}
+
 fun Project.configureAndroidProject() {
     extensions.configure<BaseExtension> {
         compileSdkVersion(libs.versions.compileSdk.get().toInt())
@@ -53,6 +61,12 @@ fun Project.configureAndroidProject() {
         defaultConfig {
             minSdk = libs.versions.minSdk.get().toInt()
             targetSdk = libs.versions.targetSdk.get().toInt()
+        }
+
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+            isCoreLibraryDesugaringEnabled = true
         }
     }
 }

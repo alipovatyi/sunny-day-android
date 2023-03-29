@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Sunny Day</string>
+    <string name="my_locations">My Locations</string>
+    <string name="current_location">Current location</string>
+    <string name="add_location">Add location</string>
+    <string name="current_location_unavailable">Current location unavailable</string>
+    <string name="location_permission_required">Location permission required. Click here to grant it.</string>
 </resources>

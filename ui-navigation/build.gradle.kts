@@ -24,4 +24,6 @@ dependencies {
     implementation(project(":ui-settings"))
 
     implementation(libs.androidx.core)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigationCompose)
 }

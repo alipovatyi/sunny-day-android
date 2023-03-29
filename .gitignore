@@ -21,3 +21,4 @@ gradle.xml
 
 # Local properties
 /local.properties
+/secrets.properties

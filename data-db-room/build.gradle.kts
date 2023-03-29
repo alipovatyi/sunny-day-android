@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -14,4 +16,17 @@ android {
 
 dependencies {
     implementation(project(":data-db"))
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.bundles.androidx.room)
+    kapt(libs.androidx.room.compiler)
+
+    coreLibraryDesugaring(libs.desugar)
+
+    testImplementation(libs.bundles.test.unitTests)
+    testImplementation(libs.androidx.room.testing)
+
+    androidTestImplementation(libs.bundles.test.instrumentedTests)
+    androidTestImplementation(libs.test.turbine)
 }

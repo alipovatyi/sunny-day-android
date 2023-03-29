@@ -17,11 +17,16 @@ android {
 }
 
 dependencies {
-    implementation(project(":resources"))
+    implementation(project(":data-model"))
+    api(project(":resources"))
 
     implementation(libs.androidx.core)
     implementation(libs.material)
+    implementation(libs.hilt.navigationCompose)
     api(platform(libs.androidx.compose.bom))
     api(libs.bundles.androidx.compose)
     debugApi(libs.androidx.compose.uiTooling)
+    api(libs.androidx.lifecycle.viewmodel)
+    api(libs.androidx.navigation.compose)
+    implementation(libs.google.places)
 }
