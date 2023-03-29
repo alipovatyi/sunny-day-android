@@ -10,4 +10,5 @@ sealed class LocationsEvent : ViewEvent {
     data class AddLocation(val location: NamedLocation) : LocationsEvent()
     object Refresh : LocationsEvent()
     data class LocationPermissionStateChange(val isGranted: Boolean) : LocationsEvent()
+    object CopyrightClick : LocationsEvent()
 }

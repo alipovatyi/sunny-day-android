@@ -46,6 +46,7 @@ import dev.arli.sunnyday.ui.locations.components.LocationList
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
+import java.net.URL
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDateTime
@@ -55,7 +56,8 @@ import kotlin.math.max
 @Composable
 fun LocationsScreen(
     viewModel: LocationsViewModel,
-    openLocationDetails: (Coordinates) -> Unit
+    openLocationDetails: (Coordinates) -> Unit,
+    openUrl: (URL) -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val lazyListState = rememberLazyListState()
@@ -81,11 +83,12 @@ fun LocationsScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
+                is LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
                 is LocationsEffect.OpenLocationDetails -> openLocationDetails(effect.coordinates)
-                LocationsEffect.ScrollToBottom -> {
+                is LocationsEffect.ScrollToBottom -> {
                     lazyListState.scrollToItem(max(0, viewState.locations.lastIndex))
                 }
+                is LocationsEffect.OpenUrl -> openUrl(effect.url)
             }
         }.collect()
     }
@@ -152,7 +155,8 @@ private fun LocationsScreen(
                 locations = viewState.locations,
                 showCurrentLocationPlaceholder = locationPermissionGranted.not(),
                 onCurrentLocationPlaceholderClick = onRequestLocationPermissionClick,
-                onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) }
+                onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) },
+                onCopyrightClick = { onEventSent(LocationsEvent.CopyrightClick) }
             )
 
             PullRefreshIndicator(

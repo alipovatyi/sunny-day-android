@@ -2,6 +2,8 @@ package dev.arli.sunnyday.ui.locations.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -15,6 +17,7 @@ import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.ui.common.components.CopyrightButton
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
 import java.time.LocalDateTime
 
@@ -25,6 +28,7 @@ internal fun LocationList(
     showCurrentLocationPlaceholder: Boolean,
     onCurrentLocationPlaceholderClick: () -> Unit,
     onLocationClick: (LocationWithCurrentWeather) -> Unit,
+    onCopyrightClick: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState()
 ) {
@@ -42,6 +46,7 @@ internal fun LocationList(
         if (showCurrentLocationPlaceholder) {
             item { CurrentLocationPlaceholder(onClick = onCurrentLocationPlaceholderClick) }
         }
+
         items(
             items = locations,
             key = { "${it.coordinates.latitude.value}:${it.coordinates.longitude.value}" }
@@ -50,6 +55,15 @@ internal fun LocationList(
                 location = location,
                 onClick = { onLocationClick(location) }
             )
+        }
+
+        item {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CopyrightButton(onClick = onCopyrightClick)
+            }
         }
     }
 }
@@ -98,7 +112,8 @@ private fun LocationListPreview() {
             ),
             showCurrentLocationPlaceholder = false,
             onCurrentLocationPlaceholderClick = {},
-            onLocationClick = {}
+            onLocationClick = {},
+            onCopyrightClick = {}
         )
     }
 }
@@ -130,7 +145,8 @@ private fun LocationListWithCurrentLocationPlaceholderPreview() {
             ),
             showCurrentLocationPlaceholder = true,
             onCurrentLocationPlaceholderClick = {},
-            onLocationClick = {}
+            onLocationClick = {},
+            onCopyrightClick = {}
         )
     }
 }

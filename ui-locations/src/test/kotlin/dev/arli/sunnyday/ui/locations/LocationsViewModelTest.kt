@@ -3,6 +3,7 @@ package dev.arli.sunnyday.ui.locations
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import dev.arli.sunnyday.data.config.ConfigRepository
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
 import dev.arli.sunnyday.domain.usecase.RefreshCurrentLocationUseCase
@@ -24,6 +25,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.net.URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -45,6 +47,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
         coEvery { this@mockk.invoke() } returns Unit.right()
     }
     val mockRefreshCurrentLocationUseCase: RefreshCurrentLocationUseCase = mockk()
+    val mockConfigRepository: ConfigRepository = mockk()
 
     lateinit var viewModel: LocationsViewModel
 
@@ -55,7 +58,8 @@ internal class LocationsViewModelTest : BehaviorSpec({
             observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase,
             addLocationUseCase = mockAddLocationUseCase,
             refreshWeatherForAllLocationsUseCase = mockRefreshWeatherForAllLocationsUseCase,
-            refreshCurrentLocationUseCase = mockRefreshCurrentLocationUseCase
+            refreshCurrentLocationUseCase = mockRefreshCurrentLocationUseCase,
+            configRepository = mockConfigRepository
         )
     }
 
@@ -298,6 +302,28 @@ internal class LocationsViewModelTest : BehaviorSpec({
                     coVerify { mockRefreshCurrentLocationUseCase() }
                     confirmVerified(mockRefreshCurrentLocationUseCase)
                 }
+            }
+        }
+    }
+
+    given("CopyrightClick") {
+        `when`("event sent") {
+            then("send OpenUrl effect") {
+                val givenDataSourceUrl = URL("https://open-meteo.com/")
+
+                val expectedEffect = LocationsEffect.OpenUrl(url = givenDataSourceUrl)
+
+                every { mockConfigRepository.getDataSourceUrl() } returns givenDataSourceUrl
+
+                viewModel.effect.test {
+                    viewModel.onEventSent(LocationsEvent.CopyrightClick)
+
+                    awaitItem() shouldBe expectedEffect
+
+                    expectNoEvents()
+                }
+
+                verify { mockConfigRepository.getDataSourceUrl() }
             }
         }
     }

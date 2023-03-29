@@ -32,7 +32,8 @@ private fun NavGraphBuilder.addLocations(
             viewModel = hiltViewModel(),
             openLocationDetails = { coordinates ->
                 navController.navigate(Screen.LocationDetails.createRoute(rootScreen, coordinates))
-            }
+            },
+            openUrl = { url -> /* TODO */ }
         )
     }
 }

@@ -2,6 +2,7 @@ package dev.arli.sunnyday.ui.locations
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.arli.sunnyday.data.config.ConfigRepository
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
 import dev.arli.sunnyday.domain.usecase.RefreshCurrentLocationUseCase
@@ -21,7 +22,8 @@ class LocationsViewModel @Inject constructor(
     private val observeLocationsWithCurrentWeatherUseCase: ObserveLocationsWithCurrentWeatherUseCase,
     private val addLocationUseCase: AddLocationUseCase,
     private val refreshWeatherForAllLocationsUseCase: RefreshWeatherForAllLocationsUseCase,
-    private val refreshCurrentLocationUseCase: RefreshCurrentLocationUseCase
+    private val refreshCurrentLocationUseCase: RefreshCurrentLocationUseCase,
+    private val configRepository: ConfigRepository
 ) : BaseViewModel<LocationsEvent, LocationsViewState, LocationsEffect>() {
 
     init {
@@ -43,6 +45,9 @@ class LocationsViewModel @Inject constructor(
                 if (event.isGranted) {
                     refreshCurrentLocation()
                 }
+            }
+            is LocationsEvent.CopyrightClick -> {
+                sendEffect(LocationsEffect.OpenUrl(configRepository.getDataSourceUrl()))
             }
         }
     }

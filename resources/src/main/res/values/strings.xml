@@ -5,4 +5,5 @@
     <string name="add_location">Add location</string>
     <string name="current_location_unavailable">Current location unavailable</string>
     <string name="location_permission_required">Location permission required. Click here to grant it.</string>
+    <string name="open_meteo_copyright">Weather data by Open-Meteo.com</string>
 </resources>
