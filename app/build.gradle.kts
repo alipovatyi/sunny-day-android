@@ -41,12 +41,14 @@ android {
             versionNameSuffix = "-staging"
 
             buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+            buildConfigField("String", "DATA_SOURCE_URL", "\"https://open-meteo.com/\"")
         }
 
         create("production") {
             dimension = "env"
 
             buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+            buildConfigField("String", "DATA_SOURCE_URL", "\"https://open-meteo.com/\"")
         }
     }
 
