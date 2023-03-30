@@ -39,6 +39,7 @@ import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.WeatherCode
 import dev.arli.sunnyday.resources.R
 import dev.arli.sunnyday.ui.common.contract.GoogleLocationSelector
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
@@ -189,7 +190,7 @@ private fun LocationsScreenPreview() {
                             temperature = 12.6,
                             windSpeed = 13.2,
                             windDirection = 244,
-                            weatherCode = 80,
+                            weatherCode = WeatherCode.RainShowersSlight,
                             time = LocalDateTime.parse("2023-03-25T15:00")
                         )
                     ),
@@ -206,7 +207,7 @@ private fun LocationsScreenPreview() {
                             temperature = 10.0,
                             windSpeed = 25.0,
                             windDirection = 90,
-                            weatherCode = 1,
+                            weatherCode = WeatherCode.MainlyClear,
                             time = LocalDateTime.parse("2023-03-25T15:00")
                         )
                     )

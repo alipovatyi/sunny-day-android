@@ -5,6 +5,7 @@ import dev.arli.sunnyday.data.db.entity.HourlyForecastEntity
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.weather.HourlyForecast
+import dev.arli.sunnyday.model.weather.WeatherCode
 
 fun HourlyForecastDto.toEntity(latitude: Latitude, longitude: Longitude): List<HourlyForecastEntity> {
     return List(temperature2m.size) { index ->
@@ -38,7 +39,7 @@ fun HourlyForecastEntity.toModel(): HourlyForecast {
         apparentTemperature = apparentTemperature,
         precipitationProbability = precipitationProbability,
         precipitation = precipitation,
-        weatherCode = weatherCode,
+        weatherCode = WeatherCode.fromKey(weatherCode),
         pressureMsl = pressureMsl,
         windSpeed10m = windSpeed10m,
         windDirection10m = windDirection10m,

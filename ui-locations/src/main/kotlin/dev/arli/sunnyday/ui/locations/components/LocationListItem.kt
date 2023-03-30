@@ -26,6 +26,7 @@ import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.WeatherCode
 import dev.arli.sunnyday.resources.R
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
 import dev.arli.sunnyday.ui.common.theme.SunnyDayTheme
@@ -97,7 +98,7 @@ private fun LocationListItemPreview() {
                     temperature = 19.0,
                     windSpeed = 5.0,
                     windDirection = 180,
-                    weatherCode = 0,
+                    weatherCode = WeatherCode.ClearSky,
                     time = LocalDateTime.parse("2023-03-24T12:00")
                 )
             ),

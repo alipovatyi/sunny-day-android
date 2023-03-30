@@ -7,6 +7,7 @@ import dev.arli.sunnyday.data.db.entity.DailyForecastEntity
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.weather.DailyForecast
+import dev.arli.sunnyday.model.weather.WeatherCode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDate
@@ -111,7 +112,7 @@ internal class DailyForecastMapperTest : BehaviorSpec({
                     latitude = Latitude(52.23),
                     longitude = Longitude(21.01),
                     time = LocalDate.parse("2023-03-25"),
-                    weatherCode = 95,
+                    weatherCode = WeatherCode.ThunderstormSlightOrModerate,
                     temperature2mMax = 13.8,
                     temperature2mMin = 7.4,
                     apparentTemperatureMax = 11.1,

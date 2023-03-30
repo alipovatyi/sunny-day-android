@@ -11,7 +11,7 @@ data class DailyForecast(
     val latitude: Latitude,
     val longitude: Longitude,
     val time: LocalDate,
-    val weatherCode: Int,
+    val weatherCode: WeatherCode,
     val temperature2mMax: Double,
     val temperature2mMin: Double,
     val apparentTemperatureMax: Double,

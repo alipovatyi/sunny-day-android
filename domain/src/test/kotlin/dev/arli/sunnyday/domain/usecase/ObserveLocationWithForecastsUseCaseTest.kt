@@ -11,6 +11,7 @@ import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.location.NamedLocation
 import dev.arli.sunnyday.model.weather.DailyForecast
 import dev.arli.sunnyday.model.weather.HourlyForecast
+import dev.arli.sunnyday.model.weather.WeatherCode
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.confirmVerified
@@ -47,7 +48,7 @@ internal class ObserveLocationWithForecastsUseCaseTest : ShouldSpec({
             temperature = 12.6,
             windSpeed = 13.2,
             windDirection = 244,
-            weatherCode = 80,
+            weatherCode = WeatherCode.RainShowersSlight,
             time = LocalDateTime.parse("2023-03-25T15:00")
         )
         val givenDailyForecasts = listOf(
@@ -55,7 +56,7 @@ internal class ObserveLocationWithForecastsUseCaseTest : ShouldSpec({
                 latitude = Latitude(52.23),
                 longitude = Longitude(21.01),
                 time = LocalDate.parse("2023-03-25"),
-                weatherCode = 95,
+                weatherCode = WeatherCode.ThunderstormSlightOrModerate,
                 temperature2mMax = 13.8,
                 temperature2mMin = 7.4,
                 apparentTemperatureMax = 11.1,
@@ -76,7 +77,7 @@ internal class ObserveLocationWithForecastsUseCaseTest : ShouldSpec({
                 apparentTemperature = 10.9,
                 precipitationProbability = 30,
                 precipitation = 0.10,
-                weatherCode = 3,
+                weatherCode = WeatherCode.Overcast,
                 pressureMsl = 1003.6,
                 windSpeed10m = 6.8,
                 windDirection10m = 267,

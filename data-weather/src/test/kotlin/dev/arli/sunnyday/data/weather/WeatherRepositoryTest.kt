@@ -28,6 +28,7 @@ import dev.arli.sunnyday.model.weather.DailyForecast
 import dev.arli.sunnyday.model.weather.DailyForecastVariable
 import dev.arli.sunnyday.model.weather.HourlyForecast
 import dev.arli.sunnyday.model.weather.HourlyForecastVariable
+import dev.arli.sunnyday.model.weather.WeatherCode
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.BehaviorSpec
@@ -96,7 +97,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                         temperature = 12.6,
                         windSpeed = 13.2,
                         windDirection = 244,
-                        weatherCode = 80,
+                        weatherCode = WeatherCode.RainShowersSlight,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     ),
                     CurrentWeather(
@@ -105,7 +106,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                         temperature = 10.0,
                         windSpeed = 25.0,
                         windDirection = 90,
-                        weatherCode = 1,
+                        weatherCode = WeatherCode.MainlyClear,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     )
                 )
@@ -148,7 +149,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                     temperature = 12.6,
                     windSpeed = 13.2,
                     windDirection = 244,
-                    weatherCode = 80,
+                    weatherCode = WeatherCode.RainShowersSlight,
                     time = LocalDateTime.parse("2023-03-25T15:00")
                 )
 
@@ -208,7 +209,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                         latitude = givenLatitude,
                         longitude = givenLongitude,
                         time = LocalDate.parse("2023-03-25"),
-                        weatherCode = 95,
+                        weatherCode = WeatherCode.ThunderstormSlightOrModerate,
                         temperature2mMax = 13.8,
                         temperature2mMin = 7.4,
                         apparentTemperatureMax = 11.1,
@@ -221,7 +222,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                         latitude = givenLatitude,
                         longitude = givenLongitude,
                         time = LocalDate.parse("2023-03-26"),
-                        weatherCode = 61,
+                        weatherCode = WeatherCode.RainSlight,
                         temperature2mMax = 9.9,
                         temperature2mMin = 6.2,
                         apparentTemperatureMax = 6.9,
@@ -300,7 +301,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                         apparentTemperature = 10.9,
                         precipitationProbability = 30,
                         precipitation = 0.10,
-                        weatherCode = 3,
+                        weatherCode = WeatherCode.Overcast,
                         pressureMsl = 1003.6,
                         windSpeed10m = 6.8,
                         windDirection10m = 267,
@@ -316,7 +317,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                         apparentTemperature = 9.6,
                         precipitationProbability = 50,
                         precipitation = 0.20,
-                        weatherCode = 2,
+                        weatherCode = WeatherCode.PartlyCloudy,
                         pressureMsl = 1004.2,
                         windSpeed10m = 8.7,
                         windDirection10m = 265,

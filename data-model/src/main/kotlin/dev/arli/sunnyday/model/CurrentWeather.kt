@@ -2,6 +2,7 @@ package dev.arli.sunnyday.model
 
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.WeatherCode
 import java.time.LocalDateTime
 
 @Suppress("ForbiddenComment")
@@ -12,6 +13,6 @@ data class CurrentWeather(
     val temperature: Double,
     val windSpeed: Double,
     val windDirection: Int,
-    val weatherCode: Int,
+    val weatherCode: WeatherCode,
     val time: LocalDateTime
 )

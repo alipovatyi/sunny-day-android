@@ -6,6 +6,7 @@ import dev.arli.sunnyday.data.db.entity.HourlyForecastEntity
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.weather.HourlyForecast
+import dev.arli.sunnyday.model.weather.WeatherCode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
@@ -122,7 +123,7 @@ internal class HourlyForecastMapperTest : BehaviorSpec({
                     apparentTemperature = 10.9,
                     precipitationProbability = 30,
                     precipitation = 0.10,
-                    weatherCode = 3,
+                    weatherCode = WeatherCode.Overcast,
                     pressureMsl = 1003.6,
                     windSpeed10m = 6.8,
                     windDirection10m = 267,

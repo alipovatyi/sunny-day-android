@@ -16,7 +16,7 @@ data class HourlyForecast(
     val apparentTemperature: Double,
     val precipitationProbability: Int?,
     val precipitation: Double,
-    val weatherCode: Int,
+    val weatherCode: WeatherCode,
     val pressureMsl: Double,
     val windSpeed10m: Double,
     val windDirection10m: Int,
