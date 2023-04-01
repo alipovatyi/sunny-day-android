@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NearMe
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,7 +61,7 @@ internal fun LocationListItem(
             if (location.isCurrent) {
                 Spacer(Modifier.width(8.dp))
                 Icon(
-                    imageVector = Icons.Default.NearMe,
+                    imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
