@@ -41,10 +41,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import java.time.LocalDate
 import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.TimeZone
 
 internal class WeatherRepositoryTest : BehaviorSpec({
 
@@ -337,16 +336,12 @@ internal class WeatherRepositoryTest : BehaviorSpec({
     }
 
     given("refresh weather") {
-        val givenTimeZone = TimeZone.getTimeZone("Europe/Warsaw")
         val givenLatitude = Latitude(52.23)
         val givenLongitude = Longitude(21.01)
         val givenForecastDaysCount = 10
 
         afterTest {
-            verify {
-                mockConfigDataSource.currentTimeZone
-                mockConfigDataSource.forecastDaysCount
-            }
+            verify { mockConfigDataSource.forecastDaysCount }
             coVerify {
                 mockWeatherApi.getWeather(
                     latitude = givenLatitude.value,
@@ -355,7 +350,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                     includeCurrentWeather = true,
                     hourlyVariables = HourlyForecastVariable.values().map { it.key },
                     dailyVariables = DailyForecastVariable.values().map { it.key },
-                    timezone = givenTimeZone.id
+                    timezone = "auto"
                 )
             }
         }
@@ -363,7 +358,6 @@ internal class WeatherRepositoryTest : BehaviorSpec({
         `when`("fetching failed") {
             val givenError = ApiError.HttpError(code = 500, reason = null)
 
-            every { mockConfigDataSource.currentTimeZone } returns givenTimeZone
             every { mockConfigDataSource.forecastDaysCount } returns givenForecastDaysCount
             coEvery {
                 mockWeatherApi.getWeather(
@@ -373,7 +367,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                     includeCurrentWeather = true,
                     hourlyVariables = HourlyForecastVariable.values().map { it.key },
                     dailyVariables = DailyForecastVariable.values().map { it.key },
-                    timezone = givenTimeZone.id
+                    timezone = "auto"
                 )
             } returns givenError.left()
 
@@ -436,7 +430,6 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                 )
             )
 
-            every { mockConfigDataSource.currentTimeZone } returns givenTimeZone
             every { mockConfigDataSource.forecastDaysCount } returns givenForecastDaysCount
             coEvery {
                 mockWeatherApi.getWeather(
@@ -446,7 +439,7 @@ internal class WeatherRepositoryTest : BehaviorSpec({
                     includeCurrentWeather = true,
                     hourlyVariables = HourlyForecastVariable.values().map { it.key },
                     dailyVariables = DailyForecastVariable.values().map { it.key },
-                    timezone = givenTimeZone.id
+                    timezone = "auto"
                 )
             } returns givenWeatherResponseDto.right()
 

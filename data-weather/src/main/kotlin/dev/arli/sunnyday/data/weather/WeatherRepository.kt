@@ -64,6 +64,7 @@ class WeatherRepository @Inject internal constructor(
 
     @Suppress("ForbiddenComment")
     // TODO: consider using Coordinates class instead of latitude/longitude
+    // TODO: remove old weather items
     suspend fun refreshWeather(latitude: Latitude, longitude: Longitude): Either<Throwable, Unit> {
         return weatherApi.getWeather(
             latitude = latitude.value,
@@ -72,7 +73,7 @@ class WeatherRepository @Inject internal constructor(
             includeCurrentWeather = true,
             hourlyVariables = HourlyForecastVariable.values().map { it.key },
             dailyVariables = DailyForecastVariable.values().map { it.key },
-            timezone = configDataSource.currentTimeZone.id
+            timezone = "auto"
         ).flatMap { weatherResponseDto ->
             Either.catch {
                 val currentWeatherEntity = weatherResponseDto.currentWeather.toEntity(latitude, longitude)
