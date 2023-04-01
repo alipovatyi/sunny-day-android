@@ -11,6 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -62,7 +63,7 @@ internal class RoomCurrentWeatherDaoTest {
     }
 
     @Test
-    fun shouldReturnFlowWithCurrentWeatherEntityForCoordinates() = runTest {
+    fun shouldReturnFlowWithCurrentWeatherEntityForCoordinatesIfExists() = runTest {
         val givenCurrentWeatherEntity1 = CurrentWeatherEntity(
             latitude = 52.23,
             longitude = 21.01,
@@ -94,6 +95,28 @@ internal class RoomCurrentWeatherDaoTest {
         ).first()
 
         assertEquals(givenCurrentWeatherEntity1, actualCurrentWeatherEntity)
+    }
+
+    @Test
+    fun shouldReturnFlowWithNullIfCurrentWeatherEntityForCoordinatesDoesNotExist() = runTest {
+        val givenCurrentWeatherEntity = CurrentWeatherEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            temperature = 19.0,
+            windSpeed = 5.0,
+            windDirection = 180,
+            weatherCode = 0,
+            time = LocalDateTime.parse("2023-03-24T12:00")
+        )
+
+        locationDao.insertOrUpdate(givenLocationEntity1)
+        locationDao.insertOrUpdate(givenLocationEntity2)
+
+        currentWeatherDao.insertOrUpdate(givenCurrentWeatherEntity)
+
+        val actualCurrentWeatherEntity = currentWeatherDao.observe(latitude = 50.45, longitude = 30.52).first()
+
+        assertNull(actualCurrentWeatherEntity)
     }
 
     @Test

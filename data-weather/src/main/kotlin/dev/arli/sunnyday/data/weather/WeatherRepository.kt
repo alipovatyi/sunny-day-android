@@ -37,11 +37,11 @@ class WeatherRepository @Inject internal constructor(
         }
     }
 
-    fun observeCurrentWeather(coordinates: Coordinates): Flow<CurrentWeather> {
+    fun observeCurrentWeather(coordinates: Coordinates): Flow<CurrentWeather?> {
         return currentWeatherDao.observe(
             latitude = coordinates.latitude.value,
             longitude = coordinates.longitude.value
-        ).map { it.toModel() }
+        ).map { it?.toModel() }
     }
 
     fun observeDailyForecast(coordinates: Coordinates): Flow<List<DailyForecast>> {
