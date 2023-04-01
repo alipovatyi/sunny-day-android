@@ -5,6 +5,8 @@ import androidx.navigation.NamedNavArgument
 
 interface ScreenArguments {
 
+    fun toStateHandle(): SavedStateHandle
+
     interface Companion {
 
         val navArguments: List<NamedNavArgument>

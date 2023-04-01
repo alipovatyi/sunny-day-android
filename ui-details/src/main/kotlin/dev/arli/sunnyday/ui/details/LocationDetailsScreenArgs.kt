@@ -13,6 +13,15 @@ data class LocationDetailsScreenArgs internal constructor(
     val coordinates: Coordinates
 ) : ScreenArguments {
 
+    override fun toStateHandle(): SavedStateHandle {
+        return SavedStateHandle(
+            mapOf(
+                LATITUDE_ARG_NAME to coordinates.latitude.value.toString(),
+                LONGITUDE_ARG_NAME to coordinates.longitude.value.toString()
+            )
+        )
+    }
+
     companion object : ScreenArguments.Companion {
         private const val LATITUDE_ARG_NAME = "latitude"
         private const val LONGITUDE_ARG_NAME = "longitude"

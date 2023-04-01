@@ -32,6 +32,22 @@ internal class LocationDetailsScreenArgsTest : ShouldSpec({
         actualScreenArguments shouldBe expectedScreenArguments
     }
 
+    should("return saved state handle") {
+        val givenLatitude = 52.23
+        val givenLongitude = 21.01
+        val givenScreenArguments = LocationDetailsScreenArgs(
+            coordinates = Coordinates(
+                latitude = Latitude(givenLatitude),
+                longitude = Longitude(givenLongitude)
+            )
+        )
+
+        val actualSavedStateHandle = givenScreenArguments.toStateHandle()
+
+        actualSavedStateHandle.get<String>("latitude") shouldBe givenLatitude.toString()
+        actualSavedStateHandle.get<String>("longitude") shouldBe givenLongitude.toString()
+    }
+
     should("return nav arguments list") {
         val expectedLatitudeArgument = navArgument("latitude") { type = NavType.StringType }
         val expectedLongitudeArgument = navArgument("longitude") { type = NavType.StringType }

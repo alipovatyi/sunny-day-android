@@ -48,7 +48,8 @@ private fun NavGraphBuilder.addLocationDetails(
     ) {
         LocationDetailsScreen(
             viewModel = hiltViewModel(),
-            navigateUp = navController::popBackStack
+            navigateUp = navController::popBackStack,
+            openUrl = { url -> /* TODO */ }
         )
     }
 }

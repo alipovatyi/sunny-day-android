@@ -5,8 +5,10 @@ import io.kotest.matchers.shouldBe
 
 internal class LocationDetailsViewStateTest : ShouldSpec({
     should("return initial view state") {
-        val expectedViewState = LocationDetailsViewState
+        val expectedViewState = LocationDetailsViewState(
+            locationWithForecasts = null
+        )
 
-        LocationDetailsViewState shouldBe expectedViewState
+        LocationDetailsViewState() shouldBe expectedViewState
     }
 })
