@@ -48,13 +48,11 @@ class LocationRepository @Inject internal constructor(
         }
     }
 
-    fun observeLocation(coordinates: Coordinates): Flow<NamedLocation> {
+    fun observeLocation(coordinates: Coordinates): Flow<NamedLocation?> {
         return locationDao.observe(
             latitude = coordinates.latitude.value,
             longitude = coordinates.longitude.value
-        ).map {
-            it.toNamedLocation()
-        }
+        ).map { it?.toNamedLocation() }
     }
 
     suspend fun addLocation(location: NamedLocation): Either<Throwable, Unit> {

@@ -60,7 +60,7 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
-    fun shouldReturnFlowWithCurrentLocationForCoordinates() = runTest {
+    fun shouldReturnFlowWithLocationEntityForCoordinatesIfExists() = runTest {
         val givenLocationEntity1 = LocationEntity(
             latitude = 52.23,
             longitude = 21.01,
@@ -86,6 +86,22 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
+    fun shouldReturnFlowWithNullIfLocationEntityForCoordinatesDoesNotExist() = runTest {
+        val givenLocationEntity = LocationEntity(
+            latitude = 52.23,
+            longitude = 21.01,
+            name = "Warsaw",
+            isCurrent = true
+        )
+
+        locationDao.insertOrUpdate(givenLocationEntity)
+
+        val actualLocationEntity = locationDao.observe(latitude = 50.45, longitude = 30.52).first()
+
+        assertNull(actualLocationEntity)
+    }
+
+    @Test
     fun shouldReturnFlowWithCurrentLocationEntityIfExists() = runTest {
         val givenLocationEntity1 = LocationEntity(
             latitude = 52.23,
@@ -104,6 +120,20 @@ internal class RoomLocationDaoTest {
         locationDao.insertOrUpdate(givenLocationEntity2)
 
         assertEquals(givenLocationEntity1, locationDao.observeCurrent().first())
+    }
+
+    @Test
+    fun shouldReturnFlowWithNullIfCurrentLocationEntityDoesNotExist() = runTest {
+        val givenLocationEntity = LocationEntity(
+            latitude = 50.45,
+            longitude = 30.52,
+            name = "Kyiv",
+            isCurrent = false
+        )
+
+        locationDao.insertOrUpdate(givenLocationEntity)
+
+        assertNull(locationDao.observeCurrent().first())
     }
 
     @Test
@@ -128,7 +158,7 @@ internal class RoomLocationDaoTest {
     }
 
     @Test
-    fun shouldReturnNullIfCurrentLocationEntityDoesNotExists() = runTest {
+    fun shouldReturnNullIfCurrentLocationEntityDoesNotExist() = runTest {
         val givenLocationEntity = LocationEntity(
             latitude = 50.45,
             longitude = 30.52,
