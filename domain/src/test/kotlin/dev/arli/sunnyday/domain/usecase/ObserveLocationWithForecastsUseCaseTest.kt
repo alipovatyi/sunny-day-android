@@ -12,7 +12,7 @@ import dev.arli.sunnyday.model.location.NamedLocation
 import dev.arli.sunnyday.model.weather.DailyForecast
 import dev.arli.sunnyday.model.weather.HourlyForecast
 import dev.arli.sunnyday.model.weather.WeatherCode
-import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -20,23 +20,34 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableSharedFlow
 
-internal class ObserveLocationWithForecastsUseCaseTest : ShouldSpec({
+internal class ObserveLocationWithForecastsUseCaseTest : BehaviorSpec({
 
-    val mockLocationRepository: LocationRepository = mockk()
-    val mockWeatherRepository: WeatherRepository = mockk()
+    val locationFlow = MutableSharedFlow<NamedLocation?>()
+    val currentWeatherFlow = MutableSharedFlow<CurrentWeather?>()
+    val dailyForecastFlow = MutableSharedFlow<List<DailyForecast>>()
+    val hourlyForecastFlow = MutableSharedFlow<List<HourlyForecast>>()
+
+    val mockLocationRepository: LocationRepository = mockk {
+        every { observeLocation(any()) } returns locationFlow
+    }
+    val mockWeatherRepository: WeatherRepository = mockk {
+        every { observeCurrentWeather(any()) } returns currentWeatherFlow
+        every { observeDailyForecast(any()) } returns dailyForecastFlow
+        every { observeHourlyForecast(any()) } returns hourlyForecastFlow
+    }
     val useCase = ObserveLocationWithForecastsUseCase(
         locationRepository = mockLocationRepository,
         weatherRepository = mockWeatherRepository
     )
 
-    should("return flow of location with current weather and forecasts") {
-        val givenCoordinates = Coordinates(
-            latitude = Latitude(52.23),
-            longitude = Longitude(21.01),
-        )
-        val givenInput = ObserveLocationWithForecastsUseCase.Input(coordinates = givenCoordinates)
+    val givenCoordinates = Coordinates(
+        latitude = Latitude(52.23),
+        longitude = Longitude(21.01)
+    )
+
+    given("observe location with forecasts use case") {
         val givenLocation = NamedLocation(
             coordinates = givenCoordinates,
             name = "Warsaw",
@@ -84,27 +95,108 @@ internal class ObserveLocationWithForecastsUseCaseTest : ShouldSpec({
                 uvIndex = 0.05
             )
         )
+        val givenInput = ObserveLocationWithForecastsUseCase.Input(coordinates = givenCoordinates)
 
-        val expectedLocationWithForecasts = LocationWithForecasts(
-            coordinates = givenCoordinates,
-            name = "Warsaw",
-            isCurrent = true,
-            currentWeather = givenCurrentWeather,
-            dailyForecasts = givenDailyForecasts,
-            hourlyForecasts = givenHourlyForecasts
-        )
+        `when`("location is not emitted") {
+            then("do nothing") {
+                useCase(givenInput).test {
+                    currentWeatherFlow.emit(givenCurrentWeather)
+                    dailyForecastFlow.emit(givenDailyForecasts)
+                    hourlyForecastFlow.emit(givenHourlyForecasts)
 
-        every { mockLocationRepository.observeLocation(givenCoordinates) } returns flowOf(givenLocation)
-        every { mockWeatherRepository.observeCurrentWeather(givenCoordinates) } returns flowOf(givenCurrentWeather)
-        every { mockWeatherRepository.observeDailyForecast(givenCoordinates) } returns flowOf(givenDailyForecasts)
-        every { mockWeatherRepository.observeHourlyForecast(givenCoordinates) } returns flowOf(givenHourlyForecasts)
-
-        useCase(givenInput).test {
-            awaitItem() shouldBe expectedLocationWithForecasts
-
-            expectNoEvents()
+                    expectNoEvents()
+                }
+            }
         }
 
+        `when`("location is null") {
+            then("do nothing") {
+                useCase(givenInput).test {
+                    locationFlow.emit(null)
+                    currentWeatherFlow.emit(givenCurrentWeather)
+                    dailyForecastFlow.emit(givenDailyForecasts)
+                    hourlyForecastFlow.emit(givenHourlyForecasts)
+
+                    expectNoEvents()
+                }
+            }
+        }
+
+        `when`("current weather is not emitted") {
+            then("do nothing") {
+                useCase(givenInput).test {
+                    locationFlow.emit(givenLocation)
+                    dailyForecastFlow.emit(givenDailyForecasts)
+                    hourlyForecastFlow.emit(givenHourlyForecasts)
+
+                    expectNoEvents()
+                }
+            }
+        }
+
+        `when`("current weather is null") {
+            then("do nothing") {
+                useCase(givenInput).test {
+                    locationFlow.emit(givenLocation)
+                    currentWeatherFlow.emit(null)
+                    dailyForecastFlow.emit(givenDailyForecasts)
+                    hourlyForecastFlow.emit(givenHourlyForecasts)
+
+                    expectNoEvents()
+                }
+            }
+        }
+
+        `when`("daily forecast is not emitted") {
+            then("do nothing") {
+                useCase(givenInput).test {
+                    locationFlow.emit(givenLocation)
+                    currentWeatherFlow.emit(givenCurrentWeather)
+                    hourlyForecastFlow.emit(givenHourlyForecasts)
+
+                    expectNoEvents()
+                }
+            }
+        }
+
+        `when`("hourly forecast is not emitted") {
+            then("do nothing") {
+                useCase(givenInput).test {
+                    locationFlow.emit(givenLocation)
+                    currentWeatherFlow.emit(givenCurrentWeather)
+                    dailyForecastFlow.emit(givenDailyForecasts)
+
+                    expectNoEvents()
+                }
+            }
+        }
+
+        `when`("all data is emitted and not null") {
+            then("emit location with forecasts") {
+                val expectedLocationWithForecasts = LocationWithForecasts(
+                    coordinates = givenCoordinates,
+                    name = "Warsaw",
+                    isCurrent = true,
+                    currentWeather = givenCurrentWeather,
+                    dailyForecasts = givenDailyForecasts,
+                    hourlyForecasts = givenHourlyForecasts
+                )
+
+                useCase(givenInput).test {
+                    locationFlow.emit(givenLocation)
+                    currentWeatherFlow.emit(givenCurrentWeather)
+                    dailyForecastFlow.emit(givenDailyForecasts)
+                    hourlyForecastFlow.emit(givenHourlyForecasts)
+
+                    awaitItem() shouldBe expectedLocationWithForecasts
+
+                    expectNoEvents()
+                }
+            }
+        }
+    }
+
+    afterEach {
         verify {
             mockLocationRepository.observeLocation(givenCoordinates)
             mockWeatherRepository.observeCurrentWeather(givenCoordinates)
