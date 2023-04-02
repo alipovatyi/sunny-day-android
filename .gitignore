@@ -15,8 +15,10 @@ build/
 .idea/deploymentTargetDropDown.xml
 .idea/androidTestResultsUserPreferences.xml
 .idea/artifacts
+.idea/assetWizardSettings.xml
 gradle.xml
 *.iml
 
 # Local properties
 /local.properties
+/secrets.properties

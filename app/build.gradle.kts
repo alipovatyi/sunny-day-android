@@ -2,16 +2,16 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.secrets)
 }
 
 android {
     namespace = "dev.arli.sunnyday"
-    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "dev.arli.bartender"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        applicationId = "dev.arli.sunnyday"
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
 
@@ -32,18 +32,71 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    setFlavorDimensions(listOf("env"))
+
+    productFlavors {
+        create("staging") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-staging"
+
+            buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+            buildConfigField("String", "DATA_SOURCE_URL", "\"https://open-meteo.com/\"")
+        }
+
+        create("production") {
+            dimension = "env"
+
+            buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+            buildConfigField("String", "DATA_SOURCE_URL", "\"https://open-meteo.com/\"")
+        }
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
+
+    secrets {
+        propertiesFileName = "secrets.properties"
+        defaultPropertiesFileName = "secrets.defaults.properties"
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
+    implementation(project(":data-api"))
+    implementation(project(":data-api-retrofit"))
+    implementation(project(":data-common"))
+    implementation(project(":data-config"))
+    implementation(project(":data-db"))
+    implementation(project(":data-db-room"))
+    implementation(project(":data-device"))
+    implementation(project(":data-location"))
+    implementation(project(":data-model"))
+    implementation(project(":data-weather"))
+    implementation(project(":domain"))
+    implementation(project(":resources"))
+    implementation(project(":ui-common"))
+    implementation(project(":ui-details"))
+    implementation(project(":ui-locations"))
+    implementation(project(":ui-navigation"))
+
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.activityCompose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.google.places)
+
+    coreLibraryDesugaring(libs.desugar)
+
+    testImplementation(libs.bundles.test.unitTests)
 }

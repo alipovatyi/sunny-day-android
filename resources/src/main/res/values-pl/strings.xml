@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sunny Day</string>
+    <string name="my_locations">Moje lokalizacje</string>
+    <string name="current_location">Bieżąca lokalizacja</string>
+    <string name="add_location">Dodaj lokalizację</string>
+    <string name="current_location_unavailable">Bieżąca lokalizacja jest niedostępna</string>
+    <string name="location_permission_required">Wymagane jest zezwolenie na lokalizację. Kliknij tutaj, aby go przyznać.</string>
+    <string name="open_meteo_copyright">Dane pogodowe z Open-Meteo.com</string>
+    <string name="go_back">Wróć</string>
+    <string name="delete_location">Usuń lokalizację</string>
+    <string name="hourly_forecast">Dzisiejsza prognoza</string>
+    <string name="daily_forecast">Prognoza dzienna</string>
+    <string name="today">Dzisiaj</string>
+    <string name="air_conditions">Warunki powietrza</string>
+    <string name="apparent_temperature">Temp. odczuw.</string>
+    <string name="wind">Wiatr</string>
+    <string name="speed_kph">%1$.1f km/g</string>
+    <string name="precipitation_probability">Prawdop. opadów</string>
+    <string name="precipitation">Opady</string>
+    <string name="precipitation_mm">%1$.1f mm</string>
+    <string name="humidity">Wilgotność</string>
+    <string name="pressure">Ciśnienie</string>
+    <string name="pressure_mm">%1$d mm</string>
+    <string name="dew_point">Temp. p. rosy</string>
+    <string name="uv_index">Indeks UV</string>
+    <string name="sunrise">Wschód słońca</string>
+    <string name="sunset">Zachód słońca</string>
+</resources>
