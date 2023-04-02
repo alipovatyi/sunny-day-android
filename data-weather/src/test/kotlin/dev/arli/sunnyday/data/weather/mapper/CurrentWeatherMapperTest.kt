@@ -6,6 +6,7 @@ import dev.arli.sunnyday.data.db.entity.CurrentWeatherEntity
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.WeatherCode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import java.time.LocalDateTime
@@ -62,7 +63,7 @@ internal class CurrentWeatherMapperTest : BehaviorSpec({
                     temperature = 12.6,
                     windSpeed = 13.2,
                     windDirection = 244,
-                    weatherCode = 80,
+                    weatherCode = WeatherCode.RainShowersSlight,
                     time = LocalDateTime.parse("2023-03-25T15:00")
                 )
 

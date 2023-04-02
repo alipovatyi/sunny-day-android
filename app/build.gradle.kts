@@ -41,12 +41,14 @@ android {
             versionNameSuffix = "-staging"
 
             buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+            buildConfigField("String", "DATA_SOURCE_URL", "\"https://open-meteo.com/\"")
         }
 
         create("production") {
             dimension = "env"
 
             buildConfigField("String", "API_URL", "\"https://api.open-meteo.com/v1/\"")
+            buildConfigField("String", "DATA_SOURCE_URL", "\"https://open-meteo.com/\"")
         }
     }
 
@@ -78,9 +80,6 @@ dependencies {
     implementation(project(":data-device"))
     implementation(project(":data-location"))
     implementation(project(":data-model"))
-    implementation(project(":data-prefs"))
-    implementation(project(":data-prefs-datastore"))
-    implementation(project(":data-settings"))
     implementation(project(":data-weather"))
     implementation(project(":domain"))
     implementation(project(":resources"))
@@ -88,8 +87,6 @@ dependencies {
     implementation(project(":ui-details"))
     implementation(project(":ui-locations"))
     implementation(project(":ui-navigation"))
-    implementation(project(":ui-search"))
-    implementation(project(":ui-settings"))
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)

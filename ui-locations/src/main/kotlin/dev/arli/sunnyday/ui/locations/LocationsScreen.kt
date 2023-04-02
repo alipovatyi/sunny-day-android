@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.launch
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -38,6 +39,7 @@ import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.WeatherCode
 import dev.arli.sunnyday.resources.R
 import dev.arli.sunnyday.ui.common.contract.GoogleLocationSelector
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
@@ -47,13 +49,16 @@ import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import java.net.URL
 import java.time.LocalDateTime
 import kotlin.math.max
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationsScreen(
-    viewModel: LocationsViewModel
+    viewModel: LocationsViewModel,
+    openLocationDetails: (Coordinates) -> Unit,
+    openUrl: (URL) -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val lazyListState = rememberLazyListState()
@@ -79,13 +84,12 @@ fun LocationsScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.onEach { effect ->
             when (effect) {
-                LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
-                is LocationsEffect.OpenLocationDetails -> {
-                    // TODO
-                }
-                LocationsEffect.ScrollToBottom -> {
+                is LocationsEffect.OpenAddLocation -> googleLocationSelectorLauncher.launch()
+                is LocationsEffect.OpenLocationDetails -> openLocationDetails(effect.coordinates)
+                is LocationsEffect.ScrollToBottom -> {
                     lazyListState.scrollToItem(max(0, viewState.locations.lastIndex))
                 }
+                is LocationsEffect.OpenUrl -> openUrl(effect.url)
             }
         }.collect()
     }
@@ -143,6 +147,7 @@ private fun LocationsScreen(
     ) { contentPadding ->
         Box(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(contentPadding)
                 .pullRefresh(pullRefreshState)
         ) {
@@ -151,7 +156,8 @@ private fun LocationsScreen(
                 locations = viewState.locations,
                 showCurrentLocationPlaceholder = locationPermissionGranted.not(),
                 onCurrentLocationPlaceholderClick = onRequestLocationPermissionClick,
-                onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) }
+                onLocationClick = { onEventSent(LocationsEvent.LocationClick(it)) },
+                onCopyrightClick = { onEventSent(LocationsEvent.CopyrightClick) }
             )
 
             PullRefreshIndicator(
@@ -163,7 +169,6 @@ private fun LocationsScreen(
     }
 }
 
-@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationsScreenPreview() {
@@ -184,7 +189,7 @@ private fun LocationsScreenPreview() {
                             temperature = 12.6,
                             windSpeed = 13.2,
                             windDirection = 244,
-                            weatherCode = 80,
+                            weatherCode = WeatherCode.RainShowersSlight,
                             time = LocalDateTime.parse("2023-03-25T15:00")
                         )
                     ),
@@ -201,7 +206,7 @@ private fun LocationsScreenPreview() {
                             temperature = 10.0,
                             windSpeed = 25.0,
                             windDirection = 90,
-                            weatherCode = 1,
+                            weatherCode = WeatherCode.MainlyClear,
                             time = LocalDateTime.parse("2023-03-25T15:00")
                         )
                     )

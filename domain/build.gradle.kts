@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation(project(":data-location"))
-    implementation(project(":data-settings"))
     implementation(project(":data-weather"))
     api(project(":data-model"))
 

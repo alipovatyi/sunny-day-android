@@ -2,6 +2,8 @@ package dev.arli.sunnyday.ui.locations.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -15,6 +17,8 @@ import dev.arli.sunnyday.model.LocationWithCurrentWeather
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.WeatherCode
+import dev.arli.sunnyday.ui.common.components.CopyrightButton
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
 import java.time.LocalDateTime
 
@@ -25,6 +29,7 @@ internal fun LocationList(
     showCurrentLocationPlaceholder: Boolean,
     onCurrentLocationPlaceholderClick: () -> Unit,
     onLocationClick: (LocationWithCurrentWeather) -> Unit,
+    onCopyrightClick: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState()
 ) {
@@ -42,6 +47,7 @@ internal fun LocationList(
         if (showCurrentLocationPlaceholder) {
             item { CurrentLocationPlaceholder(onClick = onCurrentLocationPlaceholderClick) }
         }
+
         items(
             items = locations,
             key = { "${it.coordinates.latitude.value}:${it.coordinates.longitude.value}" }
@@ -51,10 +57,18 @@ internal fun LocationList(
                 onClick = { onLocationClick(location) }
             )
         }
+
+        item {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CopyrightButton(onClick = onCopyrightClick)
+            }
+        }
     }
 }
 
-@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationListPreview() {
@@ -74,7 +88,7 @@ private fun LocationListPreview() {
                         temperature = 12.6,
                         windSpeed = 13.2,
                         windDirection = 244,
-                        weatherCode = 80,
+                        weatherCode = WeatherCode.RainShowersSlight,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     )
                 ),
@@ -91,19 +105,19 @@ private fun LocationListPreview() {
                         temperature = 10.0,
                         windSpeed = 25.0,
                         windDirection = 90,
-                        weatherCode = 1,
+                        weatherCode = WeatherCode.MainlyClear,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     )
                 )
             ),
             showCurrentLocationPlaceholder = false,
             onCurrentLocationPlaceholderClick = {},
-            onLocationClick = {}
+            onLocationClick = {},
+            onCopyrightClick = {}
         )
     }
 }
 
-@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationListWithCurrentLocationPlaceholderPreview() {
@@ -123,14 +137,15 @@ private fun LocationListWithCurrentLocationPlaceholderPreview() {
                         temperature = 10.0,
                         windSpeed = 25.0,
                         windDirection = 90,
-                        weatherCode = 1,
+                        weatherCode = WeatherCode.MainlyClear,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     )
                 )
             ),
             showCurrentLocationPlaceholder = true,
             onCurrentLocationPlaceholderClick = {},
-            onLocationClick = {}
+            onLocationClick = {},
+            onCopyrightClick = {}
         )
     }
 }

@@ -7,7 +7,7 @@ interface CurrentWeatherDao {
 
     fun observeAll(): Flow<List<CurrentWeatherEntity>>
 
-    fun observe(latitude: Double, longitude: Double): Flow<CurrentWeatherEntity>
+    fun observe(latitude: Double, longitude: Double): Flow<CurrentWeatherEntity?>
 
     suspend fun insertOrUpdate(currentWeather: CurrentWeatherEntity)
 

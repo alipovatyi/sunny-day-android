@@ -7,6 +7,7 @@ import dev.arli.sunnyday.data.db.dao.LocationDao
 import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
 import dev.arli.sunnyday.data.location.mapper.toLocationEntity
 import dev.arli.sunnyday.data.location.mapper.toNamedLocation
+import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.NamedLocation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -47,10 +48,28 @@ class LocationRepository @Inject internal constructor(
         }
     }
 
+    fun observeLocation(coordinates: Coordinates): Flow<NamedLocation?> {
+        return locationDao.observe(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { it?.toNamedLocation() }
+    }
+
     suspend fun addLocation(location: NamedLocation): Either<Throwable, Unit> {
         return Either.catch {
             databaseTransactionRunner {
                 locationDao.insertOrUpdate(location.toLocationEntity())
+            }
+        }
+    }
+
+    suspend fun deleteLocation(coordinates: Coordinates): Either<Throwable, Unit> {
+        return Either.catch {
+            databaseTransactionRunner {
+                locationDao.delete(
+                    latitude = coordinates.latitude.value,
+                    longitude = coordinates.longitude.value
+                )
             }
         }
     }

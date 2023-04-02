@@ -12,6 +12,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.arli.sunnyday.data.common.datasource.DateTimeDataSource
+import dev.arli.sunnyday.data.device.datasource.DeviceDateTimeDataSource
 import dev.arli.sunnyday.data.device.datasource.DeviceLocationDataSourceImpl
 import dev.arli.sunnyday.data.location.datasource.DeviceLocationDataSource
 import java.util.Locale
@@ -24,6 +26,11 @@ internal abstract class DeviceDataModule {
     abstract fun bindDeviceLocationDataSource(
         deviceLocationDataSourceImpl: DeviceLocationDataSourceImpl
     ): DeviceLocationDataSource
+
+    @Binds
+    abstract fun bindDeviceDateTimeDataSource(
+        deviceDateTimeDataSource: DeviceDateTimeDataSource
+    ): DateTimeDataSource
 
     companion object {
 

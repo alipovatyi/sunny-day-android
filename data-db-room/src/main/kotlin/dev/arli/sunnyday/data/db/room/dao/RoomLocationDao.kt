@@ -14,8 +14,15 @@ abstract class RoomLocationDao : LocationDao {
     @Query("SELECT * FROM ${LocationEntity.TableName} ORDER BY ${LocationEntity.Columns.IsCurrent} DESC")
     abstract override fun observeAll(): Flow<List<LocationEntity>>
 
+    @Query(
+        "SELECT * FROM ${LocationEntity.TableName} " +
+            "WHERE ${LocationEntity.Columns.Latitude} = :latitude " +
+            "AND ${LocationEntity.Columns.Longitude} = :longitude"
+    )
+    abstract override fun observe(latitude: Double, longitude: Double): Flow<LocationEntity?>
+
     @Query("SELECT * FROM ${LocationEntity.TableName} WHERE ${LocationEntity.Columns.IsCurrent} = 1")
-    abstract override fun observeCurrent(): Flow<LocationEntity>
+    abstract override fun observeCurrent(): Flow<LocationEntity?>
 
     @Query("SELECT * FROM ${LocationEntity.TableName} WHERE ${LocationEntity.Columns.IsCurrent} = 1")
     abstract override suspend fun selectCurrent(): LocationEntity?

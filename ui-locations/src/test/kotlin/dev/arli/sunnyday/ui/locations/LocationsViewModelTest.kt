@@ -3,6 +3,7 @@ package dev.arli.sunnyday.ui.locations
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import dev.arli.sunnyday.data.config.ConfigRepository
 import dev.arli.sunnyday.domain.usecase.AddLocationUseCase
 import dev.arli.sunnyday.domain.usecase.ObserveLocationsWithCurrentWeatherUseCase
 import dev.arli.sunnyday.domain.usecase.RefreshCurrentLocationUseCase
@@ -13,6 +14,7 @@ import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.location.NamedLocation
+import dev.arli.sunnyday.model.weather.WeatherCode
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import java.net.URL
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,6 +48,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
         coEvery { this@mockk.invoke() } returns Unit.right()
     }
     val mockRefreshCurrentLocationUseCase: RefreshCurrentLocationUseCase = mockk()
+    val mockConfigRepository: ConfigRepository = mockk()
 
     lateinit var viewModel: LocationsViewModel
 
@@ -55,7 +59,8 @@ internal class LocationsViewModelTest : BehaviorSpec({
             observeLocationsWithCurrentWeatherUseCase = mockObserveLocationsWithCurrentWeatherUseCase,
             addLocationUseCase = mockAddLocationUseCase,
             refreshWeatherForAllLocationsUseCase = mockRefreshWeatherForAllLocationsUseCase,
-            refreshCurrentLocationUseCase = mockRefreshCurrentLocationUseCase
+            refreshCurrentLocationUseCase = mockRefreshCurrentLocationUseCase,
+            configRepository = mockConfigRepository
         )
     }
 
@@ -109,7 +114,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
                         temperature = 12.6,
                         windSpeed = 13.2,
                         windDirection = 244,
-                        weatherCode = 80,
+                        weatherCode = WeatherCode.RainShowersSlight,
                         time = LocalDateTime.parse("2023-03-25T15:00")
                     )
                 )
@@ -176,8 +181,6 @@ internal class LocationsViewModelTest : BehaviorSpec({
                     coVerify { mockAddLocationUseCase(expectedInput) }
                     confirmVerified(mockAddLocationUseCase)
                 }
-            }
-            then("add location and send ScrollToBottom effect") {
             }
         }
     }
@@ -302,6 +305,28 @@ internal class LocationsViewModelTest : BehaviorSpec({
         }
     }
 
+    given("CopyrightClick") {
+        `when`("event sent") {
+            then("send OpenUrl effect") {
+                val givenDataSourceUrl = URL("https://open-meteo.com/")
+
+                val expectedEffect = LocationsEffect.OpenUrl(url = givenDataSourceUrl)
+
+                every { mockConfigRepository.getDataSourceUrl() } returns givenDataSourceUrl
+
+                viewModel.effect.test {
+                    viewModel.onEventSent(LocationsEvent.CopyrightClick)
+
+                    awaitItem() shouldBe expectedEffect
+
+                    expectNoEvents()
+                }
+
+                verify { mockConfigRepository.getDataSourceUrl() }
+            }
+        }
+    }
+
     given("observing locations with current weather") {
         `when`("locations are emitted") {
             and("list is empty") {
@@ -331,7 +356,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
                             temperature = 12.6,
                             windSpeed = 13.2,
                             windDirection = 244,
-                            weatherCode = 80,
+                            weatherCode = WeatherCode.RainShowersSlight,
                             time = LocalDateTime.parse("2023-03-25T15:00")
                         )
                     )
@@ -348,7 +373,7 @@ internal class LocationsViewModelTest : BehaviorSpec({
                             temperature = 10.0,
                             windSpeed = 25.0,
                             windDirection = 90,
-                            weatherCode = 1,
+                            weatherCode = WeatherCode.MainlyClear,
                             time = LocalDateTime.parse("2023-03-25T15:00")
                         )
                     )

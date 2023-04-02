@@ -1,8 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sunny Day</string>
     <string name="my_locations">My Locations</string>
     <string name="current_location">Current location</string>
     <string name="add_location">Add location</string>
-    <string name="current_location_unavailable">Current location unavailable</string>
+    <string name="current_location_unavailable">Current location is unavailable</string>
     <string name="location_permission_required">Location permission required. Click here to grant it.</string>
+    <string name="open_meteo_copyright">Weather data by Open-Meteo.com</string>
+    <string name="go_back">Go back</string>
+    <string name="delete_location">Delete location</string>
+    <string name="hourly_forecast">Today\'s forecast</string>
+    <string name="daily_forecast">Daily forecast</string>
+    <string name="today">Today</string>
+    <string name="air_conditions">Air conditions</string>
+    <string name="apparent_temperature">Real feel</string>
+    <string name="wind">Wind</string>
+    <string name="speed_kph">%1$.1f km/h</string>
+    <string name="precipitation_probability">Precipitation</string>
+    <string name="precipitation">Precipitation</string>
+    <string name="precipitation_mm">%1$.1f mm</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="pressure_mm">%1$d mm</string>
+    <string name="dew_point">Dew point</string>
+    <string name="uv_index">UV index</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
 </resources>

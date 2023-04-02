@@ -9,6 +9,7 @@ import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.location.NamedLocation
+import dev.arli.sunnyday.model.weather.WeatherCode
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.confirmVerified
@@ -52,7 +53,7 @@ internal class ObserveLocationsWithCurrentWeatherUseCaseTest : ShouldSpec({
             temperature = 12.6,
             windSpeed = 13.2,
             windDirection = 244,
-            weatherCode = 80,
+            weatherCode = WeatherCode.RainShowersSlight,
             time = LocalDateTime.parse("2023-03-25T15:00")
         )
 

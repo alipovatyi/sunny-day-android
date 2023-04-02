@@ -245,6 +245,49 @@ internal class LocationRepositoryTest : BehaviorSpec({
         }
     }
 
+    given("observe location for coordinates") {
+        `when`("called") {
+            then("return flow of named location") {
+                val givenCoordinates = Coordinates(
+                    latitude = Latitude(52.23),
+                    longitude = Longitude(21.01)
+                )
+                val givenLocationEntity = LocationEntity(
+                    latitude = 52.23,
+                    longitude = 21.01,
+                    name = "Warsaw",
+                    isCurrent = true
+                )
+
+                val expectedNamedLocation = NamedLocation(
+                    coordinates = givenCoordinates,
+                    name = "Warsaw",
+                    isCurrent = true
+                )
+
+                every {
+                    mockLocationDao.observe(
+                        latitude = givenLocationEntity.latitude,
+                        longitude = givenLocationEntity.longitude
+                    )
+                } returns flowOf(givenLocationEntity)
+
+                repository.observeLocation(givenCoordinates).test {
+                    awaitItem() shouldBe expectedNamedLocation
+
+                    expectNoEvents()
+                }
+
+                verify {
+                    mockLocationDao.observe(
+                        latitude = givenLocationEntity.latitude,
+                        longitude = givenLocationEntity.longitude
+                    )
+                }
+            }
+        }
+    }
+
     given("add location") {
         `when`("failed") {
             then("return either left with error") {
@@ -296,6 +339,55 @@ internal class LocationRepositoryTest : BehaviorSpec({
                 repository.addLocation(givenNamedLocation) shouldBeRight Unit
 
                 coVerify { mockLocationDao.insertOrUpdate(expectedLocationEntity) }
+            }
+        }
+    }
+
+    given("delete location") {
+        val givenCoordinates = Coordinates(
+            latitude = Latitude(52.23),
+            longitude = Longitude(21.01)
+        )
+
+        `when`("failed") {
+            then("return either left with error") {
+                val givenError = Throwable()
+
+                coEvery {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                } throws givenError
+
+                repository.deleteLocation(givenCoordinates) shouldBeLeft givenError
+
+                coVerify {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                }
+            }
+        }
+
+        `when`("succeeded") {
+            then("return either right with Unit") {
+                coEvery {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                } just runs
+
+                repository.deleteLocation(givenCoordinates) shouldBeRight Unit
+
+                coVerify {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                }
             }
         }
     }

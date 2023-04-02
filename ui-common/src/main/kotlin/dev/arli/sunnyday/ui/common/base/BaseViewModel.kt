@@ -1,7 +1,10 @@
 package dev.arli.sunnyday.ui.common.base
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.arli.sunnyday.ui.common.navigation.ScreenArgsLazyImpl
+import dev.arli.sunnyday.ui.common.navigation.ScreenArguments
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,4 +51,8 @@ abstract class BaseViewModel<Event : ViewEvent, State : ViewState, Effect : View
     protected fun sendEffect(effect: Effect) {
         viewModelScope.launch { _effect.send(effect) }
     }
+
+    protected inline fun <reified Args : ScreenArguments> screenArgs(
+        savedStateHandle: SavedStateHandle
+    ): Lazy<Args> = ScreenArgsLazyImpl(Args::class, savedStateHandle)
 }

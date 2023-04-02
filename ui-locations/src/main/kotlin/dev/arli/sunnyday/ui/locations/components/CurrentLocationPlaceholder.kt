@@ -3,6 +3,7 @@ package dev.arli.sunnyday.ui.locations.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,7 +32,7 @@ internal fun CurrentLocationPlaceholder(
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .height(80.dp)
+                .defaultMinSize(minHeight = 80.dp)
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {

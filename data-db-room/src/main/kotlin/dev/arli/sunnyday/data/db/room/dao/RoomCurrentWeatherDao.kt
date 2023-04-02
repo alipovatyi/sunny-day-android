@@ -19,7 +19,7 @@ abstract class RoomCurrentWeatherDao : CurrentWeatherDao {
             "WHERE ${CurrentWeatherEntity.Columns.Latitude} = :latitude " +
             "AND ${CurrentWeatherEntity.Columns.Longitude} = :longitude"
     )
-    abstract override fun observe(latitude: Double, longitude: Double): Flow<CurrentWeatherEntity>
+    abstract override fun observe(latitude: Double, longitude: Double): Flow<CurrentWeatherEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract override suspend fun insertOrUpdate(currentWeather: CurrentWeatherEntity)

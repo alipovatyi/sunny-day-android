@@ -17,11 +17,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":data-model"))
     implementation(project(":ui-common"))
     implementation(project(":ui-details"))
     implementation(project(":ui-locations"))
-    implementation(project(":ui-search"))
-    implementation(project(":ui-settings"))
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.navigation.compose)

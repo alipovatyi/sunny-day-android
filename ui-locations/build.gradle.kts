@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":data-config"))
     implementation(project(":data-location"))
     implementation(project(":data-weather"))
     implementation(project(":domain"))

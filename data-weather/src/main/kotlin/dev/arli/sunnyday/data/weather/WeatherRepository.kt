@@ -11,9 +11,12 @@ import dev.arli.sunnyday.data.db.dao.HourlyForecastDao
 import dev.arli.sunnyday.data.weather.mapper.toEntity
 import dev.arli.sunnyday.data.weather.mapper.toModel
 import dev.arli.sunnyday.model.CurrentWeather
+import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
+import dev.arli.sunnyday.model.weather.DailyForecast
 import dev.arli.sunnyday.model.weather.DailyForecastVariable
+import dev.arli.sunnyday.model.weather.HourlyForecast
 import dev.arli.sunnyday.model.weather.HourlyForecastVariable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -34,8 +37,34 @@ class WeatherRepository @Inject internal constructor(
         }
     }
 
+    fun observeCurrentWeather(coordinates: Coordinates): Flow<CurrentWeather?> {
+        return currentWeatherDao.observe(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { it?.toModel() }
+    }
+
+    fun observeDailyForecast(coordinates: Coordinates): Flow<List<DailyForecast>> {
+        return dailyForecastDao.observeAll(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { dailyForecastEntities ->
+            dailyForecastEntities.map { it.toModel() }
+        }
+    }
+
+    fun observeHourlyForecast(coordinates: Coordinates): Flow<List<HourlyForecast>> {
+        return hourlyForecastDao.observeAll(
+            latitude = coordinates.latitude.value,
+            longitude = coordinates.longitude.value
+        ).map { hourlyForecastEntities ->
+            hourlyForecastEntities.map { it.toModel() }
+        }
+    }
+
     @Suppress("ForbiddenComment")
     // TODO: consider using Coordinates class instead of latitude/longitude
+    // TODO: remove old weather items
     suspend fun refreshWeather(latitude: Latitude, longitude: Longitude): Either<Throwable, Unit> {
         return weatherApi.getWeather(
             latitude = latitude.value,
@@ -44,7 +73,7 @@ class WeatherRepository @Inject internal constructor(
             includeCurrentWeather = true,
             hourlyVariables = HourlyForecastVariable.values().map { it.key },
             dailyVariables = DailyForecastVariable.values().map { it.key },
-            timezone = configDataSource.currentTimeZone.id
+            timezone = "auto"
         ).flatMap { weatherResponseDto ->
             Either.catch {
                 val currentWeatherEntity = weatherResponseDto.currentWeather.toEntity(latitude, longitude)
