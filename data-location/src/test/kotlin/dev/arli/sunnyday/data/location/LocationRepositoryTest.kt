@@ -343,6 +343,55 @@ internal class LocationRepositoryTest : BehaviorSpec({
         }
     }
 
+    given("delete location") {
+        val givenCoordinates = Coordinates(
+            latitude = Latitude(52.23),
+            longitude = Longitude(21.01)
+        )
+
+        `when`("failed") {
+            then("return either left with error") {
+                val givenError = Throwable()
+
+                coEvery {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                } throws givenError
+
+                repository.deleteLocation(givenCoordinates) shouldBeLeft givenError
+
+                coVerify {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                }
+            }
+        }
+
+        `when`("succeeded") {
+            then("return either right with Unit") {
+                coEvery {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                } just runs
+
+                repository.deleteLocation(givenCoordinates) shouldBeRight Unit
+
+                coVerify {
+                    mockLocationDao.delete(
+                        latitude = givenCoordinates.latitude.value,
+                        longitude = givenCoordinates.longitude.value
+                    )
+                }
+            }
+        }
+    }
+
     afterEach {
         confirmVerified(mockDeviceLocationDataSource, mockLocationDao)
     }

@@ -62,4 +62,15 @@ class LocationRepository @Inject internal constructor(
             }
         }
     }
+
+    suspend fun deleteLocation(coordinates: Coordinates): Either<Throwable, Unit> {
+        return Either.catch {
+            databaseTransactionRunner {
+                locationDao.delete(
+                    latitude = coordinates.latitude.value,
+                    longitude = coordinates.longitude.value
+                )
+            }
+        }
+    }
 }
