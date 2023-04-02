@@ -80,9 +80,6 @@ dependencies {
     implementation(project(":data-device"))
     implementation(project(":data-location"))
     implementation(project(":data-model"))
-    implementation(project(":data-prefs"))
-    implementation(project(":data-prefs-datastore"))
-    implementation(project(":data-settings"))
     implementation(project(":data-weather"))
     implementation(project(":domain"))
     implementation(project(":resources"))
@@ -90,8 +87,6 @@ dependencies {
     implementation(project(":ui-details"))
     implementation(project(":ui-locations"))
     implementation(project(":ui-navigation"))
-    implementation(project(":ui-search"))
-    implementation(project(":ui-settings"))
 
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
