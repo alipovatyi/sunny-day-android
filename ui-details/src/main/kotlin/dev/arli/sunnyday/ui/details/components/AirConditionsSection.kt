@@ -31,6 +31,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.math.roundToInt
 
+@Suppress("LongMethod")
 @Composable
 internal fun AirConditionsSection(
     currentDailyForecast: DailyForecast,

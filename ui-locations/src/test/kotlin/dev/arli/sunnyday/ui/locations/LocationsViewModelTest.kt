@@ -26,13 +26,13 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import java.net.URL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import java.net.URL
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -181,8 +181,6 @@ internal class LocationsViewModelTest : BehaviorSpec({
                     coVerify { mockAddLocationUseCase(expectedInput) }
                     confirmVerified(mockAddLocationUseCase)
                 }
-            }
-            then("add location and send ScrollToBottom effect") {
             }
         }
     }

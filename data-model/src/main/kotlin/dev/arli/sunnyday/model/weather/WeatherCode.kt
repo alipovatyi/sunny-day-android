@@ -1,5 +1,6 @@
 package dev.arli.sunnyday.model.weather
 
+@Suppress("MagicNumber")
 enum class WeatherCode(val key: Int) {
     ClearSky(0),
     MainlyClear(1),

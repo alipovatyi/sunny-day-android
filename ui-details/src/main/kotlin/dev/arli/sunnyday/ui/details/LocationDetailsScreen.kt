@@ -54,11 +54,11 @@ import dev.arli.sunnyday.ui.details.components.SunTimeSection
 import dev.arli.sunnyday.ui.details.contract.LocationDetailsEffect
 import dev.arli.sunnyday.ui.details.contract.LocationDetailsEvent
 import dev.arli.sunnyday.ui.details.contract.LocationDetailsViewState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun LocationDetailsScreen(
@@ -83,6 +83,7 @@ fun LocationDetailsScreen(
     )
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun LocationDetailsScreen(
@@ -212,6 +213,7 @@ private fun LocationDetailsScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Preview
 @Composable
 private fun LocationDetailsScreenPreview() {

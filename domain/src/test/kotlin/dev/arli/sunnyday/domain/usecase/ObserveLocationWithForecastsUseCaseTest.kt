@@ -18,9 +18,9 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 internal class ObserveLocationWithForecastsUseCaseTest : BehaviorSpec({
 

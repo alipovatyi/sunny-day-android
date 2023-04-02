@@ -47,9 +47,9 @@ import dev.arli.sunnyday.ui.locations.components.LocationList
 import dev.arli.sunnyday.ui.locations.contract.LocationsEffect
 import dev.arli.sunnyday.ui.locations.contract.LocationsEvent
 import dev.arli.sunnyday.ui.locations.contract.LocationsViewState
-import java.net.URL
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import java.net.URL
 import java.time.LocalDateTime
 import kotlin.math.max
 
@@ -169,7 +169,6 @@ private fun LocationsScreen(
     }
 }
 
-@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationsScreenPreview() {

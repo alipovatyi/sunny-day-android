@@ -7,15 +7,14 @@ import dev.arli.sunnyday.model.LocationWithForecasts
 import dev.arli.sunnyday.model.location.Coordinates
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
+import javax.inject.Inject
 
 class ObserveLocationWithForecastsUseCase @Inject internal constructor(
     private val locationRepository: LocationRepository,
     private val weatherRepository: WeatherRepository
 ) : InOutUseCase<ObserveLocationWithForecastsUseCase.Input, Flow<LocationWithForecasts>> {
 
-    // TODO: add filter out old daily and hourly forecasts
     override fun invoke(input: Input): Flow<LocationWithForecasts> {
         return combine(
             locationRepository.observeLocation(input.coordinates).filterNotNull(),

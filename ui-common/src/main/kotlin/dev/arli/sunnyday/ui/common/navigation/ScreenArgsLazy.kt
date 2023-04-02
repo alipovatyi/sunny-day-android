@@ -1,3 +1,5 @@
+@file:Suppress("Filename")
+
 package dev.arli.sunnyday.ui.common.navigation
 
 import android.annotation.SuppressLint

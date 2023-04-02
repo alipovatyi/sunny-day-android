@@ -39,6 +39,7 @@ import kotlin.math.roundToInt
 
 private val TimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
+@Suppress("UnstableCollections")
 @Composable
 internal fun HourlyForecastSection(
     hourlyForecasts: List<HourlyForecast>,

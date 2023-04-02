@@ -38,6 +38,7 @@ import kotlin.math.roundToInt
 
 private val DayOfWeekFormatter = DateTimeFormatter.ofPattern("EEE")
 
+@Suppress("UnstableCollections", "LongMethod")
 @Composable
 internal fun DailyForecastSection(
     dailyForecasts: List<DailyForecast>,

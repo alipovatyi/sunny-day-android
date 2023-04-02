@@ -69,7 +69,6 @@ internal fun LocationList(
     }
 }
 
-@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationListPreview() {
@@ -119,7 +118,6 @@ private fun LocationListPreview() {
     }
 }
 
-@Suppress("MagicNumber")
 @Preview
 @Composable
 private fun LocationListWithCurrentLocationPlaceholderPreview() {

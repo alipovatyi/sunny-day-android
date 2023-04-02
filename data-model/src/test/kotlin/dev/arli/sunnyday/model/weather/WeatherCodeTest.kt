@@ -54,7 +54,7 @@ internal class WeatherCodeTest : BehaviorSpec({
                         1 to WeatherCode.MainlyClear,
                         2 to WeatherCode.PartlyCloudy,
                         3 to WeatherCode.Overcast,
-                        45 to WeatherCode.Fog ,
+                        45 to WeatherCode.Fog,
                         48 to WeatherCode.DepositingRimeFog,
                         51 to WeatherCode.DrizzleLight,
                         53 to WeatherCode.DrizzleModerate,
