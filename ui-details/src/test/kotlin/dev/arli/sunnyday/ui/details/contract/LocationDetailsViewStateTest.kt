@@ -12,7 +12,8 @@ internal class LocationDetailsViewStateTest : ShouldSpec({
             hourlyForecasts = emptyList(),
             dailyForecasts = emptyList(),
             currentHourlyForecast = null,
-            currentDailyForecast = null
+            currentDailyForecast = null,
+            isRefreshing = false
         )
 
         LocationDetailsViewState() shouldBe expectedViewState

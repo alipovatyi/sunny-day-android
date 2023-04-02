@@ -1,5 +1,6 @@
 package dev.arli.sunnyday.ui.details
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,10 +11,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -78,13 +83,17 @@ fun LocationDetailsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 private fun LocationDetailsScreen(
     viewState: LocationDetailsViewState,
     onEventSent: (LocationDetailsEvent) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewState.isRefreshing,
+        onRefresh = { onEventSent(LocationDetailsEvent.Refresh) }
+    )
 
     Scaffold(
         topBar = {
@@ -125,68 +134,80 @@ private fun LocationDetailsScreen(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { contentPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(contentPadding)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
+                .pullRefresh(pullRefreshState)
         ) {
-            val currentWeather = viewState.currentWeather
-            val currentHourlyForecast = viewState.currentHourlyForecast
-            val currentDailyForecast = viewState.currentDailyForecast
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                val currentWeather = viewState.currentWeather
+                val currentHourlyForecast = viewState.currentHourlyForecast
+                val currentDailyForecast = viewState.currentDailyForecast
 
-            CrossfadeVisibility(currentWeather != null) {
-                Column {
-                    Spacer(Modifier.height(24.dp))
+                CrossfadeVisibility(currentWeather != null) {
+                    Column {
+                        Spacer(Modifier.height(24.dp))
 
-                    if (currentWeather != null) {
-                        CurrentWeatherSection(
-                            currentWeather = currentWeather,
+                        if (currentWeather != null) {
+                            CurrentWeatherSection(
+                                currentWeather = currentWeather,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Spacer(Modifier.height(32.dp))
+
+                        HourlyForecastSection(
+                            hourlyForecasts = viewState.hourlyForecasts,
                             modifier = Modifier.fillMaxWidth()
                         )
-                    }
 
-                    Spacer(Modifier.height(32.dp))
+                        Spacer(Modifier.height(16.dp))
 
-                    HourlyForecastSection(
-                        hourlyForecasts = viewState.hourlyForecasts,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    DailyForecastSection(
-                        dailyForecasts = viewState.dailyForecasts,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    if (currentDailyForecast != null && currentHourlyForecast != null) {
-                        AirConditionsSection(
-                            currentDailyForecast = currentDailyForecast,
-                            currentHourlyForecast = currentHourlyForecast,
+                        DailyForecastSection(
+                            dailyForecasts = viewState.dailyForecasts,
                             modifier = Modifier.fillMaxWidth()
                         )
-                    }
 
-                    Spacer(Modifier.height(16.dp))
+                        Spacer(Modifier.height(16.dp))
 
-                    if (currentDailyForecast != null) {
-                        SunTimeSection(
-                            currentDailyForecast = currentDailyForecast,
-                            modifier = Modifier.fillMaxWidth()
+                        if (currentDailyForecast != null && currentHourlyForecast != null) {
+                            AirConditionsSection(
+                                currentDailyForecast = currentDailyForecast,
+                                currentHourlyForecast = currentHourlyForecast,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
+                        if (currentDailyForecast != null) {
+                            SunTimeSection(
+                                currentDailyForecast = currentDailyForecast,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        CopyrightButton(
+                            onClick = { onEventSent(LocationDetailsEvent.CopyrightClick) },
+                            modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
-
-                    CopyrightButton(
-                        onClick = { onEventSent(LocationDetailsEvent.CopyrightClick) },
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    )
                 }
             }
+
+            PullRefreshIndicator(
+                refreshing = viewState.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }

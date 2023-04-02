@@ -14,5 +14,6 @@ data class LocationDetailsViewState(
     val hourlyForecasts: List<HourlyForecast> = emptyList(),
     val dailyForecasts: List<DailyForecast> = emptyList(),
     val currentHourlyForecast: HourlyForecast? = null,
-    val currentDailyForecast: DailyForecast? = null
+    val currentDailyForecast: DailyForecast? = null,
+    val isRefreshing: Boolean = false
 ) : ViewState

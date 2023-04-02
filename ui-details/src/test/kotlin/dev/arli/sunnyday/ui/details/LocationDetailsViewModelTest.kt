@@ -6,6 +6,7 @@ import arrow.core.right
 import dev.arli.sunnyday.data.common.DateTimeRepository
 import dev.arli.sunnyday.data.config.ConfigRepository
 import dev.arli.sunnyday.data.location.LocationRepository
+import dev.arli.sunnyday.data.weather.WeatherRepository
 import dev.arli.sunnyday.domain.usecase.ObserveLocationWithForecastsUseCase
 import dev.arli.sunnyday.model.CurrentWeather
 import dev.arli.sunnyday.model.LocationWithForecasts
@@ -21,6 +22,7 @@ import dev.arli.sunnyday.ui.details.contract.LocationDetailsViewState
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -41,8 +43,9 @@ internal class LocationDetailsViewModelTest : BehaviorSpec({
     val locationWithForecastsFlow = MutableSharedFlow<LocationWithForecasts>()
 
     val mockConfigRepository: ConfigRepository = mockk()
-    val mockLocationRepository: LocationRepository = mockk()
     val mockDateTimeRepository: DateTimeRepository = mockk()
+    val mockLocationRepository: LocationRepository = mockk()
+    val mockWeatherRepository: WeatherRepository = mockk()
     val mockObserveLocationWithForecastsUseCase: ObserveLocationWithForecastsUseCase = mockk {
         every { this@mockk.invoke(any()) } returns locationWithForecastsFlow
     }
@@ -60,8 +63,9 @@ internal class LocationDetailsViewModelTest : BehaviorSpec({
         viewModel = LocationDetailsViewModel(
             savedStateHandle = LocationDetailsScreenArgs(coordinates = givenCoordinates).toStateHandle(),
             configRepository = mockConfigRepository,
-            locationRepository = mockLocationRepository,
             dateTimeRepository = mockDateTimeRepository,
+            locationRepository = mockLocationRepository,
+            weatherRepository = mockWeatherRepository,
             observeLocationWithForecastsUseCase = mockObserveLocationWithForecastsUseCase
         )
     }
@@ -98,7 +102,7 @@ internal class LocationDetailsViewModelTest : BehaviorSpec({
 
     given("DeleteClick event") {
         `when`("event sent") {
-            and("delete failed") {
+            and("deleting failed") {
                 val givenError = Throwable()
 
                 coEvery { mockLocationRepository.deleteLocation(givenCoordinates) } returns givenError.left()
@@ -112,7 +116,7 @@ internal class LocationDetailsViewModelTest : BehaviorSpec({
                 }
             }
 
-            and("delete succeeded") {
+            and("deleting succeeded") {
                 coEvery { mockLocationRepository.deleteLocation(givenCoordinates) } returns Unit.right()
 
                 then("send OpenAddLocation effect") {
@@ -146,6 +150,78 @@ internal class LocationDetailsViewModelTest : BehaviorSpec({
                 }
 
                 verify { mockConfigRepository.getDataSourceUrl() }
+            }
+        }
+    }
+
+    given("Refresh event") {
+        `when`("event sent") {
+            and("refreshing failed") {
+                then("update view state") {
+                    val givenError = Throwable()
+
+                    val expectedViewState1 = LocationDetailsViewState(isRefreshing = true)
+                    val expectedViewState2 = LocationDetailsViewState(isRefreshing = false)
+
+                    coEvery {
+                        mockWeatherRepository.refreshWeather(
+                            latitude = givenCoordinates.latitude,
+                            longitude = givenCoordinates.longitude
+                        )
+                    } returns givenError.left()
+
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
+                        viewModel.onEventSent(LocationDetailsEvent.Refresh)
+
+                        awaitItem() shouldBe expectedViewState1
+                        awaitItem() shouldBe expectedViewState2
+
+                        expectNoEvents()
+                    }
+
+                    coVerify {
+                        mockWeatherRepository.refreshWeather(
+                            latitude = givenCoordinates.latitude,
+                            longitude = givenCoordinates.longitude
+                        )
+                    }
+                    confirmVerified(mockWeatherRepository)
+                }
+            }
+
+            and("refreshing succeeded") {
+                then("update view state") {
+                    val expectedViewState1 = LocationDetailsViewState(isRefreshing = true)
+                    val expectedViewState2 = LocationDetailsViewState(isRefreshing = false)
+
+                    coEvery {
+                        mockWeatherRepository.refreshWeather(
+                            latitude = givenCoordinates.latitude,
+                            longitude = givenCoordinates.longitude
+                        )
+                    } returns Unit.right()
+
+                    viewModel.viewState.test {
+                        skipItems(1) // skip initial state
+
+                        viewModel.onEventSent(LocationDetailsEvent.Refresh)
+
+                        awaitItem() shouldBe expectedViewState1
+                        awaitItem() shouldBe expectedViewState2
+
+                        expectNoEvents()
+                    }
+
+                    coVerify {
+                        mockWeatherRepository.refreshWeather(
+                            latitude = givenCoordinates.latitude,
+                            longitude = givenCoordinates.longitude
+                        )
+                    }
+                    confirmVerified(mockWeatherRepository)
+                }
             }
         }
     }

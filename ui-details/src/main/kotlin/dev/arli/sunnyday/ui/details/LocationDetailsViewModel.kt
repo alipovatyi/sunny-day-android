@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.arli.sunnyday.data.common.DateTimeRepository
 import dev.arli.sunnyday.data.config.ConfigRepository
 import dev.arli.sunnyday.data.location.LocationRepository
+import dev.arli.sunnyday.data.weather.WeatherRepository
 import dev.arli.sunnyday.domain.usecase.ObserveLocationWithForecastsUseCase
 import dev.arli.sunnyday.model.location.Coordinates
 import dev.arli.sunnyday.ui.common.base.BaseViewModel
@@ -21,8 +22,9 @@ import kotlinx.coroutines.launch
 class LocationDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val configRepository: ConfigRepository,
-    private val locationRepository: LocationRepository,
     private val dateTimeRepository: DateTimeRepository,
+    private val locationRepository: LocationRepository,
+    private val weatherRepository: WeatherRepository,
     private val observeLocationWithForecastsUseCase: ObserveLocationWithForecastsUseCase
 ) : BaseViewModel<LocationDetailsEvent, LocationDetailsViewState, LocationDetailsEffect>() {
 
@@ -41,6 +43,7 @@ class LocationDetailsViewModel @Inject constructor(
             LocationDetailsEvent.CopyrightClick -> {
                 sendEffect(LocationDetailsEffect.OpenUrl(configRepository.getDataSourceUrl()))
             }
+            LocationDetailsEvent.Refresh -> refreshLocationWithForecasts()
         }
     }
 
@@ -75,6 +78,24 @@ class LocationDetailsViewModel @Inject constructor(
             locationRepository.deleteLocation(args.coordinates).tap {
                 sendEffect(LocationDetailsEffect.NavigateUp)
             }
+        }
+    }
+
+    private fun refreshLocationWithForecasts() {
+        setState { it.copy(isRefreshing = true) }
+
+        viewModelScope.launch {
+            weatherRepository.refreshWeather(
+                latitude = args.coordinates.latitude,
+                longitude = args.coordinates.longitude
+            ).fold(
+                ifLeft = {
+                    setState { it.copy(isRefreshing = false) }
+                },
+                ifRight = {
+                    setState { it.copy(isRefreshing = false) }
+                }
+            )
         }
     }
 }

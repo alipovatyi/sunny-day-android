@@ -6,4 +6,5 @@ sealed class LocationDetailsEvent : ViewEvent {
     object BackClick : LocationDetailsEvent()
     object DeleteClick : LocationDetailsEvent()
     object CopyrightClick : LocationDetailsEvent()
+    object Refresh : LocationDetailsEvent()
 }
