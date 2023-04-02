@@ -153,7 +153,10 @@ private fun LocationDetailsScreen(
                 val currentDailyForecast = viewState.currentDailyForecast
 
                 CrossfadeVisibility(currentWeather != null) {
-                    Column {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Spacer(Modifier.height(24.dp))
 
                         if (currentWeather != null) {

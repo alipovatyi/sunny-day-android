@@ -10,7 +10,8 @@ import dev.arli.sunnyday.data.api.retrofit.di.RetrofitApiModule
 @Module(
     includes = [
         ApplicationConfigModule::class,
-        RetrofitApiModule::class
+        RetrofitApiModule::class,
+        NavigatorModule::class
     ]
 )
 @InstallIn(SingletonComponent::class)

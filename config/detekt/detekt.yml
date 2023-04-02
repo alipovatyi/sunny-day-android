@@ -931,6 +931,7 @@ formatting:
 Compose:
   CompositionLocalAllowlist:
     active: true
+    allowedCompositionLocals: ['LocalNavigator']
   ContentEmitterReturningValues:
     active: true
   ModifierComposable:
