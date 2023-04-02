@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.arli.sunnyday.model.CurrentWeather
@@ -28,6 +29,7 @@ import dev.arli.sunnyday.model.location.Latitude
 import dev.arli.sunnyday.model.location.Longitude
 import dev.arli.sunnyday.model.weather.WeatherCode
 import dev.arli.sunnyday.resources.R
+import dev.arli.sunnyday.ui.common.components.WeatherIcon
 import dev.arli.sunnyday.ui.common.preview.SunnyDayThemePreview
 import dev.arli.sunnyday.ui.common.theme.SunnyDayTheme
 import java.time.LocalDateTime
@@ -54,25 +56,36 @@ internal fun LocationListItem(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(
-                text = location.name ?: stringResource(id = R.string.current_location),
-                style = SunnyDayTheme.typography.titleLarge
-            )
-            if (location.isCurrent) {
-                Spacer(Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = location.name ?: stringResource(id = R.string.current_location),
+                    style = SunnyDayTheme.typography.titleLarge,
+                    overflow = TextOverflow.Ellipsis
                 )
+                if (location.isCurrent) {
+                    Spacer(Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
-            Spacer(Modifier.weight(1f))
             if (currentWeather == null) {
                 CircularProgressIndicator(
                     strokeWidth = 4.dp,
                     modifier = Modifier.size(32.dp)
                 )
             } else {
+                Spacer(Modifier.width(8.dp))
+                WeatherIcon(
+                    weatherCode = currentWeather.weatherCode,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(Modifier.width(8.dp))
                 Text(
                     text = "${currentWeather.temperature.roundToInt()}°",
                     style = SunnyDayTheme.typography.headlineLarge,
