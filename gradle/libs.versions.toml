@@ -3,7 +3,7 @@ compileSdk = "33"
 minSdk = "24"
 targetSdk = "33"
 versionCode = "1"
-versionName = "0.1.0"
+versionName = "1.0.0"
 
 detekt = "1.22.0"
 androidGradle = "7.4.2"
