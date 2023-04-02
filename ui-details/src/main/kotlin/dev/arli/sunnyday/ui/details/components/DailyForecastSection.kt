@@ -72,10 +72,14 @@ internal fun DailyForecastSection(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.weight(1 / 3f)
                     ) {
-                        val formattedTime = remember(dailyForecast.time) {
-                            DayOfWeekFormatter.format(dailyForecast.time)
-                        }
-                        Text(text = formattedTime, style = SunnyDayTheme.typography.bodyLarge)
+                        Text(
+                            text = if (dailyForecast.time.isEqual(LocalDate.now())) {
+                                stringResource(id = R.string.today)
+                            } else {
+                                remember(dailyForecast.time) { DayOfWeekFormatter.format(dailyForecast.time) }
+                            },
+                            style = SunnyDayTheme.typography.bodyLarge
+                        )
                     }
 
                     Box(
